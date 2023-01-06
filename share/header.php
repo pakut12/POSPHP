@@ -27,17 +27,4 @@
         background-size: cover;
         font-family: 'Krub', sans-serif;
     }
-
-    ::-webkit-scrollbar {
-        width: .45rem;
-    }
-
-    ::-webkit-scrollbar-thumb {
-        background-color: rgba(13, 110, 253, .4);
-        border-radius: 3px;
-    }
-
-    ::-webkit-scrollbar-track {
-        background: transparent;
-    }
 </style>

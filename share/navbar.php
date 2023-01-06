@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark" >
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
         <a class="navbar-brand" href="#">POS</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -14,6 +14,9 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link " aria-current="page" href="managecompany.php" id="managecompany">ManageCompany</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " aria-current="page" href="managecdepartment.php" id="managecdepartment">ManageDepartment</a>
                 </li>
             </ul>
         </div>

@@ -34,7 +34,7 @@ class companyservice
     {
         include "../config.php";
         require "../modal/companydetails.php";
-        $primarykey = self::getlastprimarykey() + 1;
+
         $sql = "SELECT * FROM `tb_company`";
         $result = mysqli_query($conn, $sql);
 
@@ -45,5 +45,49 @@ class companyservice
             $arr[] = $company;
         }
         return $arr;
+    }
+    public static function getcompanybyid($id)
+    {
+        include "../config.php";
+        require "../modal/companydetails.php";
+
+        $sql = "SELECT * FROM `tb_company` WHERE company_id = '$id';";
+        $result = mysqli_query($conn, $sql);
+        while ($row = mysqli_fetch_assoc($result)) {
+            $company = new companydetails();
+            $company->setCompanyid($row["company_id"]);
+            $company->setCompanyName($row["company_name"]);
+            $arr[] = $company;
+        }
+
+        return $arr;
+    }
+    public static function delcompany($id)
+    {
+        include "../config.php";
+        require "../modal/companydetails.php";
+
+        $sql = "DELETE FROM `tb_company` WHERE company_id = '$id';";
+        $result = mysqli_query($conn, $sql);
+        $status = null;
+        if ($result) {
+            $status = true;
+        } else {
+            $status = false;
+        }
+        return $status;
+    }
+    public static function updatecompany($id,$company)
+    {
+        include "../config.php";
+        $sql = "UPDATE `tb_company` SET `company_name` = '$company' WHERE `tb_company`.`company_id` = $id;";
+        $result = mysqli_query($conn, $sql);
+        $status = null;
+        if ($result) {
+            $status = true;
+        } else {
+            $status = false;
+        }
+        return $status;
     }
 }

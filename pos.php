@@ -51,11 +51,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="row mx-auto">
-                                <div class="col-sm-12 col-md-12 ">
-                                    <button type="button" id="confim_user" class="btn btn-sm btn-primary  mt-4  w-100">ยืนยัน</button>
-                                </div>
-                            </div>
+                            <br>
                         </div>
                     </div>
                 </div>
