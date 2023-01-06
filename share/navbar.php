@@ -13,7 +13,7 @@
                     <a class="nav-link " aria-current="page" href="pos.php" id="pospage">POS</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link " aria-current="page" href="pos.php" id="pospage">ManageCompany</a>
+                    <a class="nav-link " aria-current="page" href="managecompany.php" id="managecompany">ManageCompany</a>
                 </li>
             </ul>
         </div>
