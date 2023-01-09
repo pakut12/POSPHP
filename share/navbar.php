@@ -18,6 +18,9 @@
                 <li class="nav-item">
                     <a class="nav-link " aria-current="page" href="managecdepartment.php" id="managecdepartment">ManageDepartment</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link " aria-current="page" href="uploadexcel.php" id="uploadexcel">UploadExcel</a>
+                </li>
             </ul>
         </div>
     </div>

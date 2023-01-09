@@ -14,12 +14,53 @@ class departmentservice
         }
         return $primarykey;
     }
+    public static function deldepartment($id)
+    {
+        include "../config.php";
+        $sql = "DELETE FROM `tb_department`WHERE department_id = '$id'";
+        $result = mysqli_query($conn, $sql);
+        $status = null;
+        if ($result) {
+            $status = true;
+        } else {
+            $status = false;
+        }
+        return $status;
+    }
+    public static function getdepartmentbyid($id)
+    {
+        include "../config.php";
+        require "../modal/departmentdetails.php";
+        $sql = "SELECT * FROM `tb_department` WHERE tb_department.department_id = '$id';";
+        $result = mysqli_query($conn, $sql);
+        while ($row = mysqli_fetch_assoc($result)) {
+            $department = new departmentdetails();
+            $department->setDepartmentid($row["department_id"]);
+            $department->setDepartmentName($row["department_name"]);
+            $arr[] = $department;
+        }
+
+        return $arr;
+    }
+    public static function updatedepartment($id, $department)
+    {
+        include "../config.php";
+        $sql = "UPDATE `tb_department` SET `department_name` = '$department' WHERE `tb_department`.`department_id` = $id;";
+        $result = mysqli_query($conn, $sql);
+        $status = null;
+        if ($result) {
+            $status = true;
+        } else {
+            $status = false;
+        }
+        return $status;
+    }
     public static function getdepartment()
     {
         include "../config.php";
         require "../modal/departmentdetails.php";
 
-        $sql = "SELECT * FROM `tb_department`";
+        $sql = 'SELECT * FROM `tb_department` WHERE tb_department.department_id != 99';
         $result = mysqli_query($conn, $sql);
         while ($row = mysqli_fetch_assoc($result)) {
             $department = new departmentdetails();

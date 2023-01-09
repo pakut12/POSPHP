@@ -7,6 +7,9 @@
 
 <body>
     <?php include("share/navbar.php"); ?>
+    <!-- 
+      /***************  Modal Add   ****************/  
+    -->
     <div class="modal fade" id="modaladd" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -16,7 +19,7 @@
                 </div>
                 <div class="modal-body text-center">
                     <div class="mb-3">
-                        <label for="user_id" class="form-label">ชื่อบริษัท</label>
+                        <label for="user_id" class="form-label">ชื่อเเผนก</label>
                         <input type="text" class="form-control form-control-sm text-center" id="add_department_name" placeholder="">
                     </div>
                 </div>
@@ -27,6 +30,12 @@
             </div>
         </div>
     </div>
+    <!-- 
+      /***************   Close Modal Add   ****************/  
+    -->
+    <!-- 
+      /***************  Modal Edit   ****************/  
+    -->
     <div class="modal fade" id="modaledit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -36,11 +45,11 @@
                 </div>
                 <div class="modal-body text-center">
                     <div class="mb-3">
-                        <label for="user_id" class="form-label">รหัสบริษัท</label>
+                        <label for="user_id" class="form-label">รหัสเเผนก</label>
                         <input type="text" class="form-control form-control-sm text-center" id="department_id" placeholder="" readonly>
                     </div>
                     <div class="mb-3">
-                        <label for="user_id" class="form-label">ชื่อบริษัท</label>
+                        <label for="user_id" class="form-label">ชื่อเเผนก</label>
                         <input type="text" class="form-control form-control-sm text-center" id="department_name" placeholder="">
                     </div>
                 </div>
@@ -51,6 +60,9 @@
             </div>
         </div>
     </div>
+    <!-- 
+      /***************  Close Modal Edit   ****************/  
+    -->
     <div class="container">
         <div class="card mt-5 border-dark ">
             <div class="card-header bg-dark text-white ">
@@ -97,6 +109,7 @@
                 type: "getdepartment"
             },
             success: function(msg) {
+                console.log(msg);
                 var jsdecode = JSON.parse(msg);
                 var html = "";
                 $.each(jsdecode, function(k, v) {
@@ -123,21 +136,76 @@
                 url: "controller/Department.php",
                 data: {
                     type: "adddepartment",
-                    department:$("#add_department_name").val()
+                    department: $("#add_department_name").val()
                 },
                 success: function(msg) {
                     console.log(msg);
+                    getdepartment();
+                    $('#modaladd').modal('hide');
                 }
             });
         });
 
     }
 
+    function editdepartment(id) {
+        $.ajax({
+            type: "post",
+            url: "controller/Department.php",
+            data: {
+                type: "getdepartmentbyid",
+                department_id: id
+            },
+            success: function(msg) {
+                var jsdecode = JSON.parse(msg);
+                $('#department_id').val(jsdecode[0][0]);
+                $('#department_name').val(jsdecode[0][1]);
+                $('#modaledit').modal('show');
+                $("#department_save_edit").click(function() {
+                    var id = $("#department_id").val();
+                    var department = $("#department_name").val();
+                    updatedepartment(id, department);
+                    $('#modaledit').modal('hide');
+                })
+            }
+        });
+    }
+
+    function updatedepartment(id, department) {
+        $.ajax({
+            type: "post",
+            url: "controller/Department.php",
+            data: {
+                type: "updatedepartment",
+                department_id: id,
+                department_name: department
+            },
+            success: function(msg) {
+                console.log(msg);
+                getdepartment();
+            }
+        });
+    }
+
+    function deldepartment(id) {
+        $.ajax({
+            type: "post",
+            url: "controller/Department.php",
+            data: {
+                type: "deldepartment",
+                department_id: id
+            },
+            success: function(msg) {
+                console.log(msg);
+                getdepartment();
+            }
+        });
+    }
+
     $(document).ready(function() {
         $("#managecdepartment").addClass("active");
         $("#table_department").DataTable();
         getdepartment();
-
         $("#add_department").click(function() {
             adddepartment();
         });
