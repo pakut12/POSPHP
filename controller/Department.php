@@ -4,10 +4,11 @@ require "../Service/departmentservice.php";
 
 $type = $_POST["type"];
 if ($type == "getdepartment") {
+    $arr = [];
     $key = new departmentservice();
     $a = $key->getdepartment();
     foreach ($a as $row) {
-        $arr[] = [$row->getdepartmentid(), $row->getdepartmentname()];
+        array_push($arr, [$row->getdepartmentid(), $row->getdepartmentname()]);
     }
     echo json_encode($arr);
 } else if ($type == "adddepartment") {
@@ -20,6 +21,7 @@ if ($type == "getdepartment") {
     $id = $_POST["department_id"];
     $key = new departmentservice();
     $a = $key->getdepartmentbyid($id);
+
     foreach ($a as $row) {
         $arr[] = [$row->getdepartmentid(), $row->getdepartmentname()];
     }

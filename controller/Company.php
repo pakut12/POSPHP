@@ -8,12 +8,13 @@ if ($type == "addcompany") {
     $company = $_POST["company"];
     $key = new companyservice();
     $a = $key->addcompany($company);
-    var_dump($a);
+    echo json_encode($a);
 } else if ($type == "getcompany") {
     $key = new companyservice();
     $a = $key->getcompany();
+    $arr = [];
     foreach ($a as $row) {
-        $arr[] = [$row->getCompanyid(), $row->getCompanyName()];
+        array_push($arr, [$row->getCompanyid(), $row->getCompanyName()]);
     }
     echo json_encode($arr);
 } else if ($type == "delcompany") {

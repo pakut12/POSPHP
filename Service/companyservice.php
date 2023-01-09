@@ -35,14 +35,14 @@ class companyservice
         include "../config.php";
         require "../modal/companydetails.php";
 
-        $sql = "SELECT * FROM `tb_company`";
+        $sql = "SELECT * FROM `tb_company` WHERE tb_company.company_id != 99;";
         $result = mysqli_query($conn, $sql);
-
+        $arr = [];
         while ($row = mysqli_fetch_assoc($result)) {
             $company = new companydetails();
             $company->setCompanyid($row["company_id"]);
             $company->setCompanyName($row["company_name"]);
-            $arr[] = $company;
+            array_push($arr, $company);
         }
         return $arr;
     }
@@ -77,7 +77,7 @@ class companyservice
         }
         return $status;
     }
-    public static function updatecompany($id,$company)
+    public static function updatecompany($id, $company)
     {
         include "../config.php";
         $sql = "UPDATE `tb_company` SET `company_name` = '$company' WHERE `tb_company`.`company_id` = $id;";

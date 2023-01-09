@@ -59,16 +59,16 @@ class departmentservice
     {
         include "../config.php";
         require "../modal/departmentdetails.php";
-
+        $arr = [];
         $sql = 'SELECT * FROM `tb_department` WHERE tb_department.department_id != 99';
         $result = mysqli_query($conn, $sql);
+
         while ($row = mysqli_fetch_assoc($result)) {
             $department = new departmentdetails();
             $department->setDepartmentid($row["department_id"]);
             $department->setDepartmentName($row["department_name"]);
-            $arr[] = $department;
+            array_push($arr, $department);
         }
-
         return $arr;
     }
     public static function adddepartment($department)
