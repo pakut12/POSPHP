@@ -90,22 +90,19 @@
 </footer>
 <script>
     function addcompany() {
-        $('#modaladd').modal('show');
-        $('#company_save_add').click(function() {
-            $.ajax({
-                type: "post",
-                url: "controller/Company.php",
-                data: {
-                    type: "addcompany",
-                    company: $("#add_company_name").val()
-                },
-                success: function(msg) {
-                    getcompany();
-                    $('#modaladd').modal('hide');
-
-                }
-            });
+        $.ajax({
+            type: "post",
+            url: "controller/Company.php",
+            data: {
+                type: "addcompany",
+                company: $("#add_company_name").val()
+            },
+            success: function(msg) {
+                $('#modaladd').modal('hide');
+                getcompany();
+            }
         });
+
     }
 
     function delcompany(id) {
@@ -193,6 +190,9 @@
         $("#table_company").DataTable();
         getcompany();
         $("#add_company").click(function() {
+            $('#modaladd').modal('show');
+        });
+        $('#company_save_add').click(function() {
             addcompany();
         });
     });

@@ -129,21 +129,18 @@
     }
 
     function adddepartment() {
-        $('#modaladd').modal('show');
-        $("#department_save_add").click(function() {
-            $.ajax({
-                type: "post",
-                url: "controller/Department.php",
-                data: {
-                    type: "adddepartment",
-                    department: $("#add_department_name").val()
-                },
-                success: function(msg) {
-                    console.log(msg);
-                    getdepartment();
-                    $('#modaladd').modal('hide');
-                }
-            });
+        $.ajax({
+            type: "post",
+            url: "controller/Department.php",
+            data: {
+                type: "adddepartment",
+                department: $("#add_department_name").val()
+            },
+            success: function(msg) {
+                console.log(msg);
+                getdepartment();
+                $('#modaladd').modal('hide');
+            }
         });
 
     }
@@ -207,6 +204,9 @@
         $("#table_department").DataTable();
         getdepartment();
         $("#add_department").click(function() {
+            $('#modaladd').modal('show');
+        });
+        $("#department_save_add").click(function() {
             adddepartment();
         });
     });
