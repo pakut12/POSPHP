@@ -1,7 +1,7 @@
 <?php
 include "../config.php";
-require "../modal/userdetails.php";
-require "../Service/companyservice.php";
+
+require "../Service/productservice.php";
 
 $type = $_POST["type"];
 if ($type == "searchproduct") {
@@ -11,9 +11,24 @@ if ($type == "searchproduct") {
     while ($row = mysqli_fetch_assoc($re)) {
         echo json_encode($row);
     }
-} else if ($type == "addproduct") {
-    $company = $_POST["company"];
-    $key = new companyservice();
-    $a = $key->addcompany($company);
-    var_dump($a);
+} else if ($type == "getproduct") {
+    $key = new productservice();
+    $a = $key->getproduct();
+
+    foreach ($a as $row) {
+        $listproduct = array(
+            "product_id" => $row->getproduct_id(),
+            "product_group" => $row->getproduct_group(),
+            "product_mat_no" => $row->getproduct_mat_no(),
+            "product_mat_barcode" => $row->getproduct_mat_barcode(),
+            "product_mat_name_th" => $row->getproduct_mat_name_th(),
+            "product_color_id" => $row->getproduct_color_id(),
+            "product_size_id" => $row->getproduct_size_id(),
+            "product_sale_price" => $row->getproduct_sale_price(),
+            "date_create" => $row->getdate_create()
+        );
+        $arr[] = $listproduct;
+    }
+
+    echo json_encode($arr);
 }

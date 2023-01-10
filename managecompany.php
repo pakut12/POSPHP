@@ -181,7 +181,6 @@
                 });
                 $("#data_company").empty();
                 $("#data_company").append(html);
-
             }
         });
     }
