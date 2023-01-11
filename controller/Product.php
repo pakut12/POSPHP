@@ -13,7 +13,7 @@ if ($type == "searchproduct") {
     }
 } else if ($type == "getproduct") {
     $product_group = $_POST["groupid"];
-  
+
     $key = new productservice();
     $a = $key->getproduct($product_group);
     foreach ($a as $row) {
@@ -57,4 +57,9 @@ if ($type == "searchproduct") {
     }
     echo json_encode($arr);
 */
+} else if ($type == "test") {
+    $product = new productservice();
+    $re = $product->chackmat("4TM26S3569NB036");
+    
+
 }

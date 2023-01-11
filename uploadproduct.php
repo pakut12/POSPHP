@@ -8,6 +8,10 @@
 <body>
     <?php include("share/navbar.php"); ?>
 
+    <?php
+    $mat = "4TM26S3569NB036";
+ 
+    ?>
     <div class="container">
         <div class="card mt-3 border-dark ">
             <div class="card-header bg-dark text-white ">
@@ -21,7 +25,7 @@
                 <form id="myForm">
                     <div class="mt-3">
                         <input type="hidden" id="type" name="type" value="uploadproduct">
-                        <label for="fileexcel" class="form-label">FileExcel</label>
+                        <label for="fileexcel" class="form-label">FileExcel : </label>
                         <input class="form-control form-control-sm" id="fileexcel" name="fileexcel" type="file">
                         <div class="text-danger mt-2 text-end">* กรุณา UploadFile ที่โหลดจากโปรเเกรมเท่านั้น</div>
                         <input type="button" value="Upload" onclick="uploadFile()" class="btn btn-success btn-sm w-100 mt-3">
@@ -62,6 +66,19 @@
     <?php include("share/footer.php"); ?>
 </footer>
 <script>
+    function test() {
+        $.ajax({
+            type: "post",
+            url: "controller/Product.php",
+            data: {
+                type: "test"
+            },
+            success: function(msg) {
+                console.log(msg);
+            }
+        })
+    }
+
     function getproduct(id) {
         $.ajax({
             type: "post",
@@ -150,7 +167,7 @@
 
     $(document).ready(function() {
         $("#uploadproduct").addClass("active");
-
+        test();
     });
 </script>
 
