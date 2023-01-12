@@ -77,7 +77,7 @@
                                 <div class="col-sm-12 col-md-12  mt-3">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="basic-addon1">บาร์โค้ด</span>
-                                        <input type="number" class="form-control " id="mat_barcode">
+                                        <input type="number" class="form-control text-center" id="mat_barcode">
                                     </div>
                                 </div>
                             </div>
@@ -92,7 +92,7 @@
                     </div>
                     <div class="card-body">
 
-                        <table class="table table-bordered text-center " id="table_cart">
+                        <table class="table table-bordered text-center w-100" id="table_cart">
                             <thead>
                                 <tr>
                                     <th scope="col">ลำดับ</th>
@@ -107,55 +107,37 @@
 
                             </tbody>
                         </table>
-                        <div class="row mt-3">
+                        <div class="row mt-3 ">
                             <div class="row">
-                                <div class="col-sm-12 col-md-9">
-                                    <div class="text-end ">
-                                        ราคาสินค้า
-                                    </div>
-                                </div>
-                                <div class="col-sm-12 col-md-2">
-                                    <div class=" text-center">
-                                        <div id="cart_product">0</div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-12 col-md-1">
-                                    <div class=" text-end">
-                                        บาท
+                                <div class="col-12">
+                                    <div class="d-flex justify-content-end">
+                                        <div class="p-2 fw-bold">ราคาสินค้า</div>
+                                        <div class="p-2 fw-bold">
+                                            <div id="cart_product" class="fw-bold text-primary">0</div>
+                                        </div>
+                                        <div class="p-2 fw-bold">บาท</div>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-sm-12 col-md-9">
-                                    <div class="text-end ">
-                                        ภาษีมูลค่าเพิ่ม 7 %
-                                    </div>
-                                </div>
-                                <div class="col-sm-12 col-md-2">
-                                    <div class=" text-center">
-                                        <div id="cart_totalvat">0</div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-12 col-md-1">
-                                    <div class=" text-end">
-                                        บาท
+                                <div class="col-12">
+                                    <div class="d-flex justify-content-end">
+                                        <div class="p-2 fw-bold">ภาษีมูลค่าเพิ่ม 7 %</div>
+                                        <div class="p-2 ">
+                                            <div id="cart_totalvat" class="fw-bold text-danger">0</div>
+                                        </div>
+                                        <div class="p-2 fw-bold">บาท</div>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-sm-12 col-md-9">
-                                    <div class="text-end ">
-                                        รวมทั้งสิ้น
-                                    </div>
-                                </div>
-                                <div class="col-sm-12 col-md-2">
-                                    <div class=" text-center">
-                                        <div id="cart_total">0</div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-12 col-md-1">
-                                    <div class=" text-end">
-                                        บาท
+                                <div class="col-12">
+                                    <div class="d-flex justify-content-end">
+                                        <div class="p-2 fw-bold">รวมทั้งสิ้น</div>
+                                        <div class="p-2 ">
+                                            <div id="cart_total" class="fw-bold text-success">0</div>
+                                        </div>
+                                        <div class="p-2 fw-bold">บาท</div>
                                     </div>
                                 </div>
                             </div>
@@ -339,32 +321,45 @@
 
     function confirmorder() {
 
-        if (!$("#customer_code").val() || !$("#customer_prefix").val() || !$("#customer_firstname").val() || !$("#customer_lastname").val() || !$("#departmentname").val() || !$("#companyname").val()) {
-            $("#myform").addClass("was-validated");
-            $("#modalcustomer").modal('show');
-        } else {
+        if (cart.length > 0) {
+            if (!$("#customer_code").val() || !$("#customer_prefix").val() || !$("#customer_firstname").val() || !$("#customer_lastname").val() || !$("#departmentname").val() || !$("#companyname").val()) {
+                $("#myform").addClass("was-validated");
+                $("#modalcustomer").modal('show');
+                Swal.fire({
+                    title: "ผิดพลาด",
+                    icon: "error",
+                    text: "กรุณากรอกข้อมูลให้ถูกต้อง"
+                })
+            } else {
 
-            var listcustomer = {
-                customercode: $("#customer_code").val(),
-                customerprefix: $("#customer_prefix").val(),
-                customerfirstname: $("#customer_firstname").val(),
-                customerlastname: $("#customer_lastname").val(),
-                departmentlist: $("#departmentname").val(),
-                companylist: $("#companyname").val()
-            }
-
-            $.ajax({
-                type: "post",
-                url: "Test.php",
-                data: {
-                    listcart: cart,
-                    listcustomer:listcustomer
-                },
-                success: function(msg) {
-                    console.log(msg);
+                var listcustomer = {
+                    customercode: $("#customer_code").val(),
+                    customerprefix: $("#customer_prefix").val(),
+                    customerfirstname: $("#customer_firstname").val(),
+                    customerlastname: $("#customer_lastname").val(),
+                    departmentlist: $("#departmentname").val(),
+                    companylist: $("#companyname").val()
                 }
-            });
-            
+
+                $.ajax({
+                    type: "post",
+                    url: "Test.php",
+                    data: {
+                        listcart: cart,
+                        listcustomer: listcustomer
+                    },
+                    success: function(msg) {
+                        console.log(msg);
+                    }
+                });
+
+            }
+        } else {
+            Swal.fire({
+                title: "ผิดพลาด",
+                icon: "error",
+                text: "กรุณาเพิ่มสินค้า"
+            })
         }
     }
 
