@@ -8,7 +8,7 @@
 <body>
     <?php include("share/navbar.php"); ?>
     <div class="container">
-        <div class="modal fade" id="modaluser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="modalcustomer" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -16,40 +16,41 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body text-center">
-                        <div class="mb-3">
-                            <label for="user_id" class="form-label">รหัสพนักงาน</label>
-                            <input type="text" class="form-control form-control-sm text-center" id="user_code">
-                        </div>
-                        <div class="mb-3">
-                            <label for="user_id" class="form-label">คำนำหน้า</label>
-                            <select class="form-select form-select-sm text-center" id="user_prefix">
-                                <option value="" selected disabled>โปรดเลือก</option>
-                                <option value="นาย">นาย</option>
-                                <option value="นางสาว">นางสาว</option>
-                                <option value="นาง">นาง</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="user_id" class="form-label">ชื่อ</label>
-                            <input type="text" class="form-control form-control-sm text-center" id="user_firstname">
-                        </div>
-                        <div class="mb-3">
-                            <label for="user_id" class="form-label">นามสกุล</label>
-                            <input type="text" class="form-control form-control-sm text-center" id="user_lastname">
-                        </div>
-                        <div class="mb-3">
-                            <label for="user_id" class="form-label">เเผนก</label>
-                            <input class="form-control form-control-sm text-center" list="departmentlist" autocomplete="off" name="departmentname" id="departmentname">
-                            <datalist id="departmentlist">
-                                
-                            </datalist>
-                        </div>
-                        <div class="mb-3">
-                            <label for="user_id" class="form-label">บริษัท</label>
-                            <input class="form-control form-control-sm text-center" list="companylist" autocomplete="off" name="companyname" id="companyname">
-                            <datalist id="companylist">
-                                
-                            </datalist>
+                        <div id="myform">
+                            <div class="mb-3">
+                                <label for="customer_id" class="form-label">รหัสพนักงาน</label>
+                                <input type="text" class="form-control form-control-sm text-center" id="customer_code" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="customer_id" class="form-label">คำนำหน้า</label>
+                                <select class="form-select form-select-sm text-center" id="customer_prefix" required>
+                                    <option value="" selected disabled>โปรดเลือก</option>
+                                    <option value="นาย">นาย</option>
+                                    <option value="นางสาว">นางสาว</option>
+                                    <option value="นาง">นาง</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="customer_id" class="form-label">ชื่อ</label>
+                                <input type="text" class="form-control form-control-sm text-center" id="customer_firstname" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="customer_id" class="form-label">นามสกุล</label>
+                                <input type="text" class="form-control form-control-sm text-center" id="customer_lastname" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="customer_id" class="form-label">เเผนก</label>
+                                <input class="form-control form-control-sm text-center" list="departmentlist" autocomplete="off" name="departmentname" id="departmentname" required>
+                                <datalist id="departmentlist">
+
+                                </datalist>
+                            </div>
+                            <div class="mb-3">
+                                <label for="customer_id" class="form-label">บริษัท</label>
+                                <input class="form-control form-control-sm text-center" list="companylist" autocomplete="off" name="companyname" id="companyname" required>
+                                <datalist id="companylist">
+                                </datalist>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -61,7 +62,7 @@
 
         <div class="row mt-4">
             <div class="col-sm-12 col-md-12 text-end ">
-                <button class="btn btn-primary btn-lg " id="view_user">ข้อมูลลูกค้า</button>
+                <button class="btn btn-primary btn-lg " id="view_customer">ข้อมูลลูกค้า</button>
             </div>
         </div>
         <div class="row">
@@ -108,14 +109,53 @@
                         </table>
                         <div class="row mt-3">
                             <div class="row">
-                                <div class="col-sm-12 col-md-6">
-                                    <div class="h2">
-                                        ยอดรวมทั้งหมด
+                                <div class="col-sm-12 col-md-9">
+                                    <div class="text-end ">
+                                        ราคาสินค้า
                                     </div>
                                 </div>
-                                <div class="col-sm-12 col-md-6">
-                                    <div class="h2 text-end" id="sumcart">
-                                        0 บาท
+                                <div class="col-sm-12 col-md-2">
+                                    <div class=" text-center">
+                                        <div id="cart_product">0</div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-1">
+                                    <div class=" text-end">
+                                        บาท
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-9">
+                                    <div class="text-end ">
+                                        ภาษีมูลค่าเพิ่ม 7 %
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-2">
+                                    <div class=" text-center">
+                                        <div id="cart_totalvat">0</div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-1">
+                                    <div class=" text-end">
+                                        บาท
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-9">
+                                    <div class="text-end ">
+                                        รวมทั้งสิ้น
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-2">
+                                    <div class=" text-center">
+                                        <div id="cart_total">0</div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-1">
+                                    <div class=" text-end">
+                                        บาท
                                     </div>
                                 </div>
                             </div>
@@ -124,7 +164,6 @@
                                 <button class="btn btn-sm btn-success w-100 mt-3 " id="print_order" disabled>พิมพ์ใบชำระสินค้า</button>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -144,9 +183,10 @@
                 barcode: $("#mat_barcode").val()
             },
             success: function(msg) {
+
                 if (msg) {
                     var js = JSON.parse(msg);
-                    addToCart(js.product_mat_no, js.product_mat_name_th, js.product_sale_price, js.product_size_id, js.product_color_id, 1);
+                    addToCart(js.product_mat_no, js.product_mat_name_th, js.product_sale_price, js.product_size_id, js.product_color_id, 1, js.product_sale_vat);
                     $("#tb_product").DataTable();
                 } else {
                     Swal.fire({
@@ -161,12 +201,15 @@
 
     const cart = [];
 
-    function addToCart(product_no, product_name, product_price, product_size, product_color, product_num) {
+    function addToCart(product_no, product_name, product_price, product_size, product_color, product_num, product_sale_vat) {
 
         for (let i = 0; i < cart.length; i++) {
             if (cart[i].no === product_no) {
                 cart[i].num = (parseInt(cart[i].num) + parseInt(product_num));
-                cart[i].total = (parseFloat(cart[i].num) * parseFloat(product_price)).toFixed(2).toLocaleString('en-US');
+                cart[i].totalproduct = (parseFloat(cart[i].num) * parseFloat(product_price)).toFixed(2).toLocaleString('en-US');
+                cart[i].totalvat = (parseFloat(cart[i].num) * (parseFloat(product_sale_vat) - parseFloat(product_price))).toFixed(2).toLocaleString('en-US');
+                cart[i].total = (parseFloat(cart[i].num) * parseFloat(product_sale_vat)).toFixed(2).toLocaleString('en-US');
+
                 displayCart();
                 return;
             }
@@ -178,7 +221,11 @@
             size: product_size,
             color: product_color,
             num: product_num,
-            total: (parseFloat(product_num) * parseFloat(product_price)).toFixed(2).toLocaleString('en-US')
+            pricevat: product_sale_vat,
+            vat: (parseFloat(product_sale_vat) - parseFloat(product_price)).toFixed(2).toLocaleString('en-US'),
+            totalproduct: (parseFloat(product_num) * parseFloat(product_price)).toFixed(2).toLocaleString('en-US'),
+            totalvat: (parseFloat(product_sale_vat) - parseFloat(product_price)).toFixed(2).toLocaleString('en-US'),
+            total: (parseFloat(product_num) * parseFloat(product_sale_vat)).toFixed(2).toLocaleString('en-US')
         });
         displayCart();
     }
@@ -191,11 +238,20 @@
     function editQuantity(index, status) {
         if (status == 1) {
             cart[index].num = (parseInt(cart[index].num) + 1);
-            cart[index].total = (parseFloat(cart[index].num) * parseFloat(cart[index].price)).toFixed(2);
+            cart[index].totalproduct = (parseFloat(cart[index].num) * parseFloat(cart[index].price)).toFixed(2).toLocaleString('en-US');
+            cart[index].totalvat = (parseFloat(cart[index].num) * parseFloat(cart[index].vat)).toFixed(2).toLocaleString('en-US');
+            cart[index].total = (parseFloat(cart[index].num) * parseFloat(cart[index].pricevat)).toFixed(2).toLocaleString('en-US');
+
+            //cart[index].total = (parseFloat(cart[index].num) * parseFloat(cart[index].price)).toFixed(2);
         } else if (status == 2) {
             cart[index].num = (parseInt(cart[index].num) - 1);
-            cart[index].total = (parseFloat(cart[index].num) * parseFloat(cart[index].price)).toFixed(2);
+            cart[index].totalproduct = (parseFloat(cart[index].num) * parseFloat(cart[index].price)).toFixed(2).toLocaleString('en-US');
+            cart[index].totalvat = (parseFloat(cart[index].num) * parseFloat(cart[index].vat)).toFixed(2).toLocaleString('en-US');
+            cart[index].total = (parseFloat(cart[index].num) * parseFloat(cart[index].pricevat)).toFixed(2).toLocaleString('en-US');
+
+            //cart[index].total = (parseFloat(cart[index].num) * parseFloat(cart[index].price)).toFixed(2);
         }
+
         displayCart();
     }
 
@@ -205,7 +261,9 @@
     }
 
     function displayCart() {
-        var sum = 0;
+        var sumproduct = 0;
+        var sumtotalvat = 0;
+        var sumtotal = 0;
         let output = '';
 
         for (let i = 0; i < cart.length; i++) {
@@ -217,9 +275,15 @@
             output += "<td>" + numberformat(cart[i].total) + "</td>";
             output += "<td><button type='button' class='btn btn-danger btn-sm' onclick='removeFromCart(" + i + ")'>ลบ</button></td>";
             output += "</tr>";
-            sum = (parseFloat(sum) + parseFloat(cart[i].total)).toFixed(2);
+            sumproduct = (parseFloat(sumproduct) + parseFloat(cart[i].totalproduct)).toFixed(2);
+            sumtotalvat = (parseFloat(sumtotalvat) + parseFloat(cart[i].totalvat)).toFixed(2);
+            sumtotal = (parseFloat(sumtotal) + parseFloat(cart[i].total)).toFixed(2);
         }
-        $("#sumcart").text(numberformat(sum) + " บาท");
+
+        $("#cart_product").text(numberformat(sumproduct));
+        $("#cart_totalvat").text(numberformat(sumtotalvat));
+        $("#cart_total").text(numberformat(sumtotal));
+
         $("#viewcart").html(output);
         var table = $("#table_cart").DataTable({
             retrieve: true,
@@ -243,9 +307,9 @@
 
                 var jsdecode = JSON.parse(msg);
                 var html = "";
-             
+
                 $.each(jsdecode, function(k, v) {
-                    html += "<option value='" + v[1] + "'>" + v[0] + "</option>";
+                    html += "<option value='" + v[0] + "'>" + v[1] + "</option>";
                 });
                 $("#departmentlist").empty();
                 $("#departmentlist").append(html);
@@ -263,9 +327,9 @@
             success: function(msg) {
                 var jsdecode = JSON.parse(msg);
                 var html = "";
-            
+
                 $.each(jsdecode, function(k, v) {
-                    html += "<option value='" + v[1] + "'>" + v[0] + "</option>";
+                    html += "<option value='" + v[0] + "'>" + v[1] + "</option>";
                 });
                 $("#companylist").empty();
                 $("#companylist").append(html);
@@ -274,16 +338,38 @@
     }
 
     function confirmorder() {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Something went wrong!',
-            footer: '<a href="">Why do I have this issue?</a>'
-        })
+
+        if (!$("#customer_code").val() || !$("#customer_prefix").val() || !$("#customer_firstname").val() || !$("#customer_lastname").val() || !$("#departmentname").val() || !$("#companyname").val()) {
+            $("#myform").addClass("was-validated");
+            $("#modalcustomer").modal('show');
+        } else {
+
+            var listcustomer = {
+                customercode: $("#customer_code").val(),
+                customerprefix: $("#customer_prefix").val(),
+                customerfirstname: $("#customer_firstname").val(),
+                customerlastname: $("#customer_lastname").val(),
+                departmentlist: $("#departmentname").val(),
+                companylist: $("#companyname").val()
+            }
+
+            $.ajax({
+                type: "post",
+                url: "Test.php",
+                data: {
+                    listcart: cart,
+                    listcustomer:listcustomer
+                },
+                success: function(msg) {
+                    console.log(msg);
+                }
+            });
+            
+        }
     }
 
     $(document).ready(function() {
-        $("#modaluser").modal('show');
+        $("#modalcustomer").modal('show');
         $("#pospage").addClass("active");
         $("#add_product").click(function() {
             getproduct();
@@ -295,10 +381,12 @@
         });
         getdepartment();
         getcompany();
-        $("#view_user").click(function() {
-            $("#modaluser").modal('show');
+        $("#view_customer").click(function() {
+            $("#modalcustomer").modal('show');
         });
-
+        $("#confirm_order").click(function() {
+            confirmorder()
+        });
     });
 </script>
 

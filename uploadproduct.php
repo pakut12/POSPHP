@@ -8,10 +8,6 @@
 <body>
     <?php include("share/navbar.php"); ?>
 
-    <?php
-    $mat = "4TM26S3569NB036";
- 
-    ?>
     <div class="container">
         <div class="card mt-3 border-dark ">
             <div class="card-header bg-dark text-white ">
@@ -51,6 +47,7 @@
                                 <th>Color</th>
                                 <th>Size</th>
                                 <th>Price</th>
+                                <th>Price Vat</th>
                                 <th>Date</th>
                             </tr>
                         </thead>
@@ -100,12 +97,14 @@
                     html += "<td>" + v.product_color_id + "</td>";
                     html += "<td>" + v.product_size_id + "</td>";
                     html += "<td>" + v.product_sale_price + "</td>";
+                    html += "<td>" + v.product_sale_vat + "</td>";
                     html += "<td>" + v.date_create + "</td>";
                     html += "</tr>";
                 })
                 $("#data_file").empty();
                 $("#data_file").html(html);
                 $("#table_excel").DataTable({
+                    retrieve: true,
                     scrollY: true,
                     dom: 'Bfrtip',
                     buttons: [
@@ -147,7 +146,6 @@
                         icon: "success",
                         text: "Upload File เรียบร้อย"
                     })
-
                     getproduct(js.groupid);
                 } else if (js.status == "false") {
                     Swal.fire({
@@ -155,8 +153,14 @@
                         icon: "error",
                         text: "ไม่สามารถ Upload File ได้"
                     })
+                } else if (js.status == "updatetrue") {
+                    Swal.fire({
+                        title: "เรียบร้อย",
+                        icon: "success",
+                        text: "Update Product เรียบร้อย"
+                    })
+                    getproduct(js.groupid);
                 }
-
 
             },
             error: function(xhr, status, error) {

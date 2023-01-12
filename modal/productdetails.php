@@ -9,6 +9,7 @@ class productdetails
     private $product_color_id;
     private $product_size_id;
     private $product_sale_price;
+    private $product_sale_vat;
     private $date_create;
 
 
@@ -78,7 +79,7 @@ class productdetails
     {
         return $this->product_size_id;
     }
-    
+
 
     public function setproduct_sale_price($product_sale_price)
     {
@@ -87,6 +88,16 @@ class productdetails
     public function getproduct_sale_price()
     {
         return $this->product_sale_price;
+    }
+
+
+    public function setproduct_sale_vat($product_sale_vat)
+    {
+        $this->product_sale_vat = $product_sale_vat;
+    }
+    public function getproduct_sale_vat()
+    {
+        return $this->product_sale_vat;
     }
 
 

@@ -32,6 +32,7 @@ class productservice
             $product->setproduct_color_id($row["product_color_id"]);
             $product->setproduct_size_id($row["product_size_id"]);
             $product->setproduct_sale_price($row["product_sale_price"]);
+            $product->setproduct_sale_vat($row["product_sale_vat"]);
             $product->setdate_create($row["date_create"]);
             array_push($arr, $product);
         }
@@ -58,13 +59,25 @@ class productservice
         if ($result) {
             $status = array(
                 "status" =>  "true",
-                "groupid" => $sql["groupid"]
+                "groupid" => $sql["groupid"],
+                "sql" => $sql["sql"]
             );
         } else {
-            $status = array(
-                "status" =>  "false",
-                "groupid" => $sql["groupid"]
-            );
+            if ($sql["update"] > 0) {
+                $status = array(
+                    "status" =>  "updatetrue",
+                    "groupid" => $sql["groupid"],
+                    "sql" => $sql["sql"],
+                    "update" => $sql["update"],
+                );
+            } else {
+                $status = array(
+                    "status" =>  "false",
+                    "groupid" => $sql["groupid"],
+                    "sql" => $sql["sql"],
+                    "update" => $sql["update"],
+                );
+            }
         }
         return $status;
     }
@@ -75,7 +88,35 @@ class productservice
         $sql = "SELECT * FROM `tb_product` WHERE product_mat_no = '" . $mat . "'";
         $result = mysqli_query($conn, $sql);
         $row = $result->num_rows;
-        return $row;
+        while ($data = mysqli_fetch_assoc($result)) {
+            $list = array(
+                "row" => $row,
+                "id" => $data["product_id"],
+                "productid" => $data["product_id"]
+            );
+        }
+        return $list;
+    }
+
+    public static function updatemat($mat)
+    {
+        include "../config.php";
+        $id = $mat["id"];
+        $barcode = $mat["barcode"];
+        $name = $mat["name"];
+        $color = $mat["color"];
+        $size = $mat["size"];
+        $price = $mat["price"];
+        $productid = $mat["productid"];
+        $pricevat = $mat["pricevat"];
+        $sql = "UPDATE tb_product SET product_group = '$productid',product_mat_barcode = '$barcode',product_mat_name_th = '$name',product_color_id = '$color',product_size_id = '$size',product_sale_price = '$price',product_sale_vat = '$pricevat' WHERE product_id = '$id';";
+        $result = mysqli_query($conn, $sql);
+        if ($result) {
+            $num = 1;
+        } else {
+            $num = 0;
+        }
+        return $num;
     }
 
     public static function generatorsqlinsert($listproduct)
@@ -86,30 +127,52 @@ class productservice
         $lastkeygroup = self::getlastkeyproductgroup() + 1;
         $lastkeyprimary = self::getlastprimarykey() + 1;
 
-        $sql = "INSERT INTO `tb_product` (`product_id`, `product_group`, `product_mat_no`, `product_mat_barcode`, `product_mat_name_th`, `product_color_id`, `product_size_id`, `product_sale_price`, `date_create`) VALUES ";
+        $sql = "INSERT INTO `tb_product` (`product_id`, `product_group`, `product_mat_no`, `product_mat_barcode`, `product_mat_name_th`, `product_color_id`, `product_size_id`, `product_sale_price`, `product_sale_vat`,  `date_create`) VALUES ";
         $row = count($listproduct);
+        $update = 0;
         for ($x = 0; $x < $row; $x++) {
-
-            $product_mat_no = $listproduct[$x]->getproduct_mat_no();
+            $mat = $listproduct[$x]->getproduct_mat_no();
             $product_mat_barcode = $listproduct[$x]->getproduct_mat_barcode();
             $product_mat_name_th = $listproduct[$x]->getproduct_mat_name_th();
             $product_color_id = $listproduct[$x]->getproduct_color_id();
             $product_size_id = $listproduct[$x]->getproduct_size_id();
             $product_sale_price = $listproduct[$x]->getproduct_sale_price();
+            $product_sale_vat = $listproduct[$x]->getproduct_sale_vat();
 
-            $chack = self::chackmat($product_mat_no);
-            if ($chack != 1) {
+
+            $color = substr(substr($mat, 10), 0, 2);
+            $size = substr($mat, 12, 3);
+            $chack = self::chackmat($mat);
+
+            if ($chack["row"] != 1) {
                 if ($x == $row - 1) {
-                    $sql = $sql . "('" . $lastkeyprimary . "', '" . $lastkeygroup . "', '" . $product_mat_no . "', '" . $product_mat_barcode . "', '" . $product_mat_name_th . "', '" . $product_color_id . "', '" . $product_size_id . "', '" . $product_sale_price . "', '" . $date . "')";
+                    $sql = $sql . "('" . $lastkeyprimary . "', '" . $lastkeygroup . "', '" . $mat . "', '" . $product_mat_barcode . "', '" . $product_mat_name_th . "', '" .    $color . "', '" . $size . "', '" . $product_sale_price . "', '" . $product_sale_vat . "', '" . $date . "')";
                 } else {
-                    $sql = $sql . "('" . $lastkeyprimary . "', '" . $lastkeygroup . "', '" . $product_mat_no . "', '" . $product_mat_barcode . "', '" . $product_mat_name_th . "', '" . $product_color_id . "', '" . $product_size_id . "', '" . $product_sale_price . "', '" . $date . "'),";
+                    $sql = $sql . "('" . $lastkeyprimary . "', '" . $lastkeygroup . "', '" . $mat . "', '" . $product_mat_barcode . "', '" . $product_mat_name_th . "', '" .    $color . "', '" . $size . "', '" . $product_sale_price . "', '" . $product_sale_vat . "','" . $date . "'),";
                 }
                 $lastkeyprimary++;
+            } else {
+                $mat = array(
+                    "id" => $chack["id"],
+                    "productid" => $lastkeygroup,
+                    "barcode" => $product_mat_barcode,
+                    "name" => $product_mat_name_th,
+                    "color" => $color,
+                    "size" =>  $size,
+                    "price" => $product_sale_price,
+                    "pricevat" => $product_sale_vat
+                );
+               
+                if (self::updatemat($mat) == 1) {
+                    $update =  $update + 1;
+                }
             }
         }
+
         $arr = array(
             "sql" =>  $sql,
-            "groupid" => $lastkeygroup
+            "groupid" => $lastkeygroup,
+            "update" => $update
         );
         return $arr;
     }
@@ -134,37 +197,26 @@ class productservice
                 $cellIterator = $row->getCellIterator();
                 $cellIterator->setIterateOnlyExistingCells(false); // Loop all cells, even if it is not set
                 foreach ($cellIterator as $cell) {
-
                     if ($d == 1) {
-                        $product->setproduct_id($cell->getValue());
-                        $d++;
-                    } else  if ($d == 2) {
-                        $product->setproduct_group($cell->getValue());
-                        $d++;
-                    } else  if ($d == 3) {
                         $product->setproduct_mat_no($cell->getValue());
                         $d++;
-                    } else  if ($d == 4) {
+                    } else  if ($d == 2) {
                         $product->setproduct_mat_barcode($cell->getValue());
                         $d++;
-                    } else  if ($d == 5) {
+                    } else  if ($d == 3) {
                         $product->setproduct_mat_name_th($cell->getValue());
                         $d++;
-                    } else  if ($d == 6) {
-                        $product->setproduct_color_id($cell->getValue());
-                        $d++;
-                    } else  if ($d == 7) {
-                        $product->setproduct_size_id($cell->getValue());
-                        $d++;
-                    } else  if ($d == 8) {
+                    } else  if ($d == 4) {
                         $product->setproduct_sale_price($cell->getValue());
+                        $d++;
+                    } else  if ($d == 5) {
+                        $product->setproduct_sale_vat($cell->getValue());
                         $d = 1;
                     }
-                    //echo $cell->getValue() . "<br>";
+                    // echo $cell->getValue() . "<br>";
                 }
                 array_push($arr, $product);
             }
-
             $n++;
         }
         return $arr;

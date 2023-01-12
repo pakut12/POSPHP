@@ -26,8 +26,10 @@ if ($type == "searchproduct") {
             "product_color_id" => $row->getproduct_color_id(),
             "product_size_id" => $row->getproduct_size_id(),
             "product_sale_price" => $row->getproduct_sale_price(),
+            "product_sale_vat" => $row->getproduct_sale_vat(),
             "date_create" => $row->getdate_create()
         );
+        
         $arr[] = $listproduct;
     }
 
@@ -39,6 +41,7 @@ if ($type == "searchproduct") {
     $listproduct = $product->readexcel($uploadstatus);
     $process = $product->insertproduct($listproduct);
 
+    //var_dump($listproduct);
     echo json_encode($process);
     /*
     foreach ($listproduct as $row) {
@@ -57,9 +60,4 @@ if ($type == "searchproduct") {
     }
     echo json_encode($arr);
 */
-} else if ($type == "test") {
-    $product = new productservice();
-    $re = $product->chackmat("4TM26S3569NB036");
-    
-
 }

@@ -1,5 +1,5 @@
 <?php
-class userdetails
+class customerdetails
 {
     private $user_id;
     private $user_code;
