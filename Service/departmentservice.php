@@ -14,6 +14,7 @@ class departmentservice
         }
         return $primarykey;
     }
+    
     public static function deldepartment($id)
     {
         include "../config.php";
@@ -27,6 +28,7 @@ class departmentservice
         }
         return $status;
     }
+
     public static function getdepartmentbyid($id)
     {
         include "../config.php";
@@ -42,6 +44,7 @@ class departmentservice
 
         return $arr;
     }
+
     public static function updatedepartment($id, $department)
     {
         include "../config.php";
@@ -55,6 +58,7 @@ class departmentservice
         }
         return $status;
     }
+
     public static function getdepartment()
     {
         include "../config.php";
@@ -71,12 +75,13 @@ class departmentservice
         }
         return $arr;
     }
+
     public static function adddepartment($department)
     {
         include "../config.php";
         require "../modal/departmentdetails.php";
 
-        $date = date("Y-d-m");
+        $date = date("Y-m-d");
         $primarykey = self::getlastprimarykey() + 1;
         $sql = "INSERT INTO `tb_department` (`department_id`, `department_name`, `date_create`) VALUES ('$primarykey ', '$department', '$date');";
         $result = mysqli_query($conn, $sql);

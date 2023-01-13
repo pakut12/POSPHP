@@ -8,6 +8,79 @@
 <body>
     <?php include("share/navbar.php"); ?>
     <div class="container">
+        <div class="modal fade" id="modalprint" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">พิมพ์มัดจำ</h5>
+                        <!--<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+                    </div>
+                    <div class="modal-body">
+                        <div class="d-flex justify-content-evenly mb-3">
+                            <div class="fw-bold">DocID : </div>
+                            <div id="docid"></div>
+                            <div class="fw-bold">Date : </div>
+                            <div class="text-center"><?= date("Y-m-d") ?></div>
+                        </div>
+                        <table class="table table-sm text-center w-100 h-25" id="table_print">
+                            <thead>
+                                <tr>
+                                    <th scope="col">ลำดับ</th>
+                                    <th scope="col">สินค้า</th>
+                                    <th scope="col">ราคา(หน่วย)</th>
+                                    <th scope="col">จำนวน</th>
+                                    <th scope="col">ราคา(ทั้งหมด)</th>
+
+                                </tr>
+                            </thead>
+                            <tbody id="viewprint">
+
+                            </tbody>
+                        </table>
+                        <div class="row mt-3 ">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="d-flex justify-content-end">
+                                        <div class="p-2 fw-bold">ราคาสินค้า</div>
+                                        <div class="p-2 fw-bold">
+                                            <div id="print_product" class="fw-bold text-primary">0</div>
+                                        </div>
+                                        <div class="p-2 fw-bold">บาท</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="d-flex justify-content-end">
+                                        <div class="p-2 fw-bold">ภาษีมูลค่าเพิ่ม 7 %</div>
+                                        <div class="p-2 ">
+                                            <div id="print_totalvat" class="fw-bold text-danger">0</div>
+                                        </div>
+                                        <div class="p-2 fw-bold">บาท</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="d-flex justify-content-end">
+                                        <div class="p-2 fw-bold">รวมทั้งสิ้น</div>
+                                        <div class="p-2 ">
+                                            <div id="print_total" class="fw-bold text-success">0</div>
+                                        </div>
+                                        <div class="p-2 fw-bold">บาท</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="noprint">ปิด</button>
+                        <button type="button" class="btn btn-success" onclick="window.open('distplayprint.php', '_blank', 'height=600,width=800,left=200,top=200');">พิมพ์</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="modal fade" id="modalcustomer" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -156,6 +229,36 @@
     <?php include("share/footer.php"); ?>
 </footer>
 <script>
+    const cart = [];
+
+    function displayprint() {
+        var sumproduct = 0;
+        var sumtotalvat = 0;
+        var sumtotal = 0;
+        let output = '';
+
+        for (let i = 0; i < cart.length; i++) {
+            output += "<tr>";
+            output += "<td>" + (i + 1) + "</td>";
+            output += "<td>" + cart[i].no + "</td>";
+            output += "<td>" + cart[i].price + "</td>";
+            output += "<td>" + cart[i].num + "</td>";
+            output += "<td>" + numberformat(cart[i].totalpricenovat) + "</td>";
+            output += "</tr>";
+            sumproduct = (parseFloat(sumproduct) + parseFloat(cart[i].totalproduct)).toFixed(2);
+            sumtotalvat = (parseFloat(sumtotalvat) + parseFloat(cart[i].totalvat)).toFixed(2);
+            sumtotal = (parseFloat(sumtotal) + parseFloat(cart[i].total)).toFixed(2);
+        }
+
+        $("#print_product").text(numberformat(sumproduct));
+        $("#print_totalvat").text(numberformat(sumtotalvat));
+        $("#print_total").text(numberformat(sumtotal));
+
+        $("#viewprint").html(output);
+
+    }
+
+
     function getproduct() {
         $.ajax({
             type: "post",
@@ -165,10 +268,10 @@
                 barcode: $("#mat_barcode").val()
             },
             success: function(msg) {
-
+                //console.log(msg);
                 if (msg) {
                     var js = JSON.parse(msg);
-                    addToCart(js.product_mat_no, js.product_mat_name_th, js.product_sale_price, js.product_size_id, js.product_color_id, 1, js.product_sale_vat);
+                    addToCart(js.product_id, js.product_mat_no, js.product_mat_name_th, js.product_sale_price, js.product_size_id, js.product_color_id, 1, js.product_sale_vat);
                     $("#tb_product").DataTable();
                 } else {
                     Swal.fire({
@@ -181,9 +284,9 @@
         })
     }
 
-    const cart = [];
 
-    function addToCart(product_no, product_name, product_price, product_size, product_color, product_num, product_sale_vat) {
+
+    function addToCart(product_id, product_no, product_name, product_price, product_size, product_color, product_num, product_sale_vat) {
 
         for (let i = 0; i < cart.length; i++) {
             if (cart[i].no === product_no) {
@@ -191,12 +294,13 @@
                 cart[i].totalproduct = (parseFloat(cart[i].num) * parseFloat(product_price)).toFixed(2).toLocaleString('en-US');
                 cart[i].totalvat = (parseFloat(cart[i].num) * (parseFloat(product_sale_vat) - parseFloat(product_price))).toFixed(2).toLocaleString('en-US');
                 cart[i].total = (parseFloat(cart[i].num) * parseFloat(product_sale_vat)).toFixed(2).toLocaleString('en-US');
-
+                cart[i].totalpricenovat = (parseFloat(cart[i].num) * parseFloat(cart[i].price)).toFixed(2).toLocaleString('en-US');
                 displayCart();
                 return;
             }
         }
         cart.push({
+            id: product_id,
             no: product_no,
             name: product_name,
             price: product_price,
@@ -207,7 +311,8 @@
             vat: (parseFloat(product_sale_vat) - parseFloat(product_price)).toFixed(2).toLocaleString('en-US'),
             totalproduct: (parseFloat(product_num) * parseFloat(product_price)).toFixed(2).toLocaleString('en-US'),
             totalvat: (parseFloat(product_sale_vat) - parseFloat(product_price)).toFixed(2).toLocaleString('en-US'),
-            total: (parseFloat(product_num) * parseFloat(product_sale_vat)).toFixed(2).toLocaleString('en-US')
+            total: (parseFloat(product_num) * parseFloat(product_sale_vat)).toFixed(2).toLocaleString('en-US'),
+            totalpricenovat: (parseFloat(product_num) * parseFloat(product_price)).toFixed(2).toLocaleString('en-US')
         });
         displayCart();
     }
@@ -223,6 +328,7 @@
             cart[index].totalproduct = (parseFloat(cart[index].num) * parseFloat(cart[index].price)).toFixed(2).toLocaleString('en-US');
             cart[index].totalvat = (parseFloat(cart[index].num) * parseFloat(cart[index].vat)).toFixed(2).toLocaleString('en-US');
             cart[index].total = (parseFloat(cart[index].num) * parseFloat(cart[index].pricevat)).toFixed(2).toLocaleString('en-US');
+            cart[index].totalpricenovat = (parseFloat(cart[index].num) * parseFloat(cart[index].price)).toFixed(2).toLocaleString('en-US');
 
             //cart[index].total = (parseFloat(cart[index].num) * parseFloat(cart[index].price)).toFixed(2);
         } else if (status == 2) {
@@ -230,6 +336,7 @@
             cart[index].totalproduct = (parseFloat(cart[index].num) * parseFloat(cart[index].price)).toFixed(2).toLocaleString('en-US');
             cart[index].totalvat = (parseFloat(cart[index].num) * parseFloat(cart[index].vat)).toFixed(2).toLocaleString('en-US');
             cart[index].total = (parseFloat(cart[index].num) * parseFloat(cart[index].pricevat)).toFixed(2).toLocaleString('en-US');
+            cart[index].totalpricenovat = (parseFloat(cart[index].num) * parseFloat(cart[index].price)).toFixed(2).toLocaleString('en-US');
 
             //cart[index].total = (parseFloat(cart[index].num) * parseFloat(cart[index].price)).toFixed(2);
         }
@@ -254,7 +361,7 @@
             output += "<td>" + cart[i].no + "</td>";
             output += "<td>" + cart[i].price + "</td>";
             output += "<td><button type='button' class='btn btn-primary btn-sm' onclick='editQuantity(" + i + ",2)'>-</button> " + cart[i].num + " <button type='button' class='btn btn-primary btn-sm' onclick='editQuantity(" + i + ",1)'>+</button></td>";
-            output += "<td>" + numberformat(cart[i].total) + "</td>";
+            output += "<td>" + numberformat(cart[i].totalpricenovat) + "</td>";
             output += "<td><button type='button' class='btn btn-danger btn-sm' onclick='removeFromCart(" + i + ")'>ลบ</button></td>";
             output += "</tr>";
             sumproduct = (parseFloat(sumproduct) + parseFloat(cart[i].totalproduct)).toFixed(2);
@@ -276,6 +383,7 @@
             "scrollY": "40vh",
             "scrollCollapse": true
         });
+        displayprint();
     }
 
     function getdepartment() {
@@ -286,7 +394,6 @@
                 type: "getdepartment"
             },
             success: function(msg) {
-
                 var jsdecode = JSON.parse(msg);
                 var html = "";
 
@@ -319,8 +426,21 @@
         });
     }
 
-    function confirmorder() {
+    function cleanorder() {
+        cart.length = 0;
+        $("#myform").removeClass("was-validated");
+        $("#mat_barcode").val("");
+        $("#customer_code").val("");
+        $("#customer_prefix").val("");
+        $("#customer_firstname").val("");
+        $("#customer_lastname").val("");
+        $("#departmentname").val("");
+        $("#docid").empty("");
+        displayCart();
+        $("#modalcustomer").modal('show');
+    }
 
+    function confirmorder() {
         if (cart.length > 0) {
             if (!$("#customer_code").val() || !$("#customer_prefix").val() || !$("#customer_firstname").val() || !$("#customer_lastname").val() || !$("#departmentname").val() || !$("#companyname").val()) {
                 $("#myform").addClass("was-validated");
@@ -331,27 +451,47 @@
                     text: "กรุณากรอกข้อมูลให้ถูกต้อง"
                 })
             } else {
-
-                var listcustomer = {
-                    customercode: $("#customer_code").val(),
-                    customerprefix: $("#customer_prefix").val(),
-                    customerfirstname: $("#customer_firstname").val(),
-                    customerlastname: $("#customer_lastname").val(),
-                    departmentlist: $("#departmentname").val(),
-                    companylist: $("#companyname").val()
-                }
-
-                $.ajax({
-                    type: "post",
-                    url: "Test.php",
-                    data: {
-                        listcart: cart,
-                        listcustomer: listcustomer
-                    },
-                    success: function(msg) {
-                        console.log(msg);
+                Swal.fire({
+                    title: 'ยืนยัน',
+                    text: "ต้องการยืนยันใช่หรือไม่",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: 'ยกเลิก',
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'ยืนยัน'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var listcustomer = {
+                            customercode: $("#customer_code").val(),
+                            customerprefix: $("#customer_prefix").val(),
+                            customerfirstname: $("#customer_firstname").val(),
+                            customerlastname: $("#customer_lastname").val(),
+                            departmentlist: $("#departmentname").val(),
+                            companylist: $("#companyname").val()
+                        }
+                        $.ajax({
+                            type: "post",
+                            url: "controller/Customer.php",
+                            data: {
+                                type: "addcustomer",
+                                listcustomer: listcustomer,
+                                listcart: cart
+                            },
+                            success: function(msg) {
+                                var js = JSON.parse(msg);
+                                $("#docid").text(js.doc_id);
+                                $("#print_order").attr("disabled", false);
+                                $("#print_order").click(function() {
+                                    $('#modalprint').modal('show');
+                                });
+                                $("#noprint").click(function() {
+                                    cleanorder();
+                                });
+                            }
+                        });
                     }
-                });
+                })
 
             }
         } else {
@@ -369,6 +509,7 @@
         $("#add_product").click(function() {
             getproduct();
         });
+
         $("#mat_barcode").on('input', function() {
             if ($(this).val()) {
                 getproduct();
@@ -382,6 +523,13 @@
         $("#confirm_order").click(function() {
             confirmorder()
         });
+        $("#print_order").click(function() {
+            $('#modalprint').modal('show');
+        });
+        $("#noprint").click(function() {
+            cleanorder();
+        });
+
     });
 </script>
 
