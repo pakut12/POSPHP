@@ -123,7 +123,7 @@ class productservice
     {
         include "../config.php";
         date_default_timezone_set("Asia/Bangkok");
-        $date = date("Y-m-d");
+        $date = date("Y-m-d h:i:s");
         $lastkeygroup = self::getlastkeyproductgroup() + 1;
         $lastkeyprimary = self::getlastprimarykey() + 1;
 

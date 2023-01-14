@@ -81,7 +81,7 @@ class departmentservice
         include "../config.php";
         require "../modal/departmentdetails.php";
 
-        $date = date("Y-m-d");
+        $date = date("Y-m-d h:i:s");
         $primarykey = self::getlastprimarykey() + 1;
         $sql = "INSERT INTO `tb_department` (`department_id`, `department_name`, `date_create`) VALUES ('$primarykey ', '$department', '$date');";
         $result = mysqli_query($conn, $sql);

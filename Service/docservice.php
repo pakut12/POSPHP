@@ -18,7 +18,7 @@ class docservice
     public static function adddoc()
     {
         include "../config.php";
-        $date = date("Y-m-d");
+        $date = date("Y-m-d h:i:s");
         $lastkey =  self::getlastprimarykey() + 1;
         $sql = "INSERT INTO `tb_doc` (`doc_id`, `date_create`) VALUES ('$lastkey', ' $date')";
         $result = mysqli_query($conn, $sql);

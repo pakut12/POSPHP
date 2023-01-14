@@ -22,7 +22,7 @@ class customerservice
         $customerlastname = $listcustomer["customerlastname"];
         // $departmentlist = $listcustomer["departmentlist"];
         // $companylist = $listcustomer["companylist"];
-        $date = date("Y-m-d");
+        $date = date("Y-m-d h:i:s");
         $lastkey = self::getlastprimarykey() + 1;
         $sql = "INSERT INTO `tb_customer` (`customer_id`, `customer_code`, `customer_prefix`, `customer_firstname`, `customer_lastname`, `date_create`) VALUES ('$lastkey', '$customercode', '$customerprefix', '$customerfirstname', '$customerlastname', '$date');";
         $result = mysqli_query($conn, $sql);

@@ -7,20 +7,21 @@
 
 <body>
     <?php include("share/navbar.php"); ?>
+
     <div class="container">
         <div class="modal fade" id="modalprint" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">พิมพ์มัดจำ</h5>
-                        <!--<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="d-flex justify-content-evenly mb-3">
                             <div class="fw-bold">DocID : </div>
                             <div id="docid"></div>
                             <div class="fw-bold">Date : </div>
-                            <div class="text-center"><?= date("Y-m-d") ?></div>
+                            <div class="text-center"><?= date("Y-m-d h:i:s") ?></div>
                         </div>
                         <table class="table table-sm text-center w-100 h-25" id="table_print">
                             <thead>
@@ -30,7 +31,6 @@
                                     <th scope="col">ราคา(หน่วย)</th>
                                     <th scope="col">จำนวน</th>
                                     <th scope="col">ราคา(ทั้งหมด)</th>
-
                                 </tr>
                             </thead>
                             <tbody id="viewprint">
@@ -75,8 +75,9 @@
 
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="noprint">ปิด</button>
-                        <button type="button" class="btn btn-success" onclick="window.open('distplayprint.php', '_blank', 'height=600,width=800,left=200,top=200');">พิมพ์</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
+                        <button type="button" class="btn btn-success" id="printout" onclick="printout();">พิมพ์</button>
+                        <button type="button" class="btn btn-primary" id="finishorder" onclick="cleanorder();">เสร็จสิ้น</button>
                     </div>
                 </div>
             </div>
@@ -216,7 +217,7 @@
                             </div>
                             <div class="text-center">
                                 <button class="btn btn-sm btn-primary w-100 mt-3" id="confirm_order">ยืนยัน Order</button>
-                                <button class="btn btn-sm btn-success w-100 mt-3 " id="print_order" disabled>พิมพ์ใบชำระสินค้า</button>
+                                <button class="btn btn-sm btn-success w-100 mt-3 " id="print_order">พิมพ์ใบชำระสินค้า</button>
                             </div>
                         </div>
                     </div>
@@ -437,7 +438,12 @@
         $("#departmentname").val("");
         $("#docid").empty("");
         displayCart();
+        $("#modalprint").modal('hide');
         $("#modalcustomer").modal('show');
+    }
+
+    function printout() {
+        window.open('distplayprint.php', '_blank', 'height=600,width=800,left=200,top=200');
     }
 
     function confirmorder() {
@@ -482,6 +488,7 @@
                                 var js = JSON.parse(msg);
                                 $("#docid").text(js.doc_id);
                                 $("#print_order").attr("disabled", false);
+                                $('#modalprint').modal('show');
                                 $("#print_order").click(function() {
                                     $('#modalprint').modal('show');
                                 });
