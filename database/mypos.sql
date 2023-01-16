@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:4306
--- Generation Time: Jan 16, 2023 at 05:37 AM
+-- Generation Time: Jan 16, 2023 at 10:29 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.29
 
@@ -50,7 +50,7 @@ INSERT INTO `tb_company` (`company_id`, `company_name`) VALUES
 CREATE TABLE `tb_customer` (
   `customer_id` int(10) NOT NULL,
   `customer_code` int(10) NOT NULL,
-  `customer_prefix` varchar(5) NOT NULL,
+  `customer_prefix` varchar(10) NOT NULL,
   `customer_firstname` varchar(50) NOT NULL,
   `customer_lastname` varchar(50) NOT NULL,
   `date_create` datetime NOT NULL
@@ -62,8 +62,9 @@ CREATE TABLE `tb_customer` (
 
 INSERT INTO `tb_customer` (`customer_id`, `customer_code`, `customer_prefix`, `customer_firstname`, `customer_lastname`, `date_create`) VALUES
 (99, 0, '', '', '', '2023-01-13 02:28:52'),
-(100, 12313, 'นาย', 'ปากัต ซิงห์', 'จาวาลา', '2023-01-16 11:35:44'),
-(101, 123213, 'นาย', 'ปากัต ซิงห์', 'จาวาลา', '2023-01-16 11:36:30');
+(100, 123213, 'นาย', 'ปากัต ซิงห์', 'จาวาลา', '2023-01-16 03:33:32'),
+(101, 123213, 'นาย', 'ปากัต ซิงห์', 'จาวาลา', '2023-01-16 03:45:52'),
+(102, 123213, 'นาย', 'ฟหกด', 'จาวาลา', '2023-01-16 03:47:59');
 
 -- --------------------------------------------------------
 
@@ -103,8 +104,8 @@ CREATE TABLE `tb_doc` (
 
 INSERT INTO `tb_doc` (`doc_id`, `date_create`) VALUES
 (99, '2023-01-13 00:00:00'),
-(100, '2023-01-16 11:35:44'),
-(101, '2023-01-16 11:36:30');
+(101, '2023-01-16 03:45:52'),
+(102, '2023-01-16 03:47:59');
 
 -- --------------------------------------------------------
 
@@ -130,10 +131,12 @@ CREATE TABLE `tb_order` (
 
 INSERT INTO `tb_order` (`order_id`, `doc_id`, `customer_id`, `product_id`, `product_qty`, `department_id`, `company_id`, `date_create`, `order_status`) VALUES
 (99, 0, 0, 0, 0, 0, 0, '2023-01-13 08:16:50', ''),
-(100, 100, 100, 103, 3, 100, 100, '2023-01-16 11:35:45', 'new'),
-(101, 100, 100, 121, 1, 100, 100, '2023-01-16 11:35:45', 'new'),
-(102, 101, 101, 119, 3, 100, 100, '2023-01-16 11:36:30', 'new'),
-(103, 101, 101, 121, 5, 100, 100, '2023-01-16 11:36:30', 'new');
+(100, 101, 101, 108, 1, 100, 100, '2023-01-16 03:45:53', 'new'),
+(101, 101, 101, 111, 2, 100, 100, '2023-01-16 03:45:53', 'new'),
+(102, 101, 101, 112, 1, 100, 100, '2023-01-16 03:45:53', 'new'),
+(103, 102, 102, 103, 2, 100, 100, '2023-01-16 03:47:59', 'new'),
+(104, 102, 102, 122, 1, 100, 100, '2023-01-16 03:47:59', 'new'),
+(105, 102, 102, 123, 1, 100, 100, '2023-01-16 03:47:59', 'new');
 
 -- --------------------------------------------------------
 

@@ -13,6 +13,9 @@
                     <a class="nav-link " aria-current="page" href="pos.php" id="pospage">POS</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link " aria-current="page" href="manageorder.php" id="manageorder">ManageOrder</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link " aria-current="page" href="managecompany.php" id="managecompany">ManageCompany</a>
                 </li>
                 <li class="nav-item">
@@ -20,9 +23,6 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link " aria-current="page" href="uploadproduct.php" id="uploadproduct">UploadProduct</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link " aria-current="page" href="manageorder.php" id="manageorder">ManageOrder</a>
                 </li>
             </ul>
         </div>
