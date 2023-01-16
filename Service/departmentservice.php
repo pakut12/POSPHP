@@ -80,7 +80,7 @@ class departmentservice
     {
         include "../config.php";
         require "../modal/departmentdetails.php";
-
+        date_default_timezone_set("Asia/Bangkok");
         $date = date("Y-m-d h:i:s");
         $primarykey = self::getlastprimarykey() + 1;
         $sql = "INSERT INTO `tb_department` (`department_id`, `department_name`, `date_create`) VALUES ('$primarykey ', '$department', '$date');";

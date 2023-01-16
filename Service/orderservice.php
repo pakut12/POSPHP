@@ -40,6 +40,7 @@ class orderservice
 
         $keydepartment = $listcustomer["departmentlist"];
         $keycompany = $listcustomer["companylist"];
+        date_default_timezone_set("Asia/Bangkok");
         $date = date("Y-m-d h:i:s");
         $lastkey = self::getlastprimarykey() + 1;
         $sql = "INSERT INTO `tb_order` (`order_id`, `doc_id`, `customer_id`, `product_id`, `department_id`, `company_id`, `date_create`, `order_status`) 
