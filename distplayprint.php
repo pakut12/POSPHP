@@ -11,39 +11,38 @@
     <title>Document</title>
 </head>
 <style>
-    .myfont {
-        font-size: 6pt;
-    }
+
 </style>
 
 <body>
     <div class="text-center myfont w-100">
+        <p class="mb-0">=====================================================</p>
         <div class="fw-bold">บริษัท ประชาอาภรณ์ จํากัด (มหาชน)<br>
             666 ถ.พระราม3 เเขวงบางโพงพาง เขตยานาวา กรุงเทพฯ 10120<br>
             โทร 02-685-6500<br>
             ใบมัดจำ 50% ค่าเสื้อ PoLo
         </div>
-        <p class="mb-0">-------------------------------------------------------------------------------------</p>
+        <p class="mb-0">=====================================================</p>
         <div class="d-flex justify-content-evenly">
             <div class="fw-bold">ชื่อ : </div>
-            <div class="text-decoration-underline">นาย ปากัต ซิงห์</div>
+            <div class="text-decoration-underline" id="customer_firstname">นาย ปากัต ซิงห์</div>
             <div class="fw-bold">นามสกุล : </div>
-            <div class="text-decoration-underline">จาวาลา</div>
+            <div class="text-decoration-underline" id="customer_lastname">จาวาลา</div>
         </div>
         <div class="d-flex justify-content-evenly">
             <div class="fw-bold">เเผนก : </div>
-            <div class="text-decoration-underline">computer</div>
+            <div class="text-decoration-underline" id="department_name">computer</div>
             <div class="fw-bold">โทร : </div>
-            <div class="text-decoration-underline">0956182209</div>
+            <div class="text-decoration-underline" id="customer_firstname">0956182209</div>
         </div>
         <div class="d-flex justify-content-evenly">
             <div class="fw-bold">DOCNO : </div>
-            <div class="text-decoration-underline">100</div>
+            <div class="text-decoration-underline" id="doc_id">100</div>
             <div class="fw-bold">DATE : </div>
             <div class="text-decoration-underline"><?= date('d-m-Y H:i:s') ?></div>
         </div>
-        <p class="mb-0">-------------------------------------------------------------------------------------</p>
-        <table class="table table-borderless mt-3 ">
+        <p class="mb-0">=====================================================</p>
+        <table class="table table-sm mx-auto">
             <thead>
                 <tr>
                     <th class="p-0">Item</th>
@@ -51,25 +50,11 @@
                     <th class="p-0">Amt</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td class="p-0">asd</td>
-                    <td class="p-0">asd</td>
-                    <td class="p-0">asd</td>
-                </tr>
-                <tr>
-                    <td class="p-0">asd</td>
-                    <td class="p-0">asd</td>
-                    <td class="p-0">asd</td>
-                </tr>
-                <tr>
-                    <td class="p-0">asd</td>
-                    <td class="p-0">asd</td>
-                    <td class="p-0">asd</td>
-                </tr>
+            <tbody id="list_order">
+
             </tbody>
         </table>
-        <p class="mb-0">-------------------------------------------------------------------------------------</p>
+        <p class="mb-0">=====================================================</p>
         <div class="row">
             <div class="col-6 ">
             </div>
@@ -77,29 +62,75 @@
                 <div class="col-12 mx-auto">
                     <div class="d-flex justify-content-evenly">
                         <div class="fw-bold">Vat Exc : </div>
-                        <div class="fw-bold">3</div>
+                        <div class="fw-bold" id="totalnovat"></div>
                         <div class="fw-bold">Bath</div>
                     </div>
                     <div class="d-flex justify-content-evenly">
                         <div class="fw-bold">Vat Amt : </div>
-                        <div class="fw-bold">10</div>
+                        <div class="fw-bold" id="vat"></div>
                         <div class="fw-bold">Bath</div>
                     </div>
                     <div class="d-flex justify-content-evenly">
                         <div class="fw-bold">Total : </div>
-                        <div class="fw-bold">12</div>
+                        <div class="fw-bold" id="totalvat"></div>
                         <div class="fw-bold">Bath</div>
                     </div>
 
                 </div>
             </div>
         </div>
-        <p class="mb-0">-------------------------------------------------------------------------------------</p>
+        <p class="mb-0">=====================================================</p>
     </div>
 </body>
 <script>
+    function getdocid() {
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const docid = urlParams.get('docid');
+
+        $.ajax({
+            type: "post",
+            url: "controller/Doc.php",
+            data: {
+                type: "getdocid",
+                docid: docid
+            },
+            success: function(msg) {
+
+                var jsdecode = JSON.parse(msg);
+
+                $("#customer_firstname").text(jsdecode[0].customer_prefix + " " + jsdecode[0].customer_firstname);
+                $("#customer_lastname").text(jsdecode[0].customer_lastname);
+                $("#department_name").text(jsdecode[0].department_name);
+                $("#customer_lastname").text(jsdecode[0].customer_lastname);
+                $("#doc_id").text(jsdecode[0].doc_id);
+
+                var html = "";
+                var totalnovat = 0;
+                var vat = 0;
+                var totalvat = 0;
+
+                $.each(jsdecode, function(k, v) {
+                    html += "<tr><td class='p-0'>" + v.product_mat_no + "</td><td class='p-0'>" + v.product_qty + "</td><td class='p-0'>" + v.product_sale_price + "</td></tr>";
+                    totalnovat += parseFloat(v.product_sale_price) * parseInt(v.product_qty);
+                    totalvat += parseFloat(v.product_sale_vat) * parseInt(v.product_qty);
+                })
+                vat = totalvat - totalnovat;
+
+                $("#totalnovat").text(totalnovat.toFixed(2));
+                $("#vat").text(vat.toFixed(2));
+                $("#totalvat").text(totalvat.toFixed(2));
+
+                $("#list_order").empty();
+                $("#list_order").html(html);
+                window.print();
+            }
+        })
+    }
+
     $(document).ready(function() {
-        alert('asd');
+        getdocid();
+
     });
 </script>
 

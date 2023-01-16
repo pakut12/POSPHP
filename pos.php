@@ -76,7 +76,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
-                        <button type="button" class="btn btn-success" id="printout" onclick="printout();">พิมพ์</button>
+                        <button type="button" class="btn btn-success" id="printout">พิมพ์</button>
                         <button type="button" class="btn btn-primary" id="finishorder" onclick="cleanorder();">เสร็จสิ้น</button>
                     </div>
                 </div>
@@ -217,7 +217,7 @@
                             </div>
                             <div class="text-center">
                                 <button class="btn btn-sm btn-primary w-100 mt-3" id="confirm_order">ยืนยัน Order</button>
-                                <button class="btn btn-sm btn-success w-100 mt-3 " id="print_order">พิมพ์ใบชำระสินค้า</button>
+                                <button class="btn btn-sm btn-success w-100 mt-3 " id="print_order" disabled>พิมพ์ใบชำระสินค้า</button>
                             </div>
                         </div>
                     </div>
@@ -437,13 +437,16 @@
         $("#customer_lastname").val("");
         $("#departmentname").val("");
         $("#docid").empty("");
+        $("#print_order").attr("disabled", true);
         displayCart();
         $("#modalprint").modal('hide');
         $("#modalcustomer").modal('show');
+
+
     }
 
-    function printout() {
-        window.open('distplayprint.php', '_blank', 'height=600,width=800,left=200,top=200');
+    function printout(id) {
+        window.open('distplayprint.php?docid=' + id, '_blank', 'height=600,width=800,left=200,top=200');
     }
 
     function confirmorder() {
@@ -491,6 +494,11 @@
                                 $('#modalprint').modal('show');
                                 $("#print_order").click(function() {
                                     $('#modalprint').modal('show');
+                                });
+
+                                $("#printout").click(function() {
+                                    var id = $("#docid").text();
+                                    printout(id);
                                 });
                                 $("#noprint").click(function() {
                                     cleanorder();

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:4306
--- Generation Time: Jan 13, 2023 at 10:53 AM
+-- Generation Time: Jan 16, 2023 at 05:37 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.29
 
@@ -61,7 +61,9 @@ CREATE TABLE `tb_customer` (
 --
 
 INSERT INTO `tb_customer` (`customer_id`, `customer_code`, `customer_prefix`, `customer_firstname`, `customer_lastname`, `date_create`) VALUES
-(99, 0, '', '', '', '2023-01-13 02:28:52');
+(99, 0, '', '', '', '2023-01-13 02:28:52'),
+(100, 12313, 'นาย', 'ปากัต ซิงห์', 'จาวาลา', '2023-01-16 11:35:44'),
+(101, 123213, 'นาย', 'ปากัต ซิงห์', 'จาวาลา', '2023-01-16 11:36:30');
 
 -- --------------------------------------------------------
 
@@ -100,7 +102,9 @@ CREATE TABLE `tb_doc` (
 --
 
 INSERT INTO `tb_doc` (`doc_id`, `date_create`) VALUES
-(99, '2023-01-13 00:00:00');
+(99, '2023-01-13 00:00:00'),
+(100, '2023-01-16 11:35:44'),
+(101, '2023-01-16 11:36:30');
 
 -- --------------------------------------------------------
 
@@ -113,6 +117,7 @@ CREATE TABLE `tb_order` (
   `doc_id` int(10) NOT NULL,
   `customer_id` int(10) NOT NULL,
   `product_id` int(10) NOT NULL,
+  `product_qty` int(10) NOT NULL,
   `department_id` int(10) NOT NULL,
   `company_id` int(10) NOT NULL,
   `date_create` datetime NOT NULL,
@@ -123,8 +128,12 @@ CREATE TABLE `tb_order` (
 -- Dumping data for table `tb_order`
 --
 
-INSERT INTO `tb_order` (`order_id`, `doc_id`, `customer_id`, `product_id`, `department_id`, `company_id`, `date_create`, `order_status`) VALUES
-(99, 0, 0, 0, 0, 0, '2023-01-13 08:16:50', '');
+INSERT INTO `tb_order` (`order_id`, `doc_id`, `customer_id`, `product_id`, `product_qty`, `department_id`, `company_id`, `date_create`, `order_status`) VALUES
+(99, 0, 0, 0, 0, 0, 0, '2023-01-13 08:16:50', ''),
+(100, 100, 100, 103, 3, 100, 100, '2023-01-16 11:35:45', 'new'),
+(101, 100, 100, 121, 1, 100, 100, '2023-01-16 11:35:45', 'new'),
+(102, 101, 101, 119, 3, 100, 100, '2023-01-16 11:36:30', 'new'),
+(103, 101, 101, 121, 5, 100, 100, '2023-01-16 11:36:30', 'new');
 
 -- --------------------------------------------------------
 

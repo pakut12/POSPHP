@@ -21,6 +21,9 @@
                 <li class="nav-item">
                     <a class="nav-link " aria-current="page" href="uploadproduct.php" id="uploadproduct">UploadProduct</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link " aria-current="page" href="manageorder.php" id="manageorder">ManageOrder</a>
+                </li>
             </ul>
         </div>
     </div>

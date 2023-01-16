@@ -43,28 +43,27 @@ class orderservice
         date_default_timezone_set("Asia/Bangkok");
         $date = date("Y-m-d h:i:s");
         $lastkey = self::getlastprimarykey() + 1;
-        $sql = "INSERT INTO `tb_order` (`order_id`, `doc_id`, `customer_id`, `product_id`, `department_id`, `company_id`, `date_create`, `order_status`) 
+        $sql = "INSERT INTO `tb_order` (`order_id`, `doc_id`, `customer_id`, `product_id`, `department_id`,`product_qty`, `company_id`, `date_create`, `order_status`) 
         VALUES ";
 
-        $num = count($listcart) - 1;
+
+        $numpd = count($listcart) - 1;
         foreach ($listcart as $row => $key) {
-            $numorder = $key["num"];
+            $num = $key["num"];
             $pd = $key["id"];
-            for ($x = 0; $x < $numorder; $x++) {
-                if ($x != $numorder - 1) {
-                    $sql = $sql . "('$lastkey', '$keydoc', '$keycustomer', '$pd', '$keydepartment', '$keycompany', '$date', 'new'),";
-                } else if ($row == $num) {
-                    $sql = $sql . "('$lastkey', '$keydoc', '$keycustomer', '$pd', '$keydepartment', '$keycompany', '$date', 'new')";
-                } else {
-                    $sql = $sql . "('$lastkey', '$keydoc', '$keycustomer', '$pd', '$keydepartment', '$keycompany', '$date', 'new'),";
-                }
-                $lastkey++;
+            if ($numpd != $row) {
+                $sql = $sql . "('$lastkey', '$keydoc', '$keycustomer', '$pd', '$keydepartment','$num', '$keycompany', '$date', 'new'),";
+            } else {
+                $sql = $sql . "('$lastkey', '$keydoc', '$keycustomer', '$pd', '$keydepartment', '$num','$keycompany', '$date', 'new')";
             }
+            $lastkey++;
         }
+
         $result = array(
             "sql" => $sql,
             "keydoc" => $keydoc
         );
+    
         return $result;
     }
 }
