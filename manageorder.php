@@ -219,7 +219,7 @@
     <?php include("share/footer.php"); ?>
 </footer>
 <script>
-    const cart = [];
+    var cart = [];
 
     function delorder(doc_id, customer_id) {
         $.ajax({
@@ -274,6 +274,36 @@
         //displayCart();
     }
 
+    function editQuantity(index, status) {
+
+        if (status == 1) {
+            cart[index].qty = (parseInt(cart[index].qty) + 1);
+            /*
+            cart[index].totalproduct = (parseFloat(cart[index].num) * parseFloat(cart[index].price)).toFixed(2).toLocaleString('en-US');
+            cart[index].totalvat = (parseFloat(cart[index].num) * parseFloat(cart[index].vat)).toFixed(2).toLocaleString('en-US');
+            cart[index].total = (parseFloat(cart[index].num) * parseFloat(cart[index].pricevat)).toFixed(2).toLocaleString('en-US');
+            cart[index].totalpricenovat = (parseFloat(cart[index].num) * parseFloat(cart[index].price)).toFixed(2).toLocaleString('en-US');
+*/
+            //cart[index].total = (parseFloat(cart[index].num) * parseFloat(cart[index].price)).toFixed(2);
+        } else if (status == 2) {
+            cart[index].qty = (parseInt(cart[index].qty) - 1);
+            /*
+            cart[index].totalproduct = (parseFloat(cart[index].num) * parseFloat(cart[index].price)).toFixed(2).toLocaleString('en-US');
+            cart[index].totalvat = (parseFloat(cart[index].num) * parseFloat(cart[index].vat)).toFixed(2).toLocaleString('en-US');
+            cart[index].total = (parseFloat(cart[index].num) * parseFloat(cart[index].pricevat)).toFixed(2).toLocaleString('en-US');
+            cart[index].totalpricenovat = (parseFloat(cart[index].num) * parseFloat(cart[index].price)).toFixed(2).toLocaleString('en-US');
+*/
+            //cart[index].total = (parseFloat(cart[index].num) * parseFloat(cart[index].price)).toFixed(2);
+        }
+
+        displayCart();
+    }
+
+    function DelQuantity(index) {
+        cart.splice(index, 1);
+        displayCart();
+    }
+
     function displayCart() {
         var html = "";
         var totalvat = 0;
@@ -286,9 +316,9 @@
             html += "<td class=''>" + (k + 1) + "</td>";
             html += "<td class=''>" + v.no + "</td>";
             html += "<td class=''>" + v.pricenovat + "</td>";
-            html += "<td class=''><input type='number' value='" + v.qty + "' class='form-control form-control-sm text-center' min='0'></td>";
-            html += "<td class=''>" + (v.pricenovat * v.qty) + "</td>";
-            html += "<td class=''><button type='button' class='btn btn-sm btn-danger' onclick='delorder(" + v.doc_id + "," + v.customer_id + ")'>ลบ</button></td>";
+            html += "<td><button type='button' class='btn btn-primary btn-sm' onclick='editQuantity(" + k + ",2)'>-</button> " + v.qty + " <button type='button' class='btn btn-primary btn-sm' onclick='editQuantity(" + k + ",1)'>+</button></td>";
+            html += "<td class=''>" + (v.pricenovat * v.qty).toFixed(2) + "</td>";
+            html += "<td class=''><button type='button' class='btn btn-sm btn-danger' onclick='DelQuantity(" + k + ")'>ลบ</button></td>";
             html += "</tr>";
 
             totalnovat += (v.pricenovat * v.qty);
@@ -323,7 +353,7 @@
             },
             success: function(msg) {
                 var js = JSON.parse(msg);
-
+                cart = [];
                 $('#modaledit').modal('show');
                 $('#detail_doc_id').val(js[0].doc_id);
                 $('#detail_customer_code').val(js[0].customer_code);
