@@ -34,7 +34,7 @@ class docservice
     {
         include "../config.php";
         require "../modal/orderdetails.php";
-        $sql = "SELECT a.doc_id,c.product_id,c.product_mat_no,b.product_qty,c.product_sale_price,c.product_sale_vat,e.customer_code,e.customer_prefix,e.customer_firstname,e.customer_lastname,f.department_name,g.company_name FROM tb_doc a INNER JOIN  tb_order b ON a.doc_id = b.doc_id INNER JOIN tb_product c ON c.product_id = b.product_id INNER JOIN tb_customer e on e.customer_id = b.customer_id INNER JOIN tb_department f on f.department_id = b.department_id INNER JOIN  tb_company g on g.company_id = b.company_id WHERE b.doc_id = '$docid'";
+        $sql = "SELECT a.doc_id,c.product_id,c.product_mat_no,b.product_qty,c.product_sale_price,c.product_sale_vat,e.customer_code,e.customer_prefix,e.customer_firstname,e.customer_lastname,e.customer_phone,f.department_name,g.company_name FROM tb_doc a INNER JOIN  tb_order b ON a.doc_id = b.doc_id INNER JOIN tb_product c ON c.product_id = b.product_id INNER JOIN tb_customer e on e.customer_id = b.customer_id INNER JOIN tb_department f on f.department_id = b.department_id INNER JOIN  tb_company g on g.company_id = b.company_id WHERE b.doc_id = '$docid'";
         $result  = mysqli_query($conn, $sql);
         $listorder = [];
         while ($row = mysqli_fetch_assoc($result)) {
@@ -49,6 +49,7 @@ class docservice
                 "customer_prefix" => $row["customer_prefix"],
                 "customer_firstname" => $row["customer_firstname"],
                 "customer_lastname" => $row["customer_lastname"],
+                "customer_phone" => $row["customer_phone"],
                 "department_name" => $row["department_name"],
                 "company_name" => $row["company_name"]
             );

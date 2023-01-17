@@ -113,6 +113,10 @@
                                 <input type="text" class="form-control form-control-sm text-center" id="customer_lastname" required>
                             </div>
                             <div class="mb-3">
+                                <label for="customer_id" class="form-label">เบอร์โทร</label>
+                                <input type="text" class="form-control form-control-sm text-center" id="customer_phone" maxlength="10" size="10" pattern="[0-9]{10}" required>
+                            </div>
+                            <div class="mb-3">
                                 <label for="customer_id" class="form-label">เเผนก</label>
                                 <input class="form-control form-control-sm text-center" list="departmentlist" autocomplete="off" name="departmentname" id="departmentname" required>
                                 <datalist id="departmentlist">
@@ -433,6 +437,7 @@
         $("#mat_barcode").val("");
         $("#customer_code").val("");
         $("#customer_prefix").val("");
+        $("#customer_phone").val("");
         $("#customer_firstname").val("");
         $("#customer_lastname").val("");
         $("#departmentname").val("");
@@ -451,7 +456,7 @@
 
     function confirmorder() {
         if (cart.length > 0) {
-            if (!$("#customer_code").val() || !$("#customer_prefix").val() || !$("#customer_firstname").val() || !$("#customer_lastname").val() || !$("#departmentname").val() || !$("#companyname").val()) {
+            if ($("#customer_phone").val().length != 10 || !$("#customer_phone").val() || !$("#customer_code").val() || !$("#customer_prefix").val() || !$("#customer_firstname").val() || !$("#customer_lastname").val() || !$("#departmentname").val() || !$("#companyname").val()) {
                 $("#myform").addClass("was-validated");
                 $("#modalcustomer").modal('show');
                 Swal.fire({
@@ -476,6 +481,7 @@
                             customerprefix: $("#customer_prefix").val(),
                             customerfirstname: $("#customer_firstname").val(),
                             customerlastname: $("#customer_lastname").val(),
+                            customerphone: $("#customer_phone").val(),
                             departmentlist: $("#departmentname").val(),
                             companylist: $("#companyname").val()
                         }

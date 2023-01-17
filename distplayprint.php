@@ -33,7 +33,7 @@
             <div class="fw-bold">เเผนก : </div>
             <div class="text-decoration-underline" id="department_name">computer</div>
             <div class="fw-bold">โทร : </div>
-            <div class="text-decoration-underline" id="customer_firstname">0956182209</div>
+            <div class="text-decoration-underline" id="customer_phone">0956182209</div>
         </div>
         <div class="d-flex justify-content-evenly">
             <div class="fw-bold">DOCNO : </div>
@@ -103,6 +103,7 @@
                 $("#customer_lastname").text(jsdecode[0].customer_lastname);
                 $("#department_name").text(jsdecode[0].department_name);
                 $("#customer_lastname").text(jsdecode[0].customer_lastname);
+                $("#customer_phone").text(jsdecode[0].customer_phone);
                 $("#doc_id").text(jsdecode[0].doc_id);
 
                 var html = "";
@@ -111,7 +112,7 @@
                 var totalvat = 0;
 
                 $.each(jsdecode, function(k, v) {
-                    html += "<tr><td class='p-0'>" + v.product_mat_no + "</td><td class='p-0'>" + v.product_qty + "</td><td class='p-0'>" + v.product_sale_price + "</td></tr>";
+                    html += "<tr><td class='p-0'>" + v.product_mat_no + "</td><td class='p-0'>" + v.product_qty + "</td><td class='p-0'>" + (v.product_sale_price * v.product_qty).toFixed(2) + "</td></tr>";
                     totalnovat += parseFloat(v.product_sale_price) * parseInt(v.product_qty);
                     totalvat += parseFloat(v.product_sale_vat) * parseInt(v.product_qty);
                 })
