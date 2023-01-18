@@ -389,7 +389,22 @@
                 doc_id: $("#detail_doc_id").val()
             },
             success: function(msg) {
-                console.log(msg);
+
+                var js = JSON.parse(msg);
+                console.log(js.statusorderupdate);
+                if (js.statusorderupdate) {
+                    Swal.fire({
+                        title: "ยืนยัน",
+                        icon: "success",
+                        text: "ยืนยันสำเร็จ"
+                    })
+                } else {
+                    Swal.fire({
+                        title: "ยืนยัน",
+                        icon: "error",
+                        text: "ยืนยันไม่สำเร็จ"
+                    })
+                }
             }
         });
     }

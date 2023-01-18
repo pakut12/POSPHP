@@ -44,6 +44,7 @@ if ($type == "getorder") {
         "statusorderupdate" =>  $statusorderupdate,
         "statusorderinsert" =>  $statusorderinsert
     );
+    echo json_encode($status);
 } else if ($type == "delorderbyid") {
     $order_id = $_POST["orderid"];
     $order = new orderservice();
