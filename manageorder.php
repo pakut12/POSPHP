@@ -81,6 +81,9 @@
                                         </div>
                                     </div>
                                 </div>
+                                <input type="hidden" id="detail_customer_id" value="">
+                                <input type="hidden" id="detail_department_id" value="">
+                                <input type="hidden" id="detail_company_id" value="">
 
                             </div>
                         </div>
@@ -102,7 +105,7 @@
                                                 <input type="text" id="detail_barcode" class="form-control form-control-sm text-center">
                                             </div>
                                             <div class="col-auto">
-                                                <button class="btn btn-success btn-sm">เพิ่มข้อมูล</button>
+                                                <button class="btn btn-success btn-sm" id="addproduct">เพิ่มข้อมูล</button>
                                             </div>
                                         </div>
                                         <div class="table-responsive">
@@ -123,9 +126,7 @@
                                             </table>
                                         </div>
                                     </div>
-
                                 </div>
-
                             </div>
                             <div class="col-sm-12 col-md-4">
                                 <div class="card">
@@ -167,7 +168,7 @@
                                             </div>
                                         </div>
                                         <br>
-                                        <button class="btn btn-success btn-sm w-100 mb-3">ยืนยัน</button>
+                                        <button class="btn btn-success btn-sm w-100 mb-3" id="confirm">ยืนยัน</button>
                                         <button class="btn btn-primary btn-sm w-100 mb-3" id="print_order">พิมพ์</button>
                                         <button class="btn btn-secondary btn-sm w-100" data-bs-dismiss="modal">ปิด</button>
                                     </div>
@@ -250,31 +251,26 @@
         });
     }
 
-    function addToCart(product_no, pricenovat, pricevat, num) {
-        /*
-                for (let i = 0; i < cart.length; i++) {
-                    if (cart[i].no === product_no) {
-                        cart[i].num = (parseInt(cart[i].num) + parseInt(product_num));
-                        cart[i].totalproduct = (parseFloat(cart[i].num) * parseFloat(product_price)).toFixed(2).toLocaleString('en-US');
-                        cart[i].totalvat = (parseFloat(cart[i].num) * (parseFloat(product_sale_vat) - parseFloat(product_price))).toFixed(2).toLocaleString('en-US');
-                        cart[i].total = (parseFloat(cart[i].num) * parseFloat(product_sale_vat)).toFixed(2).toLocaleString('en-US');
-                        cart[i].totalpricenovat = (parseFloat(cart[i].num) * parseFloat(cart[i].price)).toFixed(2).toLocaleString('en-US');
-                        displayCart();
-                        return;
-                    }
-                }
-                */
+    function addToCart(order_id, product_id, product_no, pricenovat, pricevat, product_num) {
+        for (let i = 0; i < cart.length; i++) {
+            if (cart[i].no === product_no) {
+                cart[i].qty = (parseInt(cart[i].qty) + 1);
+                displayCart();
+                return;
+            }
+        }
         cart.push({
+            orderid: order_id,
+            id: product_id,
             no: product_no,
             pricenovat: pricenovat,
             pricevat: pricevat,
-            qty: num
+            qty: product_num
         });
-
-        //displayCart();
+        displayCart();
     }
 
-    function editQuantity(index, status) {
+    function editProduct(index, status) {
 
         if (status == 1) {
             cart[index].qty = (parseInt(cart[index].qty) + 1);
@@ -299,9 +295,50 @@
         displayCart();
     }
 
-    function DelQuantity(index) {
-        cart.splice(index, 1);
-        displayCart();
+    function DelProduct(index, orderid) {
+
+        $.ajax({
+            type: "post",
+            url: "controller/Order.php",
+            data: {
+                type: "delorderbyid",
+                orderid: orderid
+            },
+            success: function(msg) {
+                cart.splice(index, 1);
+                console.log(msg);
+                displayCart();
+            }
+        })
+
+    }
+
+    function getproduct(barcode) {
+        $.ajax({
+            type: "post",
+            url: "controller/Product.php",
+            data: {
+                type: "searchproduct",
+                barcode: barcode
+            },
+            success: function(msg) {
+                if (msg) {
+                    var js = JSON.parse(msg);
+                    //addToCart(js.product_id, js.product_mat_no, js.product_mat_name_th, js.product_sale_price, js.product_size_id, js.product_color_id, 1, js.product_sale_vat);
+
+                    addToCart("new", js.product_id, js.product_mat_no, js.product_sale_price, js.product_sale_vat, 1);
+                    displayCart();
+                } else {
+                    Swal.fire({
+                        title: "ผิดพลาด",
+                        text: "ไม่พบข้อมูล",
+                        icon: "error"
+                    })
+                }
+
+            }
+        })
+
     }
 
     function displayCart() {
@@ -316,18 +353,15 @@
             html += "<td class=''>" + (k + 1) + "</td>";
             html += "<td class=''>" + v.no + "</td>";
             html += "<td class=''>" + v.pricenovat + "</td>";
-            html += "<td><button type='button' class='btn btn-primary btn-sm' onclick='editQuantity(" + k + ",2)'>-</button> " + v.qty + " <button type='button' class='btn btn-primary btn-sm' onclick='editQuantity(" + k + ",1)'>+</button></td>";
+            html += "<td><button type='button' class='btn btn-primary btn-sm' onclick='editProduct(" + k + ",2)'>-</button> " + v.qty + " <button type='button' class='btn btn-primary btn-sm' onclick='editProduct(" + k + ",1)'>+</button></td>";
             html += "<td class=''>" + (v.pricenovat * v.qty).toFixed(2) + "</td>";
-            html += "<td class=''><button type='button' class='btn btn-sm btn-danger' onclick='DelQuantity(" + k + ")'>ลบ</button></td>";
+            html += "<td class=''><button type='button' class='btn btn-sm btn-danger' onclick='DelProduct(" + k + "," + v.orderid + ")'>ลบ</button></td>";
             html += "</tr>";
 
             totalnovat += (v.pricenovat * v.qty);
             totalvat += (v.pricevat * v.qty);
             vat = totalvat - totalnovat;
-
         });
-
-
 
         $("#print_order").click(function() {
             var id = $("#detail_doc_id").val();
@@ -342,7 +376,26 @@
         $("#table_detail").DataTable();
     }
 
+    function confirmorder() {
+        $.ajax({
+            type: "post",
+            url: "controller/Order.php",
+            data: {
+                type: "updateorderbyid",
+                listcart: cart,
+                customer_id: $("#detail_customer_id").val(),
+                department_id: $("#detail_department_id").val(),
+                company_id: $("#detail_company_id").val(),
+                doc_id: $("#detail_doc_id").val()
+            },
+            success: function(msg) {
+                console.log(msg);
+            }
+        });
+    }
+
     function editorder(doc_id, customer_id) {
+        $("#detail_barcode").val("");
         $.ajax({
             type: "post",
             url: "controller/Order.php",
@@ -353,8 +406,13 @@
             },
             success: function(msg) {
                 var js = JSON.parse(msg);
+
                 cart = [];
                 $('#modaledit').modal('show');
+                $("#detail_customer_id").val(js[0].customer_id);
+                $("#detail_department_id").val(js[0].department_id);
+                $("#detail_company_id").val(js[0].company_id);
+
                 $('#detail_doc_id').val(js[0].doc_id);
                 $('#detail_customer_code').val(js[0].customer_code);
                 $('#detail_customer_name').val(js[0].customer_prefix + " " + js[0].customer_firstname + " " + js[0].customer_lastname);
@@ -363,10 +421,10 @@
                 $('#detail_company').val(js[0].company_name);
                 $('#detail_date_create').val(js[0].date_create);
                 $.each(js, function(k, v) {
-                    addToCart(v.product_mat_no, v.product_sale_price, v.product_sale_vat, v.product_qty, );
+                    addToCart(v.order_id, v.product_id, v.product_mat_no, v.product_sale_price, v.product_sale_vat, v.product_qty);
                 });
 
-                displayCart()
+                displayCart();
             }
         });
     }
@@ -388,8 +446,8 @@
                 type: "getorder"
             },
             success: function(msg) {
-
                 var js = JSON.parse(msg);
+
                 var html = "";
                 $.each(js, function(k, v) {
                     html += "<tr>";
@@ -409,7 +467,6 @@
 
     $(document).ready(function() {
         $("#manageorder").addClass("active");
-
         getorder();
         $("#add_order").click(function() {
             $('#modaladd').modal('show');
@@ -417,6 +474,13 @@
         $('#order_save_add').click(function() {
             addorder();
         });
+        $("#addproduct").click(function() {
+            var barcode = $("#detail_barcode").val();
+            getproduct(barcode);
+        });
+        $("#confirm").click(function() {
+            confirmorder();
+        })
     });
 </script>
 

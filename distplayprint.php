@@ -90,10 +90,10 @@
 
         $.ajax({
             type: "post",
-            url: "controller/Doc.php",
+            url: "controller/Order.php",
             data: {
-                type: "getdocid",
-                docid: docid
+                type: "getorderbyid",
+                doc_id: docid
             },
             success: function(msg) {
 
