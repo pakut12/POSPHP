@@ -217,7 +217,7 @@ class orderservice
         include "../config.php";
         $sql = self::generatorsqlinsertorder($listcart, $doc_id, $customer_id, $department_id, $company_id);
         $result = mysqli_query($conn, $sql);
-
+       
         if ($result) {
             $status = true;
         } else {
@@ -234,15 +234,15 @@ class orderservice
         $lastkey = self::getlastprimarykey() + 1;
         $sql = "INSERT INTO `tb_order`(`order_id`, `doc_id`, `customer_id`, `product_id`, `product_qty`, `department_id`, `company_id`, `date_create`, `order_status`) 
         VALUES ";
+        
         $numpd = count($listcart) - 1;
 
         foreach ($listcart as $row => $key) {
             $product_id = $key["id"];
             $product_qty = $key["qty"];
 
-
             if ($numpd != $row) {
-                $sql = $sql . "('$lastkey', '$doc_id', '$customer_id', '$product_id', '$product_qty','$department_id, '$company_id', '$date', 'new'),";
+                $sql = $sql . "('$lastkey', '$doc_id', '$customer_id', '$product_id', '$product_qty','$department_id', '$company_id', '$date', 'new'),";
             } else {
                 $sql = $sql . "('$lastkey', '$doc_id', '$customer_id', '$product_id', '$product_qty', '$department_id','$company_id', '$date', 'new')";
             }

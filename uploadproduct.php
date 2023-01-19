@@ -18,15 +18,26 @@
                     <div class="h3 fw-bold ">UploadExcel</div>
                     <a href="attachfile/downloadmaster/Master.xlsx"><button class="btn btn-success btn-md" id="">โหลดไฟล์ Master</button></a>
                 </div>
-                <form id="myForm">
-                    <div class="mt-3">
-                        <input type="hidden" id="type" name="type" value="uploadproduct">
-                        <label for="fileexcel" class="form-label">FileExcel : </label>
-                        <input class="form-control form-control-sm" id="fileexcel" name="fileexcel" type="file">
-                        <div class="text-danger mt-2 text-end">* กรุณา UploadFile ที่โหลดจากโปรเเกรมเท่านั้น</div>
-                        <input type="button" value="Upload" onclick="uploadFile()" class="btn btn-success btn-sm w-100 mt-3">
+                <form id="myForm" class="">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            <div class="mt-3">
+                                <label for="asd" class="form-label">MaterialGroup : </label>
+                                <select class="form-select form-select-sm text-center" id="materialgroup" name="materialgroup" required>
 
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="mt-3">
+                                <input type="hidden" id="type" name="type" value="uploadproduct">
+                                <label for="fileexcel" class="form-label">FileExcel : </label>
+                                <input class="form-control form-control-sm" id="fileexcel" name="fileexcel" type="file" required>
+                                <div class="text-danger mt-2 text-center">* กรุณา UploadFile ที่โหลดจากโปรเเกรมเท่านั้น</div>
+                            </div>
+                        </div>
                     </div>
+                    <input type="button" value="Upload" id="uploadFile" name="uploadFile" class="btn btn-success btn-sm w-100 mt-3">
                 </form>
             </div>
         </div>
@@ -63,19 +74,6 @@
     <?php include("share/footer.php"); ?>
 </footer>
 <script>
-    function test() {
-        $.ajax({
-            type: "post",
-            url: "controller/Product.php",
-            data: {
-                type: "test"
-            },
-            success: function(msg) {
-                console.log(msg);
-            }
-        })
-    }
-
     function getproduct(id) {
         $.ajax({
             type: "post",
@@ -115,63 +113,101 @@
         });
     }
 
-    function uploadFile() {
-        var formData = new FormData();
-        var file = document.getElementById('fileexcel').files[0];
-        formData.append('fileexcel', file);
-        formData.append('type', "uploadproduct");
+    function GetMaterial() {
         $.ajax({
-            url: 'controller/Product.php',
-            type: 'POST',
-            data: formData,
-            contentType: false,
-            processData: false,
-            xhr: function() {
-                var xhr = new window.XMLHttpRequest();
-                xhr.upload.addEventListener("progress", function(evt) {
-                    if (evt.lengthComputable) {
-                        var percentComplete = evt.loaded / evt.total;
-                        percentComplete = parseInt(percentComplete * 100);
-                        //console.log(percentComplete + '% uploaded');
-                    }
-                }, false);
-                return xhr;
+            type: "post",
+            url: "controller/Material.php",
+            data: {
+                type: "getmaterial"
             },
-            success: function(data) {
-                console.log(data);
-                var js = JSON.parse(data);
-                if (js.status == "true") {
-                    Swal.fire({
-                        title: "เรียบร้อย",
-                        icon: "success",
-                        text: "Upload File เรียบร้อย"
-                    })
-                    getproduct(js.groupid);
-                } else if (js.status == "false") {
-                    Swal.fire({
-                        title: "ผิดพลาด",
-                        icon: "error",
-                        text: "ไม่สามารถ Upload File ได้"
-                    })
-                } else if (js.status == "updatetrue") {
-                    Swal.fire({
-                        title: "เรียบร้อย",
-                        icon: "success",
-                        text: "Update Product เรียบร้อย"
-                    })
-                    getproduct(js.groupid);
-                }
-
-            },
-            error: function(xhr, status, error) {
-                console.log("Error uploading file");
+            success: function(msg) {
+                var jsdecode = JSON.parse(msg);
+                console.log(jsdecode);
+                var html = "";
+                html += "<option value='' selected disabled>โปรดเลือก</option>";
+                $.each(jsdecode, function(k, v) {
+                    html += "<option value='" + v.material_id + "'>" + v.material_name + "</option>";
+                });
+                $("#materialgroup").empty();
+                $("#materialgroup").append(html);
             }
         });
     }
 
+    function uploadFile() {
+
+        if ($('#fileexcel').get(0).files.length === 0 || $("#materialgroup").val() == "") {
+            $("#myForm").addClass("was-validated");
+            Swal.fire({
+                title: 'ผิดพลาด',
+                icon: 'error',
+                text: 'กรุณากรอกข้อมูลให้ถูกต้อง'
+            })
+
+        } else {
+            var formData = new FormData();
+            var file = document.getElementById('fileexcel').files[0];
+            formData.append('fileexcel', file);
+            formData.append('type', "uploadproduct");
+            formData.append('materialgroup', $("#materialgroup").val());
+
+            $.ajax({
+                url: 'controller/Product.php',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                xhr: function() {
+                    var xhr = new window.XMLHttpRequest();
+                    xhr.upload.addEventListener("progress", function(evt) {
+                        if (evt.lengthComputable) {
+                            var percentComplete = evt.loaded / evt.total;
+                            percentComplete = parseInt(percentComplete * 100);
+                            //console.log(percentComplete + '% uploaded');
+                        }
+                    }, false);
+                    return xhr;
+                },
+                success: function(data) {
+
+                    var js = JSON.parse(data);
+                    console.log(js);
+                    if (js.status == "true") {
+                        Swal.fire({
+                            title: "เรียบร้อย",
+                            icon: "success",
+                            text: "Upload File เรียบร้อย"
+                        })
+                        getproduct(js.groupid);
+                    } else if (js.status == "false") {
+                        Swal.fire({
+                            title: "ผิดพลาด",
+                            icon: "error",
+                            text: "ไม่สามารถ Upload File ได้"
+                        })
+                    } else if (js.status == "updatetrue") {
+                        Swal.fire({
+                            title: "เรียบร้อย",
+                            icon: "success",
+                            text: "Update Product เรียบร้อย"
+                        })
+                        getproduct(js.groupid);
+                    }
+
+                },
+                error: function(xhr, status, error) {
+                    console.log("Error uploading file");
+                }
+            });
+        }
+    }
+
     $(document).ready(function() {
         $("#uploadproduct").addClass("active");
-        test();
+        $("#uploadFile").click(function() {
+            uploadFile();
+        });
+        GetMaterial();
     });
 </script>
 

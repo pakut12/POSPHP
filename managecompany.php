@@ -15,9 +15,11 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-center">
-                    <div class="mb-3">
-                        <label for="user_id" class="form-label">ชื่อบริษัท</label>
-                        <input type="text" class="form-control form-control-sm text-center" id="add_company_name" placeholder="">
+                    <div id="myform">
+                        <div class="mb-3">
+                            <label for="user_id" class="form-label">ชื่อบริษัท</label>
+                            <input type="text" class="form-control form-control-sm text-center" id="add_company_name" placeholder="" required>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -63,7 +65,6 @@
                 <div class="text-end">
                     <button class="btn btn-lg btn-success" id="add_company"> + เพิ่ม</button>
                 </div>
-
                 <br>
                 <div class="table-responsive ">
                     <table class="table text-nowrap" id="table_company">
@@ -90,18 +91,29 @@
 </footer>
 <script>
     function addcompany() {
-        $.ajax({
-            type: "post",
-            url: "controller/Company.php",
-            data: {
-                type: "addcompany",
-                company: $("#add_company_name").val()
-            },
-            success: function(msg) {
-                $('#modaladd').modal('hide');
-                getcompany();
-            }
-        });
+        var company_name = $("#add_company_name").val();
+        if (!company_name) {
+            $("#myform").addClass('was-validated');
+            Swal.fire({
+                icon: 'error',
+                title: 'กรุณากรอกข้อมูลให้ถูกต้อง',
+                text: 'กรุณากรอกข้อมูลให้ถูกต้อง'
+            });
+        } else {
+            $.ajax({
+                type: "post",
+                url: "controller/Company.php",
+                data: {
+                    type: "addcompany",
+                    company: $("#add_company_name").val()
+                },
+                success: function(msg) {
+                    $('#modaladd').modal('hide');
+                    getcompany();
+                }
+            });
+        }
+
 
     }
 
@@ -181,12 +193,13 @@
                 });
                 $("#data_company").empty();
                 $("#data_company").append(html);
+                $("#table_company").DataTable();
             }
         });
     }
     $(document).ready(function() {
         $("#managecompany").addClass("active");
-        $("#table_company").DataTable();
+
         getcompany();
         $("#add_company").click(function() {
             $('#modaladd').modal('show');

@@ -51,10 +51,10 @@ class productservice
         }
         return $primarykey;
     }
-    public static function insertproduct($listproduct)
+    public static function insertproduct($listproduct, $materialgroup)
     {
         include "../config.php";
-        $sql = self::generatorsqlinsert($listproduct);
+        $sql = self::generatorsqlinsert($listproduct, $materialgroup);
         $result = mysqli_query($conn, $sql["sql"]);
         if ($result) {
             $status = array(
@@ -102,6 +102,7 @@ class productservice
     {
         include "../config.php";
         $id = $mat["id"];
+        $materialgroup = $mat["materialgroup"];
         $barcode = $mat["barcode"];
         $name = $mat["name"];
         $color = $mat["color"];
@@ -109,7 +110,8 @@ class productservice
         $price = $mat["price"];
         $productid = $mat["productid"];
         $pricevat = $mat["pricevat"];
-        $sql = "UPDATE tb_product SET product_group = '$productid',product_mat_barcode = '$barcode',product_mat_name_th = '$name',product_color_id = '$color',product_size_id = '$size',product_sale_price = '$price',product_sale_vat = '$pricevat' WHERE product_id = '$id';";
+        $sql = "UPDATE tb_product SET product_group = '$productid',material_id = '$materialgroup ',product_mat_barcode = '$barcode',product_mat_name_th = '$name',product_color_id = '$color',product_size_id = '$size',product_sale_price = '$price',product_sale_vat = '$pricevat' WHERE product_id = '$id';";
+     
         $result = mysqli_query($conn, $sql);
         if ($result) {
             $num = 1;
@@ -119,7 +121,7 @@ class productservice
         return $num;
     }
 
-    public static function generatorsqlinsert($listproduct)
+    public static function generatorsqlinsert($listproduct, $materialgroup)
     {
         include "../config.php";
         date_default_timezone_set("Asia/Bangkok");
@@ -127,7 +129,7 @@ class productservice
         $lastkeygroup = self::getlastkeyproductgroup() + 1;
         $lastkeyprimary = self::getlastprimarykey() + 1;
 
-        $sql = "INSERT INTO `tb_product` (`product_id`, `product_group`, `product_mat_no`, `product_mat_barcode`, `product_mat_name_th`, `product_color_id`, `product_size_id`, `product_sale_price`, `product_sale_vat`,  `date_create`) VALUES ";
+        $sql = "INSERT INTO `tb_product` (`product_id`, `material_id`,`product_group`, `product_mat_no`, `product_mat_barcode`, `product_mat_name_th`, `product_color_id`, `product_size_id`, `product_sale_price`, `product_sale_vat`,  `date_create`) VALUES ";
         $row = count($listproduct);
         $update = 0;
         for ($x = 0; $x < $row; $x++) {
@@ -146,14 +148,15 @@ class productservice
 
             if ($chack["row"] != 1) {
                 if ($x == $row - 1) {
-                    $sql = $sql . "('" . $lastkeyprimary . "', '" . $lastkeygroup . "', '" . $mat . "', '" . $product_mat_barcode . "', '" . $product_mat_name_th . "', '" .    $color . "', '" . $size . "', '" . $product_sale_price . "', '" . $product_sale_vat . "', '" . $date . "')";
+                    $sql = $sql . "('" . $lastkeyprimary . "', '" . $materialgroup . "','" . $lastkeygroup . "', '" . $mat . "', '" . $product_mat_barcode . "', '" . $product_mat_name_th . "', '" .    $color . "', '" . $size . "', '" . $product_sale_price . "', '" . $product_sale_vat . "', '" . $date . "')";
                 } else {
-                    $sql = $sql . "('" . $lastkeyprimary . "', '" . $lastkeygroup . "', '" . $mat . "', '" . $product_mat_barcode . "', '" . $product_mat_name_th . "', '" .    $color . "', '" . $size . "', '" . $product_sale_price . "', '" . $product_sale_vat . "','" . $date . "'),";
+                    $sql = $sql . "('" . $lastkeyprimary . "','" . $materialgroup . "', '" . $lastkeygroup . "', '" . $mat . "', '" . $product_mat_barcode . "', '" . $product_mat_name_th . "', '" .    $color . "', '" . $size . "', '" . $product_sale_price . "', '" . $product_sale_vat . "','" . $date . "'),";
                 }
                 $lastkeyprimary++;
             } else {
                 $mat = array(
                     "id" => $chack["id"],
+                    "materialgroup" => $materialgroup,
                     "productid" => $lastkeygroup,
                     "barcode" => $product_mat_barcode,
                     "name" => $product_mat_name_th,
@@ -162,7 +165,7 @@ class productservice
                     "price" => $product_sale_price,
                     "pricevat" => $product_sale_vat
                 );
-               
+
                 if (self::updatemat($mat) == 1) {
                     $update =  $update + 1;
                 }

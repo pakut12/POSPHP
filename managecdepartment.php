@@ -18,9 +18,11 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-center">
-                    <div class="mb-3">
-                        <label for="user_id" class="form-label">ชื่อเเผนก</label>
-                        <input type="text" class="form-control form-control-sm text-center" id="add_department_name" placeholder="">
+                    <div id="myform">
+                        <div class="mb-3">
+                            <label for="user_id" class="form-label">ชื่อเเผนก</label>
+                            <input type="text" class="form-control form-control-sm text-center" id="add_department_name" placeholder="" required>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -44,6 +46,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-center">
+
                     <div class="mb-3">
                         <label for="user_id" class="form-label">รหัสเเผนก</label>
                         <input type="text" class="form-control form-control-sm text-center" id="department_id" placeholder="" readonly>
@@ -52,6 +55,7 @@
                         <label for="user_id" class="form-label">ชื่อเเผนก</label>
                         <input type="text" class="form-control form-control-sm text-center" id="department_name" placeholder="">
                     </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -123,25 +127,37 @@
                 });
                 $("#data_department").empty();
                 $("#data_department").append(html);
-
+                $("#table_department").DataTable();
             }
         });
     }
 
     function adddepartment() {
-        $.ajax({
-            type: "post",
-            url: "controller/Department.php",
-            data: {
-                type: "adddepartment",
-                department: $("#add_department_name").val()
-            },
-            success: function(msg) {
-                console.log(msg);
-                getdepartment();
-                $('#modaladd').modal('hide');
-            }
-        });
+        var department_name = $("#add_department_name").val();
+
+
+        if (!department_name) {
+            $("#myform").addClass('was-validated');
+            Swal.fire({
+                icon: 'error',
+                title: 'กรุณากรอกข้อมูลให้ถูกต้อง',
+                text: 'กรุณากรอกข้อมูลให้ถูกต้อง'
+            });
+        } else {
+            $.ajax({
+                type: "post",
+                url: "controller/Department.php",
+                data: {
+                    type: "adddepartment",
+                    department: $("#add_department_name").val()
+                },
+                success: function(msg) {
+                    console.log(msg);
+                    getdepartment();
+                    $('#modaladd').modal('hide');
+                }
+            });
+        }
 
     }
 
@@ -201,7 +217,7 @@
 
     $(document).ready(function() {
         $("#managecdepartment").addClass("active");
-        $("#table_department").DataTable();
+
         getdepartment();
         $("#add_department").click(function() {
             $('#modaladd').modal('show');

@@ -190,20 +190,23 @@
                 <div class="text-center">
                     <div class="h3 fw-bold">ManageOrder</div>
                 </div>
+                <div class="text-end">
+                    <a href="pos.php"><button class="btn btn-lg btn-success" id="add_department"> + Add</button></a>
+                </div>
                 <br>
                 <div class="table-responsive ">
                     <table class="table text-nowrap" id="table_order">
                         <thead>
                             <tr>
-                                <th>เลขที่เอกสาร</th>
-                                <th>รหัสพนักงาน</th>
-                                <th>ชื่อ</th>
-                                <th>เเผนก</th>
-                                <th>บริษัท</th>
-                                <th>วันที่</th>
-                                <th>รายละเอียด</th>
-                                <th>พิมพ์</th>
-                                <th>ลบ</th>
+                                <th>DocID</th>
+                                <th>CustomerCode</th>
+                                <th>Name</th>
+                                <th>Department</th>
+                                <th>Company</th>
+                                <th>Date</th>
+                                <th>Detail</th>
+                                <th>Print</th>
+                                <th>Del</th>
                             </tr>
                         </thead>
                         <tbody id="data_order">
@@ -296,7 +299,6 @@
     }
 
     function DelProduct(index, orderid) {
-
         $.ajax({
             type: "post",
             url: "controller/Order.php",
@@ -306,10 +308,10 @@
             },
             success: function(msg) {
                 cart.splice(index, 1);
-                console.log(msg);
                 displayCart();
+                console.log(msg);
             }
-        })
+        });
 
     }
 
@@ -325,8 +327,10 @@
                 if (msg) {
                     var js = JSON.parse(msg);
                     //addToCart(js.product_id, js.product_mat_no, js.product_mat_name_th, js.product_sale_price, js.product_size_id, js.product_color_id, 1, js.product_sale_vat);
+                    var x = '"new"';
 
-                    addToCart("new", js.product_id, js.product_mat_no, js.product_sale_price, js.product_sale_vat, 1);
+                    addToCart(x, js.product_id, js.product_mat_no, js.product_sale_price, js.product_sale_vat, 1);
+
                     displayCart();
                 } else {
                     Swal.fire({
@@ -389,10 +393,9 @@
                 doc_id: $("#detail_doc_id").val()
             },
             success: function(msg) {
-
                 var js = JSON.parse(msg);
-                console.log(js.statusorderupdate);
-                if (js.statusorderupdate) {
+                console.log(js);
+                if (js.status) {
                     Swal.fire({
                         title: "ยืนยัน",
                         icon: "success",

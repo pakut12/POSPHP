@@ -29,7 +29,7 @@ if ($type == "getorder") {
     $listinsent = [];
 
     foreach ($listcart as $list) {
-        if ($list["orderid"] == "new") {
+        if ($list["orderid"] == '"new"') {
             array_push($listinsent, $list);
         } else {
             array_push($listupdate, $list);
@@ -40,10 +40,19 @@ if ($type == "getorder") {
     $statusorderupdate = $order->updateorderbyid($listupdate);
     $statusorderinsert = $order->insertorderbyid($listinsent, $doc_id, $customer_id, $department_id, $company_id);
 
-    $status = array(
-        "statusorderupdate" =>  $statusorderupdate,
-        "statusorderinsert" =>  $statusorderinsert
-    );
+    if ($statusorderupdate && count($listupdate) > 0 && $statusorderinsert && count($listinsent) > 0) {
+        $status = array(
+            "status" => "true"
+        );
+    } else if ($statusorderupdate && count($listupdate) > 0  && !$statusorderinsert &&  count($listinsent) == 0) {
+        $status = array(
+            "status" => "true"
+        );
+    } else {
+        $status = array(
+            "status" => "false"
+        );
+    }
     echo json_encode($status);
 } else if ($type == "delorderbyid") {
     $order_id = $_POST["orderid"];

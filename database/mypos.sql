@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:4306
--- Generation Time: Jan 16, 2023 at 10:29 AM
+-- Generation Time: Jan 19, 2023 at 03:11 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.29
 
@@ -53,6 +53,7 @@ CREATE TABLE `tb_customer` (
   `customer_prefix` varchar(10) NOT NULL,
   `customer_firstname` varchar(50) NOT NULL,
   `customer_lastname` varchar(50) NOT NULL,
+  `customer_phone` varchar(10) NOT NULL,
   `date_create` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -60,11 +61,8 @@ CREATE TABLE `tb_customer` (
 -- Dumping data for table `tb_customer`
 --
 
-INSERT INTO `tb_customer` (`customer_id`, `customer_code`, `customer_prefix`, `customer_firstname`, `customer_lastname`, `date_create`) VALUES
-(99, 0, '', '', '', '2023-01-13 02:28:52'),
-(100, 123213, 'นาย', 'ปากัต ซิงห์', 'จาวาลา', '2023-01-16 03:33:32'),
-(101, 123213, 'นาย', 'ปากัต ซิงห์', 'จาวาลา', '2023-01-16 03:45:52'),
-(102, 123213, 'นาย', 'ฟหกด', 'จาวาลา', '2023-01-16 03:47:59');
+INSERT INTO `tb_customer` (`customer_id`, `customer_code`, `customer_prefix`, `customer_firstname`, `customer_lastname`, `customer_phone`, `date_create`) VALUES
+(99, 0, '', '', '', '', '2023-01-13 02:28:52');
 
 -- --------------------------------------------------------
 
@@ -103,9 +101,26 @@ CREATE TABLE `tb_doc` (
 --
 
 INSERT INTO `tb_doc` (`doc_id`, `date_create`) VALUES
-(99, '2023-01-13 00:00:00'),
-(101, '2023-01-16 03:45:52'),
-(102, '2023-01-16 03:47:59');
+(99, '2023-01-13 00:00:00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tb_material`
+--
+
+CREATE TABLE `tb_material` (
+  `material_id` int(10) NOT NULL,
+  `material_name` varchar(50) NOT NULL,
+  `date_create` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tb_material`
+--
+
+INSERT INTO `tb_material` (`material_id`, `material_name`, `date_create`) VALUES
+(99, '', '2023-01-19 03:10:44');
 
 -- --------------------------------------------------------
 
@@ -130,13 +145,7 @@ CREATE TABLE `tb_order` (
 --
 
 INSERT INTO `tb_order` (`order_id`, `doc_id`, `customer_id`, `product_id`, `product_qty`, `department_id`, `company_id`, `date_create`, `order_status`) VALUES
-(99, 0, 0, 0, 0, 0, 0, '2023-01-13 08:16:50', ''),
-(100, 101, 101, 108, 1, 100, 100, '2023-01-16 03:45:53', 'new'),
-(101, 101, 101, 111, 2, 100, 100, '2023-01-16 03:45:53', 'new'),
-(102, 101, 101, 112, 1, 100, 100, '2023-01-16 03:45:53', 'new'),
-(103, 102, 102, 103, 2, 100, 100, '2023-01-16 03:47:59', 'new'),
-(104, 102, 102, 122, 1, 100, 100, '2023-01-16 03:47:59', 'new'),
-(105, 102, 102, 123, 1, 100, 100, '2023-01-16 03:47:59', 'new');
+(99, 0, 0, 0, 0, 0, 0, '2023-01-19 02:19:04', '');
 
 -- --------------------------------------------------------
 
@@ -236,6 +245,12 @@ ALTER TABLE `tb_department`
 --
 ALTER TABLE `tb_doc`
   ADD PRIMARY KEY (`doc_id`);
+
+--
+-- Indexes for table `tb_material`
+--
+ALTER TABLE `tb_material`
+  ADD PRIMARY KEY (`material_id`);
 
 --
 -- Indexes for table `tb_order`

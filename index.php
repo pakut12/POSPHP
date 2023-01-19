@@ -29,9 +29,6 @@
         $("#mat_barcode").change(function() {
             getproduct();
         });
-
-        
-
     });
 </script>
 

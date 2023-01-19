@@ -22,7 +22,13 @@
                     <a class="nav-link " aria-current="page" href="managecdepartment.php" id="managecdepartment">ManageDepartment</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link " aria-current="page" href="managematerial.php" id="managematerial">ManageMaterial</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link " aria-current="page" href="uploadproduct.php" id="uploadproduct">UploadProduct</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " aria-current="page" href="exportexcel.php" id="exportexcel">ExportExcel</a>
                 </li>
             </ul>
         </div>
