@@ -32,7 +32,7 @@
                             <div class="mt-3">
                                 <input type="hidden" id="type" name="type" value="uploadproduct">
                                 <label for="fileexcel" class="form-label">FileExcel : </label>
-                                <input class="form-control form-control-sm" id="fileexcel" name="fileexcel" type="file" required>
+                                <input class="form-control form-control-sm" id="fileexcel" name="fileexcel" type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"  required>
                                 <div class="text-danger mt-2 text-center">* กรุณา UploadFile ที่โหลดจากโปรเเกรมเท่านั้น</div>
                             </div>
                         </div>

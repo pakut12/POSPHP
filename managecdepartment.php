@@ -23,6 +23,12 @@
                             <label for="user_id" class="form-label">ชื่อเเผนก</label>
                             <input type="text" class="form-control form-control-sm text-center" id="add_department_name" placeholder="" required>
                         </div>
+                        <div class="mb-3">
+                            <label for="customer_id" class="form-label">บริษัท</label>
+                            <input class="form-control form-control-sm text-center" list="companylist" autocomplete="off" name="companyname" id="companyname" required>
+                            <datalist id="companylist">
+                            </datalist>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -88,6 +94,7 @@
                                 <th>ลำดับ</th>
                                 <th>รหัสเเผนก</th>
                                 <th>ชื่อเเผนก</th>
+                                <th>ชื่อบริษัท</th>
                                 <th>เเก้ไข</th>
                                 <th>ลบ</th>
                             </tr>
@@ -121,6 +128,7 @@
                     html += "<td>" + (k + 1) + "</td>";
                     html += "<td>" + v[0] + "</td>";
                     html += "<td>" + v[1] + "</td>";
+                    html += "<td>" + v[2] + "</td>";
                     html += "<td><button type='button' onclick='editdepartment(" + v[0] + ");' class='btn btn-warning btn-sm '>เเก้ไข</button></td>";
                     html += "<td><button type='button' onclick='deldepartment(" + v[0] + ");' class='btn btn-danger btn-sm '>ลบ</button></td>";
                     html += "</tr>";
@@ -133,9 +141,8 @@
     }
 
     function adddepartment() {
+       
         var department_name = $("#add_department_name").val();
-
-
         if (!department_name) {
             $("#myform").addClass('was-validated');
             Swal.fire({
@@ -149,7 +156,8 @@
                 url: "controller/Department.php",
                 data: {
                     type: "adddepartment",
-                    department: $("#add_department_name").val()
+                    department: $("#add_department_name").val(),
+                    company: $("#companyname").val()
                 },
                 success: function(msg) {
                     console.log(msg);
@@ -159,6 +167,26 @@
             });
         }
 
+    }
+
+    function getcompany() {
+   
+        $.ajax({
+            type: "post",
+            url: "controller/Company.php",
+            data: {
+                type: "getcompany"
+            },
+            success: function(msg) {
+                var jsdecode = JSON.parse(msg);
+                var html = "";
+                $.each(jsdecode, function(k, v) {
+                    html += "<option value='" + v[0] + "'>" + v[1] + "</option>";
+                });
+                $("#companylist").empty();
+                $("#companylist").append(html);
+            }
+        });
     }
 
     function editdepartment(id) {
@@ -221,6 +249,7 @@
         getdepartment();
         $("#add_department").click(function() {
             $('#modaladd').modal('show');
+            getcompany();
         });
         $("#department_save_add").click(function() {
             adddepartment();

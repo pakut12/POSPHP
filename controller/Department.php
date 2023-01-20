@@ -8,20 +8,21 @@ if ($type == "getdepartment") {
     $key = new departmentservice();
     $a = $key->getdepartment();
     foreach ($a as $row) {
-        array_push($arr, [$row->getdepartmentid(), $row->getdepartmentname()]);
+        array_push($arr, [$row->getdepartmentid(), $row->getdepartmentname(), $row->getcompany_id()]);
     }
     echo json_encode($arr);
 } else if ($type == "adddepartment") {
     $department = $_POST["department"];
+    $company = $_POST["company"];
+
     $key = new departmentservice();
-    $a = $key->adddepartment($department);
+    $a = $key->adddepartment($department, $company);
 
     echo json_encode($a);
 } else if ($type == "getdepartmentbyid") {
     $id = $_POST["department_id"];
     $key = new departmentservice();
     $a = $key->getdepartmentbyid($id);
-
     foreach ($a as $row) {
         $arr[] = [$row->getdepartmentid(), $row->getdepartmentname()];
     }
@@ -37,6 +38,10 @@ if ($type == "getdepartment") {
     $id = $_POST["department_id"];
     $key = new departmentservice();
     $a = $key->deldepartment($id);
-
+    echo json_encode($a);
+} else if ($type == "getdepartmentbycompanyid") {
+    $id = $_POST["company_id"];
+    $key = new departmentservice();
+    $a = $key->getdepartmentbycompanyid($id);
     echo json_encode($a);
 }

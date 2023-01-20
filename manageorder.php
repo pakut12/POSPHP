@@ -90,7 +90,6 @@
 
                         <br>
                         <div class="row">
-
                             <div class="col-sm-12 col-md-8">
                                 <div class="card">
                                     <div class="card-header">
@@ -201,8 +200,8 @@
                                 <th>DocID</th>
                                 <th>CustomerCode</th>
                                 <th>Name</th>
-                                <th>Department</th>
                                 <th>Company</th>
+                                <th>Department</th>
                                 <th>Date</th>
                                 <th>Detail</th>
                                 <th>Print</th>
@@ -469,7 +468,7 @@
                 var html = "";
                 $.each(js, function(k, v) {
                     html += "<tr>";
-                    html += "<td class=''>" + v.doc_id + "</td><td class=''>" + v.customer_code + "</td><td class=''>" + v.customer_prefix + " " + v.customer_firstname + " " + v.customer_lastname + "</td><td class=''>" + v.department_name + "</td><td class=''>" + v.company_name + "</td>";
+                    html += "<td class=''>" + v.doc_id + "</td><td class=''>" + v.customer_code + "</td><td class=''>" + v.customer_prefix + " " + v.customer_firstname + " " + v.customer_lastname + "</td><td class=''>" + v.company_name + "</td><td class=''>" + v.department_name + "</td>";
                     html += "<td class=''>" + v.date_create + "</td>";
                     html += "<td class=''><button type='button' class='btn btn-sm btn-warning' onclick='editorder(" + v.doc_id + "," + v.customer_id + ")'>ดูรายละเอียด</button></td>";
                     html += "<td class=''><button type='button' class='btn btn-sm btn-primary' onclick='printout(" + v.doc_id + ")'>พิมพ์</button></td>";

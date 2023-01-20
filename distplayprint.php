@@ -125,6 +125,7 @@
                 $("#list_order").empty();
                 $("#list_order").html(html);
                 window.print();
+                window.close();
             }
         })
     }

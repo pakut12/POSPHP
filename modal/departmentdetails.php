@@ -3,6 +3,7 @@ class departmentdetails
 {
     private $department_id;
     private $department_name;
+    private $company_id;
     private $department_dete;
 
     // set user's first name
@@ -34,5 +35,25 @@ class departmentdetails
     public function getDepartmentdete()
     {
         return $this->department_dete;
+    }
+
+    /**
+     * Get the value of company_id
+     */ 
+    public function getCompany_id()
+    {
+        return $this->company_id;
+    }
+
+    /**
+     * Set the value of company_id
+     *
+     * @return  self
+     */ 
+    public function setCompany_id($company_id)
+    {
+        $this->company_id = $company_id;
+
+        return $this;
     }
 }

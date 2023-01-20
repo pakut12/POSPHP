@@ -117,16 +117,16 @@
                                 <input type="text" class="form-control form-control-sm text-center" id="customer_phone" maxlength="10" size="10" pattern="[0-9]{10}" required>
                             </div>
                             <div class="mb-3">
-                                <label for="customer_id" class="form-label">เเผนก</label>
-                                <input class="form-control form-control-sm text-center" list="departmentlist" autocomplete="off" name="departmentname" id="departmentname" required>
-                                <datalist id="departmentlist">
-
-                                </datalist>
-                            </div>
-                            <div class="mb-3">
                                 <label for="customer_id" class="form-label">บริษัท</label>
                                 <input class="form-control form-control-sm text-center" list="companylist" autocomplete="off" name="companyname" id="companyname" required>
                                 <datalist id="companylist">
+                                </datalist>
+                            </div>
+                            <div class="mb-3">
+                                <label for="customer_id" class="form-label">เเผนก</label>
+                                <input class="form-control form-control-sm text-center" list="departmentlist" autocomplete="off" name="departmentname" id="departmentname" disabled required>
+                                <datalist id="departmentlist">
+
                                 </datalist>
                             </div>
                         </div>
@@ -392,21 +392,29 @@
     }
 
     function getdepartment() {
+
         $.ajax({
             type: "post",
             url: "controller/Department.php",
             data: {
-                type: "getdepartment"
+                type: "getdepartmentbycompanyid",
+                company_id: $("#companyname").val()
             },
             success: function(msg) {
-                var jsdecode = JSON.parse(msg);
-                var html = "";
 
-                $.each(jsdecode, function(k, v) {
-                    html += "<option value='" + v[0] + "'>" + v[1] + "</option>";
-                });
-                $("#departmentlist").empty();
-                $("#departmentlist").append(html);
+                var jsdecode = JSON.parse(msg);
+                if (jsdecode.length > 0) {
+                    $("#departmentname").attr("disabled", false);
+                    var html = "";
+                    $.each(jsdecode, function(k, v) {
+                        html += "<option value='" + v.department_id + "'>" + v.department_name + "</option>";
+                    });
+                    $("#departmentlist").empty();
+                    $("#departmentlist").append(html);
+                } else {
+                    $("#departmentlist").empty();
+                    $("#departmentname").attr("disabled", true);
+                }
             }
         });
     }
@@ -421,7 +429,6 @@
             success: function(msg) {
                 var jsdecode = JSON.parse(msg);
                 var html = "";
-
                 $.each(jsdecode, function(k, v) {
                     html += "<option value='" + v[0] + "'>" + v[1] + "</option>";
                 });
@@ -446,8 +453,6 @@
         displayCart();
         $("#modalprint").modal('hide');
         $("#modalcustomer").modal('show');
-
-
     }
 
     function printout(id) {
@@ -536,7 +541,6 @@
                 getproduct();
             }
         });
-        getdepartment();
         getcompany();
         $("#view_customer").click(function() {
             $("#modalcustomer").modal('show');
@@ -550,7 +554,9 @@
         $("#noprint").click(function() {
             cleanorder();
         });
-
+        $("#companyname").change(function() {
+            getdepartment();
+        })
     });
 </script>
 

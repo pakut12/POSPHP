@@ -110,6 +110,7 @@
                 success: function(msg) {
                     $('#modaladd').modal('hide');
                     getcompany();
+                    $("#add_company_name").val("")
                 }
             });
         }
