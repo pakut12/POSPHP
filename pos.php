@@ -273,7 +273,7 @@
                 barcode: $("#mat_barcode").val()
             },
             success: function(msg) {
-                //console.log(msg);
+                console.log(msg);
                 if (msg) {
                     var js = JSON.parse(msg);
                     addToCart(js.product_id, js.product_mat_no, js.product_mat_name_th, js.product_sale_price, js.product_size_id, js.product_color_id, 1, js.product_sale_vat);

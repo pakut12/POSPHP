@@ -1,6 +1,5 @@
 <?php
 include "../config.php";
-
 require "../Service/productservice.php";
 
 $type = $_POST["type"];
