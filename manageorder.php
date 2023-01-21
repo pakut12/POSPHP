@@ -98,7 +98,7 @@
                                     <div class="card-body">
                                         <div class="row g-3 align-items-center mb-3">
                                             <div class="col-auto">
-                                                <label for="" class="col-form-label">รหัสพนักงาน : </label>
+                                                <label for="" class="col-form-label">บาร์โค้ด : </label>
                                             </div>
                                             <div class="col-auto">
                                                 <input type="text" id="detail_barcode" class="form-control form-control-sm text-center">
@@ -366,10 +366,7 @@
             vat = totalvat - totalnovat;
         });
 
-        $("#print_order").click(function() {
-            var id = $("#detail_doc_id").val();
-            printout(id);
-        });
+
 
         $("#cart_product").text(numberformat(totalnovat.toFixed(2)));
         $("#cart_totalvat").text(numberformat(vat.toFixed(2)));
@@ -498,6 +495,10 @@
         $("#confirm").click(function() {
             confirmorder();
         })
+        $("#print_order").click(function() {
+            var id = $("#detail_doc_id").val();
+            printout(id);
+        });
     });
 </script>
 

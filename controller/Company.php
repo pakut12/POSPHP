@@ -37,4 +37,31 @@ if ($type == "addcompany") {
     $key = new companyservice();
     $a = $key->updatecompany($id, $company);
     echo json_encode($a);
+} else if ($type == "gettablecompany") {
+    $key = new companyservice();
+    $a = $key->getcompany();
+    $html = "";
+    $html .= '<table class="table text-nowrap text-center" id="table_company">';
+    $html .= '<thead>';
+    $html .= '<tr>';
+    $html .= '<th>ลำดับ</th>';
+    $html .= '<th>รหัสบริษัท</th>';
+    $html .= '<th>ชื่อบริษัท</th>';
+    $html .= '<th>เเก้ไข</th>';
+    $html .= '<th>ลบ</th>';
+    $html .= '</tr>';
+    $html .= '</thead>';
+    $html .= '<tbody id="data_company">';
+    foreach ($a as $key => $company) {
+        $html .= '<tr>';
+        $html .= '<td>' . $key . '</td>';
+        $html .= '<td>' . $company->getCompanyid() . '</td>';
+        $html .= '<td>' . $company->getCompanyName() . '</td>';
+        $html .= '<td><button type="button" onclick="editcompany(' . $company->getCompanyid() . ');" class="btn btn-warning btn-sm">เเก้ไข</button></td>';
+        $html .= '<td><button type="button" onclick="delcompany(' . $company->getCompanyid() . ');" class="btn btn-danger btn-sm">ลบ</button></td>';
+        $html .= '</tr>';
+    }
+    $html .= '</tbody>';
+    $html .= '</table>';
+    echo $html;
 }

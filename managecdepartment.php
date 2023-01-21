@@ -88,21 +88,8 @@
 
                 <br>
                 <div class="table-responsive ">
-                    <table class="table text-nowrap" id="table_department">
-                        <thead>
-                            <tr>
-                                <th>ลำดับ</th>
-                                <th>รหัสเเผนก</th>
-                                <th>ชื่อเเผนก</th>
-                                <th>ชื่อบริษัท</th>
-                                <th>เเก้ไข</th>
-                                <th>ลบ</th>
-                            </tr>
-                        </thead>
-                        <tbody id="data_department">
-
-                        </tbody>
-                    </table>
+                    <div id="department_table">
+                    </div>
                 </div>
             </div>
         </div>
@@ -117,31 +104,17 @@
             type: "post",
             url: "controller/Department.php",
             data: {
-                type: "getdepartment"
+                type: "gettabledepartment"
             },
             success: function(msg) {
-                console.log(msg);
-                var jsdecode = JSON.parse(msg);
-                var html = "";
-                $.each(jsdecode, function(k, v) {
-                    html += "<tr>";
-                    html += "<td>" + (k + 1) + "</td>";
-                    html += "<td>" + v[0] + "</td>";
-                    html += "<td>" + v[1] + "</td>";
-                    html += "<td>" + v[2] + "</td>";
-                    html += "<td><button type='button' onclick='editdepartment(" + v[0] + ");' class='btn btn-warning btn-sm '>เเก้ไข</button></td>";
-                    html += "<td><button type='button' onclick='deldepartment(" + v[0] + ");' class='btn btn-danger btn-sm '>ลบ</button></td>";
-                    html += "</tr>";
-                });
-                $("#data_department").empty();
-                $("#data_department").append(html);
+                $("#department_table").html(msg);
                 $("#table_department").DataTable();
             }
         });
     }
 
     function adddepartment() {
-       
+
         var department_name = $("#add_department_name").val();
         if (!department_name) {
             $("#myform").addClass('was-validated');
@@ -170,7 +143,7 @@
     }
 
     function getcompany() {
-   
+
         $.ajax({
             type: "post",
             url: "controller/Company.php",

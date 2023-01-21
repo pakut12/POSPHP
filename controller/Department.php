@@ -44,4 +44,41 @@ if ($type == "getdepartment") {
     $key = new departmentservice();
     $a = $key->getdepartmentbycompanyid($id);
     echo json_encode($a);
+} else if ($type == "getdepartment") {
+    $arr = [];
+    $key = new departmentservice();
+    $a = $key->getdepartment();
+    foreach ($a as $row) {
+        array_push($arr, [$row->getdepartmentid(), $row->getdepartmentname(), $row->getcompany_id()]);
+    }
+    echo json_encode($arr);
+} else if ($type == "gettabledepartment") {
+    $key = new departmentservice();
+    $a = $key->getdepartment();
+    $html = "";
+    $html .= '<table class="table text-nowrap text-center" id="table_department">';
+    $html .= '<thead>';
+    $html .= '<tr>';
+    $html .= '<th>ลำดับ</th>';
+    $html .= '<th>รหัสเเผนก</th>';
+    $html .= '<th>ชื่อเเผนก</th>';
+    $html .= '<th>ชื่อบริษัท</th>';
+    $html .= '<th>เเก้ไข</th>';
+    $html .= '<th>ลบ</th>';
+    $html .= '</tr>';
+    $html .= '</thead>';
+    $html .= '<tbody id="data_department">';
+    foreach ($a as $key => $department) {
+        $html .= '<tr>';
+        $html .= '<td>' . $key . '</td>';
+        $html .= '<td>' . $department->getdepartmentid() . '</td>';
+        $html .= '<td>' . $department->getdepartmentname() . '</td>';
+        $html .= '<td>' . $department->getcompany_id() . '</td>';
+        $html .= '<td><button type="button" onclick="editdepartment(' . $department->getdepartmentid() . ');" class="btn btn-warning btn-sm">เเก้ไข</button></td>';
+        $html .= '<td><button type="button" onclick="deldepartment(' . $department->getdepartmentid() . ');" class="btn btn-danger btn-sm">ลบ</button></td>';
+        $html .= '</tr>';
+    }
+    $html .= '</tbody>';
+    $html .= '</table>';
+    echo $html;
 }

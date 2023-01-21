@@ -67,20 +67,9 @@
                 </div>
                 <br>
                 <div class="table-responsive ">
-                    <table class="table text-nowrap" id="table_company">
-                        <thead>
-                            <tr>
-                                <th>ลำดับ</th>
-                                <th>รหัสบริษัท</th>
-                                <th>ชื่อบริษัท</th>
-                                <th>เเก้ไข</th>
-                                <th>ลบ</th>
-                            </tr>
-                        </thead>
-                        <tbody id="data_company">
+                    <div id="company_table">
 
-                        </tbody>
-                    </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -178,22 +167,10 @@
             type: "post",
             url: "controller/Company.php",
             data: {
-                type: "getcompany"
+                type: "gettablecompany"
             },
             success: function(msg) {
-                var jsdecode = JSON.parse(msg);
-                var html = "";
-                $.each(jsdecode, function(k, v) {
-                    html += "<tr>";
-                    html += "<td>" + (k + 1) + "</td>";
-                    html += "<td>" + v[0] + "</td>";
-                    html += "<td>" + v[1] + "</td>";
-                    html += "<td><button type='button' onclick='editcompany(" + v[0] + ");' class='btn btn-warning btn-sm '>เเก้ไข</button></td>";
-                    html += "<td><button type='button' onclick='delcompany(" + v[0] + ");' class='btn btn-danger btn-sm '>ลบ</button></td>";
-                    html += "</tr>";
-                });
-                $("#data_company").empty();
-                $("#data_company").append(html);
+                $("#company_table").html(msg);
                 $("#table_company").DataTable();
             }
         });

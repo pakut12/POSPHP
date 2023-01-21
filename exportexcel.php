@@ -48,26 +48,8 @@
                 <div id="listorder">
                     <h3 class="text-center">ExportExcel</h3>
                     <br>
-                    <table class="table text-nowrap text-center" id="table_exportexcel">
-                        <thead>
-                            <tr>
-                                <th>ลำดับ</th>
-                                <th>ชื่อสกุล</th>
-                                <th>รหัสสินค้า</th>
-                                <th>รหัสบาร์โค้ด</th>
-                                <th>ชื่อสินค้า</th>
-                                <th>material group</th>
-                                <th>ชื่อ material group</th>
-                                <th>จำนวนที่ขาย</th>
-                                <th>ต้นทุน</th>
-                                <th>ราคาขาย</th>
-                            </tr>
-                        </thead>
-                        <tbody id="data_exportexcel">
-
-
-                        </tbody>
-                    </table>
+                    <div id="order_table">
+                    </div>
                 </div>
             </div>
         </div>
@@ -108,84 +90,60 @@
                 company_id: $("#companyname").val()
             },
             success: function(msg) {
-                var jsdecode = JSON.parse(msg);
-                if (jsdecode.length > 0) {
-                    var html = "";
-                    $.each(jsdecode, function(k, v) {
-                        html += "<tr>";
-                        html += "<td>" + (k + 1) + "</td>";
-                        html += "<td>" + v.customer_name + "</td>";
-                        html += "<td>" + v.product_mat_no + "</td>";
-                        html += "<td>" + v.product_mat_barcode + "</td>";
-                        html += "<td>" + v.product_mat_name_th + "</td>";
-                        html += "<td>" + v.material_group + "</td>";
-                        html += "<td>" + v.material_name + "</td>";
-                        html += "<td>" + v.product_qty + "</td>";
-                        html += "<td>" + v.product_sale_price + "</td>";
-                        html += "<td>" + v.product_sale_vat + "</td>";
-                        html += "</tr>";
-                    });
-                    $("#data_exportexcel").empty();
-                    $("#data_exportexcel").append(html);
+                $("#order_table").html(msg);
+                var groupColumn = 1;
+                var table = $('#table_exportexcel').DataTable({
+                    destroy: true,
+                    scrollY: true,
+                    dom: 'Bfrtip',
+                    buttons: [{
+                        extend: 'excel',
+                        title: "List Order " + $("#companyname").val() + " " + $("#date_start").val() + " ถึง " + $("#date_end").val()
+                    }],
+                    columnDefs: [{
+                        visible: false,
+                        targets: groupColumn
+                    }],
+                    order: [
+                        [0, 'asc']
+                    ],
+                    displayLength: 10,
+                    drawCallback: function(settings) {
+                        var api = this.api();
+                        var rows = api.rows({
+                            page: 'current'
+                        }).nodes();
+                        var last = null;
 
-
-                    var groupColumn = 1;
-                    var table = $('#table_exportexcel').DataTable({
-                        destroy: true,
-                        retrieve: true,
-                        scrollY: true,
-                        dom: 'Bfrtip',
-                        buttons: [{
-                            extend: 'excel',
-                            title: "List Order " + $("#companyname").val() + " " + $("#date_start").val() + " ถึง " + $("#date_end").val()
-                        }],
-                        columnDefs: [{
-                            visible: false,
-                            targets: groupColumn
-                        }],
-                        order: [
-                            [0, 'asc']
-                        ],
-                        displayLength: 10,
-                        drawCallback: function(settings) {
-                            var api = this.api();
-                            var rows = api.rows({
+                        api
+                            .column(groupColumn, {
                                 page: 'current'
-                            }).nodes();
-                            var last = null;
+                            })
+                            .data()
+                            .each(function(group, i) {
+                                if (last !== group) {
+                                    $(rows)
+                                        .eq(i)
+                                        .before('<tr class="group text-start" style="background-color:#ddd"><td colspan="10">' + group + '</td></tr>');
+                                    last = group;
+                                }
+                            });
+                    },
+                });
 
-                            api
-                                .column(groupColumn, {
-                                    page: 'current'
-                                })
-                                .data()
-                                .each(function(group, i) {
-                                    if (last !== group) {
-                                        $(rows)
-                                            .eq(i)
-                                            .before('<tr class="group text-start" style="background-color:#ddd"><td colspan="10">' + group + '</td></tr>');
-                                        last = group;
-                                    }
-                                });
-                        },
-                    });
+                // Order by the grouping
+                $('#table_exportexcel tbody').on('click', 'tr.group', function() {
+                    var currentOrder = table.order()[0];
+                    if (currentOrder[0] === groupColumn && currentOrder[1] === 'asc') {
+                        table.order([groupColumn, 'desc']).draw();
+                    } else {
+                        table.order([groupColumn, 'asc']).draw();
+                    }
+                });
 
-                    // Order by the grouping
-                    $('#table_exportexcel tbody').on('click', 'tr.group', function() {
-                        var currentOrder = table.order()[0];
-                        if (currentOrder[0] === groupColumn && currentOrder[1] === 'asc') {
-                            table.order([groupColumn, 'desc']).draw();
-                        } else {
-                            table.order([groupColumn, 'asc']).draw();
-                        }
-                    });
-
-                }
             }
         })
     }
-
-
 
     $(document).ready(function() {
         $("#exportexcel").addClass("active");
