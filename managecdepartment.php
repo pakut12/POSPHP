@@ -108,7 +108,40 @@
             },
             success: function(msg) {
                 $("#department_table").html(msg);
-                $("#table_department").DataTable();
+                var groupColumn = 3;
+                var table = $('#table_department').DataTable({
+                    destroy: true,
+                    scrollY: true,
+                    columnDefs: [{
+                        visible: false,
+                        targets: groupColumn
+                    }],
+                    order: [
+                        [0, 'asc']
+                    ],
+                    displayLength: 10,
+                    drawCallback: function(settings) {
+                        var api = this.api();
+                        var rows = api.rows({
+                            page: 'current'
+                        }).nodes();
+                        var last = null;
+
+                        api
+                            .column(groupColumn, {
+                                page: 'current'
+                            })
+                            .data()
+                            .each(function(group, i) {
+                                if (last !== group) {
+                                    $(rows)
+                                        .eq(i)
+                                        .before('<tr class="group text-start" style="background-color:#ddd"><td colspan="5">' + group + '</td></tr>');
+                                    last = group;
+                                }
+                            });
+                    },
+                });
             }
         });
     }
