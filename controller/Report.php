@@ -14,6 +14,7 @@ if ($type == "summarizeorder") {
     $html .= '<thead>';
     $html .= '<tr>';
     $html .= '<th>ลำดับ</th>';
+    $html .= '<th>เลขที่ออเดอร์</th>';
     $html .= '<th>ชื่อสกุล</th>';
     $html .= '<th>รหัสสินค้า</th>';
     $html .= '<th>รหัสบาร์โค้ด</th>';
@@ -28,7 +29,8 @@ if ($type == "summarizeorder") {
     $html .= '<tbody id="data_exportexcel">';
     foreach ($listorder as $key => $order) {
         $html .= '<tr>';
-        $html .= '<td>' . $key . '</td>';
+        $html .= '<td>' . ($key + 1) . '</td>';
+        $html .= '<td>' . $order["order_id"] . '</td>';
         $html .= '<td>' . $order["customer_name"] . '</td>';
         $html .= '<td>' . $order["product_mat_no"] . '</td>';
         $html .= '<td>' . $order["product_mat_barcode"] . '</td>';

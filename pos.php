@@ -145,8 +145,8 @@
         </div>
         <div class="row">
             <div class="col-sm-12 col-md-4">
-                <div class="card mt-3 border-dark ">
-                    <div class="card-header bg-dark text-white ">
+                <div class="card mt-3 ">
+                    <div class="card-header  ">
                         ค้นหาสินค้า
                     </div>
                     <div class="card-body">
@@ -164,8 +164,8 @@
                 </div>
             </div>
             <div class="col-sm-12 col-md-8">
-                <div class="card mt-3 border-dark ">
-                    <div class="card-header bg-dark text-white ">
+                <div class="card mt-3 ">
+                    <div class="card-header  ">
                         ตะกร้าสินค้า
                     </div>
                     <div class="card-body">

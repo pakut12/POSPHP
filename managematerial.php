@@ -62,8 +62,12 @@
         </div>
     </div>
     <div class="container">
-        <div class="card mt-5 border-dark ">
-            <div class="card-header bg-dark text-white ">
+        <div class="card mt-5 ">
+            <div class="card-header  ">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pass" viewBox="0 0 16 16">
+                    <path d="M5.5 5a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5Zm0 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3Z" />
+                    <path d="M8 2a2 2 0 0 0 2-2h2.5A1.5 1.5 0 0 1 14 1.5v13a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 14.5v-13A1.5 1.5 0 0 1 3.5 0H6a2 2 0 0 0 2 2Zm0 1a3.001 3.001 0 0 1-2.83-2H3.5a.5.5 0 0 0-.5.5v13a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5v-13a.5.5 0 0 0-.5-.5h-1.67A3.001 3.001 0 0 1 8 3Z" />
+                </svg>
                 Material
             </div>
             <div class="card-body">
@@ -123,13 +127,13 @@
                 if (js.status == "true") {
                     Swal.fire({
                         icon: 'success',
-                        title: 'เเก้ไขข้อมูล',
-                        text: 'เเก้ไขสำเร็จ'
+                        title: 'เเก้ไข',
+                        text: 'เเก้ไขเรียบร้อย'
                     });
                 } else if (js.status == "false") {
                     Swal.fire({
                         icon: 'error',
-                        title: 'เเก้ไขข้อมูล',
+                        title: 'เเก้ไข',
                         text: 'เเก้ไขไม่สำเร็จ'
                     });
                 }
@@ -140,31 +144,45 @@
     }
 
     function DelMaterial(material_id) {
-        $.ajax({
-            type: "post",
-            url: "controller/Material.php",
-            data: {
-                type: "delmaterial",
-                material_id: material_id
-            },
-            success: function(msg) {
-                var js = JSON.parse(msg);
-                if (js.status == "true") {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'ลบข้อมูล',
-                        text: 'ลบสำเร็จ'
-                    });
-                } else if (js.status == "false") {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'ลบข้อมูล',
-                        text: 'ลบไม่สำเร็จ'
-                    });
-                }
-                GetMaterial()
+        Swal.fire({
+            title: 'ลบ',
+            text: "คุณต้องการลบใช่หรือไม่",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'ไม่',
+            confirmButtonText: 'ใช่'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "post",
+                    url: "controller/Material.php",
+                    data: {
+                        type: "delmaterial",
+                        material_id: material_id
+                    },
+                    success: function(msg) {
+                        var js = JSON.parse(msg);
+                        if (js.status == "true") {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'ลบข้อมูล',
+                                text: 'ลบสำเร็จ'
+                            });
+                        } else if (js.status == "false") {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'ลบข้อมูล',
+                                text: 'ลบไม่สำเร็จ'
+                            });
+                        }
+                        GetMaterial()
+                    }
+                });
             }
-        });
+        })
+
     }
 
     function AddMaterial() {
@@ -244,7 +262,7 @@
 
     $(document).ready(function() {
         $("#managematerial").addClass("active");
-    
+
         $("#add_material").click(function() {
             $('#modaladd').modal('show');
         });

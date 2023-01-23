@@ -59,18 +59,18 @@ if ($type == "getdepartment") {
     $html .= '<table class="table text-nowrap text-center" id="table_department">';
     $html .= '<thead>';
     $html .= '<tr>';
-    $html .= '<th>ลำดับ</th>';
-    $html .= '<th>รหัสเเผนก</th>';
-    $html .= '<th>ชื่อเเผนก</th>';
-    $html .= '<th>ชื่อบริษัท</th>';
-    $html .= '<th>เเก้ไข</th>';
-    $html .= '<th>ลบ</th>';
+    $html .= '<th>No</th>';
+    $html .= '<th>DepartmentID</th>';
+    $html .= '<th>DepartmentName</th>';
+    $html .= '<th>Company</th>';
+    $html .= '<th>Edit</th>';
+    $html .= '<th>Del</th>';
     $html .= '</tr>';
     $html .= '</thead>';
     $html .= '<tbody id="data_department">';
     foreach ($a as $key => $department) {
         $html .= '<tr>';
-        $html .= '<td>' . $key . '</td>';
+        $html .= '<td>' . ($key + 1) . '</td>';
         $html .= '<td>' . $department->getdepartmentid() . '</td>';
         $html .= '<td>' . $department->getdepartmentname() . '</td>';
         $html .= '<td>' . $department->getcompany_id() . '</td>';

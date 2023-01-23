@@ -44,17 +44,17 @@ if ($type == "addcompany") {
     $html .= '<table class="table text-nowrap text-center" id="table_company">';
     $html .= '<thead>';
     $html .= '<tr>';
-    $html .= '<th>ลำดับ</th>';
-    $html .= '<th>รหัสบริษัท</th>';
-    $html .= '<th>ชื่อบริษัท</th>';
-    $html .= '<th>เเก้ไข</th>';
-    $html .= '<th>ลบ</th>';
+    $html .= '<th>No</th>';
+    $html .= '<th>CompanyID</th>';
+    $html .= '<th>CompanyName</th>';
+    $html .= '<th>Edit</th>';
+    $html .= '<th>Del</th>';
     $html .= '</tr>';
     $html .= '</thead>';
     $html .= '<tbody id="data_company">';
     foreach ($a as $key => $company) {
         $html .= '<tr>';
-        $html .= '<td>' . $key . '</td>';
+        $html .= '<td>' . ($key + 1)  . '</td>';
         $html .= '<td>' . $company->getCompanyid() . '</td>';
         $html .= '<td>' . $company->getCompanyName() . '</td>';
         $html .= '<td><button type="button" onclick="editcompany(' . $company->getCompanyid() . ');" class="btn btn-warning btn-sm">เเก้ไข</button></td>';

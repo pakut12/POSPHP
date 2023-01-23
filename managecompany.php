@@ -54,8 +54,12 @@
         </div>
     </div>
     <div class="container">
-        <div class="card mt-5 border-dark ">
-            <div class="card-header bg-dark text-white ">
+        <div class="card mt-5 ">
+            <div class="card-header  ">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-building" viewBox="0 0 16 16">
+                    <path d="M4 2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Zm3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1ZM4 5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1ZM7.5 5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Zm2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1ZM4.5 8a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Zm2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Zm3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Z" />
+                    <path d="M2 1a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V1Zm11 0H3v14h3v-2.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5V15h3V1Z" />
+                </svg>
                 Company
             </div>
             <div class="card-body">
@@ -97,6 +101,19 @@
                     company: $("#add_company_name").val()
                 },
                 success: function(msg) {
+                    if (msg == "true") {
+                        Swal.fire({
+                            title: "บันทึก",
+                            icon: "success",
+                            text: "บันทึกเรียบร้อย"
+                        })
+                    } else {
+                        Swal.fire({
+                            title: "บันทึก",
+                            icon: "success",
+                            text: "บันทึกไม่สำเร็จ"
+                        })
+                    }
                     $('#modaladd').modal('hide');
                     getcompany();
                     $("#add_company_name").val("")
@@ -108,18 +125,44 @@
     }
 
     function delcompany(id) {
-        $.ajax({
-            type: "post",
-            url: "controller/Company.php",
-            data: {
-                type: "delcompany",
-                company_id: id
-            },
-            success: function(msg) {
-                console.log(msg);
-                getcompany();
+        Swal.fire({
+            title: 'ลบ',
+            text: "คุณต้องการลบใช่หรือไม่",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'ไม่',
+            confirmButtonText: 'ใช่'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "post",
+                    url: "controller/Company.php",
+                    data: {
+                        type: "delcompany",
+                        company_id: id
+                    },
+                    success: function(msg) {
+                        if (msg == "true") {
+                            Swal.fire({
+                                title: "ลบ",
+                                icon: "success",
+                                text: "ลบเรียบร้อย"
+                            })
+                        } else {
+                            Swal.fire({
+                                title: "ลบ",
+                                icon: "success",
+                                text: "ลบไม่สำเร็จ"
+                            })
+                        }
+                        getcompany();
+                    }
+                });
             }
-        });
+        })
+
     }
 
     function editcompany(id) {
@@ -156,7 +199,19 @@
                 company_name: company
             },
             success: function(msg) {
-                console.log(msg);
+                if (msg == "true") {
+                    Swal.fire({
+                        title: "บันทึก",
+                        icon: "success",
+                        text: "บันทึกเรียบร้อย"
+                    })
+                } else {
+                    Swal.fire({
+                        title: "บันทึก",
+                        icon: "success",
+                        text: "บันทึกไม่สำเร็จ"
+                    })
+                }
                 getcompany();
             }
         });

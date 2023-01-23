@@ -9,8 +9,12 @@
     <?php include("share/navbar.php"); ?>
 
     <div class="container">
-        <div class="card mt-3 border-dark ">
-            <div class="card-header bg-dark text-white ">
+        <div class="card mt-3  ">
+            <div class="card-header  ">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-upload" viewBox="0 0 16 16">
+                    <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
+                    <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z" />
+                </svg>
                 UploadExcel
             </div>
             <div class="card-body">
@@ -32,7 +36,7 @@
                             <div class="mt-3">
                                 <input type="hidden" id="type" name="type" value="uploadproduct">
                                 <label for="fileexcel" class="form-label">FileExcel : </label>
-                                <input class="form-control form-control-sm" id="fileexcel" name="fileexcel" type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"  required>
+                                <input class="form-control form-control-sm" id="fileexcel" name="fileexcel" type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" required>
                                 <div class="text-danger mt-2 text-center">* กรุณา UploadFile ที่โหลดจากโปรเเกรมเท่านั้น</div>
                             </div>
                         </div>
@@ -41,8 +45,8 @@
                 </form>
             </div>
         </div>
-        <div class="card mt-3 border-dark ">
-            <div class="card-header bg-dark text-white ">
+        <div class="card mt-3  ">
+            <div class="card-header  ">
                 ProductList
             </div>
             <div class="card-body">
