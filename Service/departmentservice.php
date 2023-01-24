@@ -12,6 +12,7 @@ class departmentservice
         while ($row = mysqli_fetch_assoc($result)) {
             $primarykey = $row["lastkey"];
         }
+        mysqli_close($conn);
         return $primarykey;
     }
 
@@ -26,6 +27,7 @@ class departmentservice
         } else {
             $status = false;
         }
+        mysqli_close($conn);
         return $status;
     }
     public static function getdepartmentbycompanyid($id)
@@ -44,6 +46,7 @@ class departmentservice
             array_push($listdepartment, $list);
         }
 
+        mysqli_close($conn);
         return $listdepartment;
     }
 
@@ -61,6 +64,7 @@ class departmentservice
             $arr[] = $department;
         }
 
+        mysqli_close($conn);
         return $arr;
     }
 
@@ -75,6 +79,7 @@ class departmentservice
         } else {
             $status = false;
         }
+        mysqli_close($conn);
         return $status;
     }
 
@@ -93,6 +98,7 @@ class departmentservice
             $department->setcompany_id($row["company_name"]);
             array_push($arr, $department);
         }
+        mysqli_close($conn);
         return $arr;
     }
 
@@ -111,6 +117,7 @@ class departmentservice
         } else {
             $status = false;
         }
+        mysqli_close($conn);
         return $status;
     }
 }

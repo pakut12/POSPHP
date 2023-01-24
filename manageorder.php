@@ -18,7 +18,6 @@
                     <div class="container">
                         <div class="card">
                             <div class="card-header">
-
                                 ข้อมูลลูกค้า
                             </div>
                             <div class="card-body ">
@@ -329,7 +328,6 @@
                 console.log(msg);
             }
         });
-
     }
 
     function getproduct(barcode) {

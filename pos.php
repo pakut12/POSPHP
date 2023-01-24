@@ -221,7 +221,7 @@
                             </div>
                             <div class="text-center">
                                 <button class="btn btn-sm btn-primary w-100 mt-3" id="confirm_order">ยืนยัน Order</button>
-                                <button class="btn btn-sm btn-success w-100 mt-3 " id="print_order" disabled>พิมพ์ใบชำระสินค้า</button>
+                                <button class="btn btn-sm btn-success w-100 mt-3 " id="print_order" disabled>พิมพ์ใบมัดจำ</button>
                             </div>
                         </div>
                     </div>

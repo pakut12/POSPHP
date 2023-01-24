@@ -114,9 +114,10 @@
                             text: "บันทึกไม่สำเร็จ"
                         })
                     }
+
                     $('#modaladd').modal('hide');
                     getcompany();
-                    $("#add_company_name").val("")
+
                 }
             });
         }
@@ -236,6 +237,7 @@
         getcompany();
         $("#add_company").click(function() {
             $('#modaladd').modal('show');
+            $("#add_company_name").val("");
         });
         $('#company_save_add').click(function() {
             addcompany();

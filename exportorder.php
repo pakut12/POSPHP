@@ -55,15 +55,36 @@
                 ExportOrder
             </div>
             <div class="card-body">
-                <div id="listorder">
-                    <h3 class="text-center">ExportOrder</h3>
-                    <br>
-                    <div id="order_table">
+                <nav>
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">รายละเอียดออเดอร์</button>
+                        <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">สรุปยอดเรียงตามรายชื่อ</button>
+                        <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">สรุปยอดเรียงตามไซร์</button>
+
+                    </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
+                        <div class="table-responsive">
+                            <div id="order_table" class="mt-4">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
+                        <div class="table-responsive">
+                            <div id="order_table_customer" class="mt-4">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">
+                    <div class="table-responsive">
+                        <div id="order_table_product" class="mt-4">
+                        </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
 </body>
 <footer>
@@ -89,6 +110,157 @@
         });
     }
 
+    function getsummarizeordersize() {
+        if (!$("#companyname").val() || !$("#date_start").val() || !$("#date_end").val()) {
+            $("#myform").addClass("was-validated");
+            Swal.fire({
+                title: "ผิดพลาด",
+                icon: "error",
+                text: "กรุณากรอกข้อมูลให้ถูกต้อง"
+            })
+        } else {
+            var company = $("#companyname").val().split(":");
+            $.ajax({
+                type: "post",
+                url: "controller/Report.php",
+                data: {
+                    type: "getsummarizeordersize",
+                    date_start: $("#date_start").val(),
+                    date_end: $("#date_end").val(),
+                    company_id: company[0]
+                },
+                success: function(msg) {
+                    $("#order_table_product").html(msg);
+
+                    var groupColumn = 1;
+                    var table = $('#table_size').DataTable({
+                      
+                        dom: 'Bfrtip',
+                        buttons: [{
+                            extend: 'excel',
+                            title: "สรุปยอดเรียงตามไซร์ของบริษัท " + company[1] + " วันที่ " + $("#date_start").val() + " ถึง " + $("#date_end").val()
+                        }],
+                        columnDefs: [{
+                            visible: false,
+                            targets: groupColumn
+                        }],
+                        order: [
+                            [0, 'asc']
+                        ],
+                        displayLength: 10,
+                        drawCallback: function(settings) {
+                            var api = this.api();
+                            var rows = api.rows({
+                                page: 'current'
+                            }).nodes();
+                            var last = null;
+
+                            api
+                                .column(groupColumn, {
+                                    page: 'current'
+                                })
+                                .data()
+                                .each(function(group, i) {
+                                    if (last !== group) {
+                                        $(rows)
+                                            .eq(i)
+                                            .before('<tr class="group text-start" style="background-color:#ddd"><td colspan="11">' + group + '</td></tr>');
+                                        last = group;
+                                    }
+                                });
+                        },
+                    });
+
+                    // Order by the grouping
+                    $('#order_table_product tbody').on('click', 'tr.group', function() {
+                        var currentOrder = table.order()[0];
+                        if (currentOrder[0] === groupColumn && currentOrder[1] === 'asc') {
+                            table.order([groupColumn, 'desc']).draw();
+                        } else {
+                            table.order([groupColumn, 'asc']).draw();
+                        }
+                    });
+                }
+            })
+
+        }
+    }
+
+    function getsummarizeordercustomer() {
+        if (!$("#companyname").val() || !$("#date_start").val() || !$("#date_end").val()) {
+            $("#myform").addClass("was-validated");
+            Swal.fire({
+                title: "ผิดพลาด",
+                icon: "error",
+                text: "กรุณากรอกข้อมูลให้ถูกต้อง"
+            })
+        } else {
+            var company = $("#companyname").val().split(":");
+            $.ajax({
+                type: "post",
+                url: "controller/Report.php",
+                data: {
+                    type: "summarizeordercustomer",
+                    date_start: $("#date_start").val(),
+                    date_end: $("#date_end").val(),
+                    company_id: company[0]
+                },
+                success: function(msg) {
+                    $("#order_table_customer").html(msg);
+
+                    var groupColumn = 2;
+                    var table = $('#table_customer').DataTable({
+                        
+                        dom: 'Bfrtip',
+                        buttons: [{
+                            extend: 'excel',
+                            title: "สรุปยอดเรียงตามรายชื่อของบริษัท " + company[1] + " วันที่ " + $("#date_start").val() + " ถึง " + $("#date_end").val()
+                        }],
+                        columnDefs: [{
+                            visible: false,
+                            targets: groupColumn
+                        }],
+                        order: [
+                            [0, 'asc']
+                        ],
+                        displayLength: 10,
+                        drawCallback: function(settings) {
+                            var api = this.api();
+                            var rows = api.rows({
+                                page: 'current'
+                            }).nodes();
+                            var last = null;
+
+                            api
+                                .column(groupColumn, {
+                                    page: 'current'
+                                })
+                                .data()
+                                .each(function(group, i) {
+                                    if (last !== group) {
+                                        $(rows)
+                                            .eq(i)
+                                            .before('<tr class="group text-start" style="background-color:#ddd"><td colspan="11">' + group + '</td></tr>');
+                                        last = group;
+                                    }
+                                });
+                        },
+                    });
+
+                    // Order by the grouping
+                    $('#table_customer tbody').on('click', 'tr.group', function() {
+                        var currentOrder = table.order()[0];
+                        if (currentOrder[0] === groupColumn && currentOrder[1] === 'asc') {
+                            table.order([groupColumn, 'desc']).draw();
+                        } else {
+                            table.order([groupColumn, 'asc']).draw();
+                        }
+                    });
+                }
+            })
+        }
+    }
+
     function getreportsummarizeorder() {
         if (!$("#companyname").val() || !$("#date_start").val() || !$("#date_end").val()) {
             $("#myform").addClass("was-validated");
@@ -109,16 +281,15 @@
                     company_id: company[0]
                 },
                 success: function(msg) {
-                    console.log(msg);
+
                     $("#order_table").html(msg);
                     var groupColumn = 2;
                     var table = $('#table_exportexcel').DataTable({
-                        destroy: true,
-                        scrollY: true,
+                        
                         dom: 'Bfrtip',
                         buttons: [{
                             extend: 'excel',
-                            title: "List Order " + company[1] + " " + $("#date_start").val() + " ถึง " + $("#date_end").val()
+                            title: "List Order " + company[1] + " วันที่ " + $("#date_start").val() + " ถึง " + $("#date_end").val()
                         }],
                         columnDefs: [{
                             visible: false,
@@ -171,6 +342,8 @@
         getcompany();
         $("#bt_search").click(function() {
             getreportsummarizeorder();
+            getsummarizeordercustomer();
+            getsummarizeordersize();
         });
 
     });

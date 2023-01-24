@@ -11,6 +11,7 @@ class productservice
         while ($row = mysqli_fetch_assoc($result)) {
             $primarykey = $row["lastkey"];
         }
+        mysqli_close($conn);
         return $primarykey;
     }
 
@@ -37,6 +38,7 @@ class productservice
             array_push($arr, $product);
         }
 
+        mysqli_close($conn);
         return $arr;
     }
 
@@ -49,6 +51,7 @@ class productservice
         while ($row = mysqli_fetch_assoc($result)) {
             $primarykey = $row["lastkey"];
         }
+        mysqli_close($conn);
         return $primarykey;
     }
     public static function insertproduct($listproduct, $materialgroup)
@@ -79,6 +82,7 @@ class productservice
                 );
             }
         }
+        mysqli_close($conn);
         return $status;
     }
 
@@ -95,6 +99,7 @@ class productservice
                 "productid" => $data["product_id"]
             );
         }
+        mysqli_close($conn);
         return $list;
     }
 
@@ -111,13 +116,14 @@ class productservice
         $productid = $mat["productid"];
         $pricevat = $mat["pricevat"];
         $sql = "UPDATE tb_product SET product_group = '$productid',material_id = '$materialgroup ',product_mat_barcode = '$barcode',product_mat_name_th = '$name',product_color_id = '$color',product_size_id = '$size',product_sale_price = '$price',product_sale_vat = '$pricevat' WHERE product_id = '$id';";
-     
+
         $result = mysqli_query($conn, $sql);
         if ($result) {
             $num = 1;
         } else {
             $num = 0;
         }
+        mysqli_close($conn);
         return $num;
     }
 
@@ -177,6 +183,7 @@ class productservice
             "groupid" => $lastkeygroup,
             "update" => $update
         );
+        mysqli_close($conn);
         return $arr;
     }
 

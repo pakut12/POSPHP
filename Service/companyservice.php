@@ -12,6 +12,7 @@ class companyservice
         while ($row = mysqli_fetch_assoc($result)) {
             $primarykey = $row["lastkey"];
         }
+        mysqli_close($conn);
         return $primarykey;
     }
 
@@ -27,6 +28,7 @@ class companyservice
         } else {
             $status = false;
         }
+        mysqli_close($conn);
         return $status;
     }
 
@@ -44,6 +46,7 @@ class companyservice
             $company->setCompanyName($row["company_name"]);
             array_push($arr, $company);
         }
+        mysqli_close($conn);
         return $arr;
     }
     public static function getcompanybyid($id)
@@ -60,21 +63,30 @@ class companyservice
             $arr[] = $company;
         }
 
+        mysqli_close($conn);
         return $arr;
     }
     public static function delcompany($id)
     {
         include "../config.php";
         require "../modal/companydetails.php";
-
-        $sql = "DELETE FROM `tb_company` WHERE company_id = '$id';";
-        $result = mysqli_query($conn, $sql);
-        $status = null;
-        if ($result) {
+        $sql = array(
+            "DELETE FROM `tb_company` WHERE company_id = '$id'",
+            "DELETE FROM tb_department WHERE company_id = '$id'"
+        );
+        $x = 0;
+        foreach ($sql as $row) {
+            $result = mysqli_query($conn, $row);
+            if ($result) {
+                $x++;
+            }
+        }
+        if ($x == 2) {
             $status = true;
         } else {
             $status = false;
         }
+        mysqli_close($conn);
         return $status;
     }
     public static function updatecompany($id, $company)
@@ -88,6 +100,7 @@ class companyservice
         } else {
             $status = false;
         }
+        mysqli_close($conn);
         return $status;
     }
 }

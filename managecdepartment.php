@@ -310,9 +310,12 @@
         $("#add_department").click(function() {
             $('#modaladd').modal('show');
             getcompany();
+            $("#add_department_name").val("");
+            $("#companyname").val("");
         });
         $("#department_save_add").click(function() {
             adddepartment();
+
         });
     });
 </script>

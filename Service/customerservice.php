@@ -10,6 +10,7 @@ class customerservice
         while ($row = mysqli_fetch_assoc($result)) {
             $primarykey = $row["lastkey"];
         }
+        mysqli_close($conn);
         return $primarykey;
     }
 
@@ -28,11 +29,13 @@ class customerservice
         $lastkey = self::getlastprimarykey() + 1;
         $sql = "INSERT INTO `tb_customer` (`customer_id`, `customer_code`, `customer_prefix`, `customer_firstname`, `customer_lastname`,`customer_phone`,`date_create`) VALUES ('$lastkey', '$customercode', '$customerprefix', '$customerfirstname', '$customerlastname', '$customerphone','$date');";
         $result = mysqli_query($conn, $sql);
-        
+        $status = null;
         if ($result) {
-            return  $lastkey;
+            $status =  $lastkey;
         } else {
-            return  0;
+            $status =  0;
         }
+        mysqli_close($conn);
+        return $status;
     }
 }

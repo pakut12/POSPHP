@@ -12,6 +12,7 @@ class materialservice
         while ($row = mysqli_fetch_assoc($result)) {
             $primarykey = $row["lastkey"];
         }
+        mysqli_close($conn);
         return $primarykey;
     }
 
@@ -29,6 +30,7 @@ class materialservice
         } else {
             $status = false;
         }
+        mysqli_close($conn);
         return $status;
     }
 
@@ -47,6 +49,7 @@ class materialservice
             );
             array_push($listmaterial, $list);
         }
+        mysqli_close($conn);
         return $listmaterial;
     }
 
@@ -62,6 +65,7 @@ class materialservice
         } else {
             $status = false;
         }
+        mysqli_close($conn);
         return $status;
     }
 
@@ -70,7 +74,7 @@ class materialservice
         $material_id = $_POST["material_id"];
         $material_name = $_POST["material_name"];
         $material_group = $_POST["material_group"];
-        
+
         include "../config.php";
         $sql = "UPDATE tb_material SET material_name = '$material_name',material_group = '$material_group' WHERE material_id = '$material_id'";
         $result = mysqli_query($conn, $sql);
@@ -80,7 +84,7 @@ class materialservice
         } else {
             $status = false;
         }
+        mysqli_close($conn);
         return $status;
-        
     }
 }

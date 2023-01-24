@@ -12,6 +12,7 @@ class docservice
         while ($row = mysqli_fetch_assoc($result)) {
             $primarykey = $row["lastkey"];
         }
+        mysqli_close($conn);
         return $primarykey;
     }
 
@@ -23,12 +24,14 @@ class docservice
         $lastkey =  self::getlastprimarykey() + 1;
         $sql = "INSERT INTO `tb_doc` (`doc_id`, `date_create`) VALUES ('$lastkey', ' $date')";
         $result = mysqli_query($conn, $sql);
-
+        $status = null;
         if ($result) {
-            return $lastkey;
+            $status = $lastkey;
         } else {
-            return 0;
+            $status = 0;
         }
+        mysqli_close($conn);
+        return $status;
     }
     public static function getdetailsdoc($docid)
     {
@@ -69,8 +72,7 @@ class docservice
             */
             array_push($listorder, $order);
         }
+        mysqli_close($conn);
         return $listorder;
     }
-
-    
 }

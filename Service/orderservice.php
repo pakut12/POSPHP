@@ -10,6 +10,7 @@ class orderservice
         while ($row = mysqli_fetch_assoc($result)) {
             $primarykey = $row["lastkey"];
         }
+        mysqli_close($conn);
         return $primarykey;
     }
 
@@ -31,6 +32,7 @@ class orderservice
             );
         }
 
+        mysqli_close($conn);
         return $status;
     }
 
@@ -64,13 +66,14 @@ class orderservice
             "keydoc" => $keydoc
         );
 
+        mysqli_close($conn);
         return $result;
     }
 
     public static function getorder()
     {
         include "../config.php";
-        $sql = "SELECT a.doc_id,e.customer_id,e.customer_code,e.customer_prefix,e.customer_firstname,e.customer_lastname,f.department_name,g.company_name,a.date_create FROM tb_doc a INNER JOIN tb_order b ON a.doc_id = b.doc_id INNER JOIN tb_product c ON c.product_id = b.product_id INNER JOIN tb_customer e on e.customer_id = b.customer_id INNER JOIN tb_department f on f.department_id = b.department_id INNER JOIN tb_company g on g.company_id = b.company_id GROUP BY a.doc_id";
+        $sql = "SELECT a.doc_id,e.customer_id,e.customer_code,e.customer_prefix,e.customer_firstname,e.customer_lastname,f.department_name,g.company_name,b.date_create FROM tb_doc a INNER JOIN tb_order b ON a.doc_id = b.doc_id INNER JOIN tb_product c ON c.product_id = b.product_id INNER JOIN tb_customer e on e.customer_id = b.customer_id INNER JOIN tb_department f on f.department_id = b.department_id INNER JOIN tb_company g on g.company_id = b.company_id GROUP BY a.doc_id";
         $result = mysqli_query($conn, $sql);
         $listorder = [];
 
@@ -88,6 +91,7 @@ class orderservice
             );
             array_push($listorder, $order);
         }
+        mysqli_close($conn);
         return $listorder;
     }
 
@@ -115,6 +119,7 @@ class orderservice
         $resultstatus = array(
             "status" => $status
         );
+        mysqli_close($conn);
         return $resultstatus;
     }
     public static function delorderbyid($order_id)
@@ -127,13 +132,14 @@ class orderservice
         } else {
             $status = false;
         }
+        mysqli_close($conn);
         return $status;
     }
 
     public static function getorderbyid($doc_id)
     {
         include "../config.php";
-        $sql = "SELECT b.order_id,a.doc_id,e.customer_id,e.customer_code,e.customer_prefix,e.customer_firstname,e.customer_lastname,e.customer_phone,f.department_id,f.department_name,g.company_id,g.company_name,a.date_create,c.product_mat_no,c.product_id,c.product_sale_price,c.product_sale_vat,b.product_qty FROM tb_doc a INNER JOIN tb_order b ON a.doc_id = b.doc_id INNER JOIN tb_product c ON c.product_id = b.product_id INNER JOIN tb_customer e on e.customer_id = b.customer_id INNER JOIN tb_department f on f.department_id = b.department_id INNER JOIN tb_company g on g.company_id = b.company_id WHERE a.doc_id ='$doc_id' GROUP BY c.product_mat_no ORDER BY b.order_id";
+        $sql = "SELECT b.order_id,a.doc_id,e.customer_id,e.customer_code,e.customer_prefix,e.customer_firstname,e.customer_lastname,e.customer_phone,f.department_id,f.department_name,g.company_id,g.company_name,b.date_create,c.product_mat_no,c.product_id,c.product_sale_price,c.product_sale_vat,b.product_qty FROM tb_doc a INNER JOIN tb_order b ON a.doc_id = b.doc_id INNER JOIN tb_product c ON c.product_id = b.product_id INNER JOIN tb_customer e on e.customer_id = b.customer_id INNER JOIN tb_department f on f.department_id = b.department_id INNER JOIN tb_company g on g.company_id = b.company_id WHERE a.doc_id ='$doc_id' GROUP BY c.product_mat_no ORDER BY b.order_id";
         $result = mysqli_query($conn, $sql);
         $listorder = [];
 
@@ -167,6 +173,7 @@ class orderservice
 
             array_push($listorder, $order);
         }
+        mysqli_close($conn);
         return $listorder;
     }
 
@@ -181,6 +188,7 @@ class orderservice
         } else {
             $status = false;
         }
+        mysqli_close($conn);
         return $status;
     }
 
@@ -208,6 +216,7 @@ class orderservice
             }
         }
 
+        mysqli_close($conn);
         return $sql;
     }
 
@@ -217,12 +226,13 @@ class orderservice
         include "../config.php";
         $sql = self::generatorsqlinsertorder($listcart, $doc_id, $customer_id, $department_id, $company_id);
         $result = mysqli_query($conn, $sql);
-       
+
         if ($result) {
             $status = true;
         } else {
             $status = false;
         }
+        mysqli_close($conn);
         return $status;
     }
 
@@ -234,7 +244,7 @@ class orderservice
         $lastkey = self::getlastprimarykey() + 1;
         $sql = "INSERT INTO `tb_order`(`order_id`, `doc_id`, `customer_id`, `product_id`, `product_qty`, `department_id`, `company_id`, `date_create`, `order_status`) 
         VALUES ";
-        
+
         $numpd = count($listcart) - 1;
 
         foreach ($listcart as $row => $key) {
@@ -248,9 +258,7 @@ class orderservice
             }
             $lastkey++;
         }
-
-
-
+        mysqli_close($conn);
         return $sql;
     }
 }
