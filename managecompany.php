@@ -232,7 +232,7 @@
         });
     }
     $(document).ready(function() {
-        $("#managecompany").addClass("active");
+        $("#managesystem").addClass("active");
 
         getcompany();
         $("#add_company").click(function() {

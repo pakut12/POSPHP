@@ -261,7 +261,7 @@
     }
 
     $(document).ready(function() {
-        $("#managematerial").addClass("active");
+        $("#managesystem").addClass("active");
 
         $("#add_material").click(function() {
             $('#modaladd').modal('show');

@@ -3,10 +3,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ระบบ POS บริษัทประชาอาภรณ์</title>
 
-<link rel="stylesheet" type="text/css" href="css/bootstrap/css/bootstrap.min.css">
-
+<link rel="stylesheet" type="text/css" href="asset/css/bootstrap/css/bootstrap.min.css">
 <script type="text/javascript" src="asset/css/bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="asset/css/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript" src="asset/js/jquery-1.7.1.js"></script>
 
 <link rel="stylesheet" type="text/css" href="asset/js/DataTables/datatables.min.css" />
@@ -27,7 +25,6 @@
         -o-background-size: cover;
         background-size: cover;
         font-family: Krub;
-
     }
 
     .card .card-header {

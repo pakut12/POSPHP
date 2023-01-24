@@ -289,7 +289,7 @@
                         dom: 'Bfrtip',
                         buttons: [{
                             extend: 'excel',
-                            title: "List Order " + company[1] + " วันที่ " + $("#date_start").val() + " ถึง " + $("#date_end").val()
+                            title: "รายละเอียดออเดอร์ของบริษัท" + company[1] + " วันที่ " + $("#date_start").val() + " ถึง " + $("#date_end").val()
                         }],
                         columnDefs: [{
                             visible: false,

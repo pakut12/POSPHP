@@ -304,7 +304,7 @@
     }
 
     $(document).ready(function() {
-        $("#managecdepartment").addClass("active");
+        $("#managesystem").addClass("active");
 
         getdepartment();
         $("#add_department").click(function() {
