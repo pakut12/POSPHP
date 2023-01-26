@@ -207,7 +207,7 @@
     }
 
     $(document).ready(function() {
-        $("#uploadproduct").addClass("active");
+        $("#managesystem").addClass("active");
         $("#uploadFile").click(function() {
             uploadFile();
         });

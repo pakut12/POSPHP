@@ -41,7 +41,8 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12 col-md-12 ">
-                        <button class="btn btn-sm btn-success w-100" id="bt_search">ค้นหา</button>
+                        <button class="btn btn-sm btn-primary w-100" id="bt_search" type="button">ค้นหา</button>
+                        <button class="btn btn-sm btn-success w-100 mt-3" id="bt_exportexcel" type="button" disabled>Excel</button>
                     </div>
                 </div>
             </div>
@@ -77,9 +78,9 @@
                         </div>
                     </div>
                     <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">
-                    <div class="table-responsive">
-                        <div id="order_table_product" class="mt-4">
-                        </div>
+                        <div class="table-responsive">
+                            <div id="order_table_product" class="mt-4">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -91,6 +92,23 @@
     <?php include("share/footer.php"); ?>
 </footer>
 <script>
+    function ExportOrder() {
+        var company = $("#companyname").val().split(":");
+        $.ajax({
+            type: "post",
+            url: "controller/Report.php",
+            data: {
+                type: "exportorder",
+                date_start: $("#date_start").val(),
+                date_end: $("#date_end").val(),
+                company_id: company[0]
+            },
+            success: function(msg) {
+                console.log(msg);
+            }
+        });
+    }
+
     function getcompany() {
         $.ajax({
             type: "post",
@@ -134,12 +152,6 @@
 
                     var groupColumn = 1;
                     var table = $('#table_size').DataTable({
-                      
-                        dom: 'Bfrtip',
-                        buttons: [{
-                            extend: 'excel',
-                            title: "สรุปยอดเรียงตามไซร์ของบริษัท " + company[1] + " วันที่ " + $("#date_start").val() + " ถึง " + $("#date_end").val()
-                        }],
                         columnDefs: [{
                             visible: false,
                             targets: groupColumn
@@ -164,7 +176,7 @@
                                     if (last !== group) {
                                         $(rows)
                                             .eq(i)
-                                            .before('<tr class="group text-start" style="background-color:#ddd"><td colspan="11">' + group + '</td></tr>');
+                                            .before('<tr class="group text-start" style="background-color:#ddd"><td colspan="12">' + group + '</td></tr>');
                                         last = group;
                                     }
                                 });
@@ -208,54 +220,9 @@
                 success: function(msg) {
                     $("#order_table_customer").html(msg);
 
-                    var groupColumn = 2;
-                    var table = $('#table_customer').DataTable({
-                        
-                        dom: 'Bfrtip',
-                        buttons: [{
-                            extend: 'excel',
-                            title: "สรุปยอดเรียงตามรายชื่อของบริษัท " + company[1] + " วันที่ " + $("#date_start").val() + " ถึง " + $("#date_end").val()
-                        }],
-                        columnDefs: [{
-                            visible: false,
-                            targets: groupColumn
-                        }],
-                        order: [
-                            [0, 'asc']
-                        ],
-                        displayLength: 10,
-                        drawCallback: function(settings) {
-                            var api = this.api();
-                            var rows = api.rows({
-                                page: 'current'
-                            }).nodes();
-                            var last = null;
 
-                            api
-                                .column(groupColumn, {
-                                    page: 'current'
-                                })
-                                .data()
-                                .each(function(group, i) {
-                                    if (last !== group) {
-                                        $(rows)
-                                            .eq(i)
-                                            .before('<tr class="group text-start" style="background-color:#ddd"><td colspan="11">' + group + '</td></tr>');
-                                        last = group;
-                                    }
-                                });
-                        },
-                    });
+                    var table = $('#table_customer').DataTable();
 
-                    // Order by the grouping
-                    $('#table_customer tbody').on('click', 'tr.group', function() {
-                        var currentOrder = table.order()[0];
-                        if (currentOrder[0] === groupColumn && currentOrder[1] === 'asc') {
-                            table.order([groupColumn, 'desc']).draw();
-                        } else {
-                            table.order([groupColumn, 'asc']).draw();
-                        }
-                    });
                 }
             })
         }
@@ -285,12 +252,6 @@
                     $("#order_table").html(msg);
                     var groupColumn = 2;
                     var table = $('#table_exportexcel').DataTable({
-                        
-                        dom: 'Bfrtip',
-                        buttons: [{
-                            extend: 'excel',
-                            title: "รายละเอียดออเดอร์ของบริษัท" + company[1] + " วันที่ " + $("#date_start").val() + " ถึง " + $("#date_end").val()
-                        }],
                         columnDefs: [{
                             visible: false,
                             targets: groupColumn
@@ -344,6 +305,11 @@
             getreportsummarizeorder();
             getsummarizeordercustomer();
             getsummarizeordersize();
+            $("#bt_exportexcel").attr("disabled", false);
+        });
+
+        $("#bt_exportexcel").click(function() {
+            ExportOrder();
         });
 
     });
