@@ -22,30 +22,41 @@ class reportservice
 
             $sheet = $excel->getActiveSheet();
             $sheet->setTitle("Sheet 1");
-            $sheet->setCellValueExplicit("A1", "ลำดับ");
-            $sheet->setCellValueExplicit("B1", "เลขที่ออเดอร์");
-            $sheet->setCellValueExplicit("C1", "รหัสพนักงาน");
-            $sheet->setCellValueExplicit("D1", "ชื่อนามสกุล");
-            $sheet->setCellValueExplicit("E1", "บริษัท");
-            $sheet->setCellValueExplicit("F1", "เเผนก");
-            $sheet->setCellValueExplicit("G1", "รหัสสินค้า");
-            $sheet->setCellValueExplicit("H1", "รหัสบาร์โค้ด");
-            $sheet->setCellValueExplicit("I1", "ชื่อสินค้า");
-            $sheet->setCellValueExplicit("J1", "material group");
-            $sheet->setCellValueExplicit("K1", "ชื่อ material group");
-            $sheet->setCellValueExplicit("L1", "ต้นทุน");
-            $sheet->setCellValueExplicit("M1", "ราคาขาย");
-            $sheet->getStyle('A1:M1')->applyFromArray(
+            $sheet->mergeCells('A1:M1');
+
+
+
+            $sheet->setCellValueExplicit("A2", "ลำดับ");
+            $sheet->setCellValueExplicit("B2", "เลขที่เอกสาร");
+            $sheet->setCellValueExplicit("C2", "รหัสพนักงาน");
+            $sheet->setCellValueExplicit("D2", "ชื่อนามสกุล");
+            $sheet->setCellValueExplicit("E2", "บริษัท");
+            $sheet->setCellValueExplicit("F2", "เเผนก");
+            $sheet->setCellValueExplicit("G2", "รหัสสินค้า");
+            $sheet->setCellValueExplicit("H2", "รหัสบาร์โค้ด");
+            $sheet->setCellValueExplicit("I2", "ชื่อสินค้า");
+            $sheet->setCellValueExplicit("J2", "material group");
+            $sheet->setCellValueExplicit("K2", "ชื่อ material group");
+            $sheet->setCellValueExplicit("L2", "จำนวนที่ขาย");
+            $sheet->setCellValueExplicit("M2", "ต้นทุน");
+            $sheet->setCellValueExplicit("N2", "ราคาขาย");
+            $sheet->getStyle('A1:N1')->applyFromArray(
                 array(
                     'font' => array('bold' => true),
                     'alignment' => array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
                 )
             );
-            $n = 2;
+            $sheet->getStyle('A2:N2')->applyFromArray(
+                array(
+                    'font' => array('bold' => true),
+                    'alignment' => array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
+                )
+            );
+            $n = 3;
             while ($row = mysqli_fetch_assoc($result)) {
-
-                $sheet->setCellValueExplicit("A" . $n, ($n - 1));
-                $sheet->setCellValueExplicit("B" . $n, $row["order_id"]);
+                $sheet->setCellValueExplicit("A1", "List Order " . $row["company_name"] . " Date : " . $date_start . " To " . $date_end);
+                $sheet->setCellValueExplicit("A" . $n, ($n - 2));
+                $sheet->setCellValueExplicit("B" . $n, $row["doc_id"]);
                 $sheet->setCellValueExplicit("C" . $n, $row["customer_code"]);
                 $sheet->setCellValueExplicit("D" . $n, $row["customer_prefix"] . " " . $row["customer_firstname"] . " " . $row["customer_lastname"]);
                 $sheet->setCellValueExplicit("E" . $n, $row["company_name"]);
@@ -55,8 +66,9 @@ class reportservice
                 $sheet->setCellValueExplicit("I" . $n, $row["product_mat_name_th"]);
                 $sheet->setCellValueExplicit("J" . $n, $row["material_group"]);
                 $sheet->setCellValueExplicit("K" . $n, $row["material_name"]);
-                $sheet->setCellValueExplicit("L" . $n, $row["product_sale_price"]);
-                $sheet->setCellValueExplicit("M" . $n, $row["product_sale_vat"]);
+                $sheet->setCellValueExplicit("L" . $n, $row["product_qty"]);
+                $sheet->setCellValueExplicit("M" . $n, $row["product_sale_price"]);
+                $sheet->setCellValueExplicit("N" . $n, $row["product_sale_vat"]);
                 $n++;
             }
 
@@ -64,13 +76,12 @@ class reportservice
                 $sheet->getColumnDimension($col)->setAutoSize(true);
             }
 
-            $path = "../attachfile/exportfileexcel/List Order " . $date_start . " To " . $date_end . " " . $date . ".xls";
+            $path = "attachfile/exportfileexcel/List Order " . $date_start . " To " . $date_end . " " . $date . ".xls";
             $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
-            $writer->save($path);
+            $writer->save("../attachfile/exportfileexcel/List Order " . $date_start . " To " . $date_end . " " . $date . ".xls");
         }
 
         mysqli_close($conn);
-
         return $path;
     }
 

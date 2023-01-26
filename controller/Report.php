@@ -91,7 +91,6 @@ if ($type == "summarizeorder") {
     $html .= '<tr>';
     $html .= '<th>ลำดับ</th>';
     $html .= '<th>รหัสสินค้า</th>';
-    $html .= '<th>ชื่อสินค้า</th>';
     $html .= '<th>รหัสบาร์โค้ด</th>';
     $html .= '<th>ไซร์</th>';
     $html .= '<th>จำนวนที่ขาย</th>';
@@ -102,8 +101,7 @@ if ($type == "summarizeorder") {
     foreach ($listorder as $key => $order) {
         $html .= '<tr>';
         $html .= '<td>' . ($key + 1) . '</td>';
-        $html .= '<td>' . substr($order["product_mat_no"], 0, 12) . '</td>';
-        $html .= '<td>' . $order["product_mat_name_th"] . '</td>';
+        $html .= '<td><b>ชื่อสินค้า : </b>' . $order["product_mat_name_th"] . '<br><b>รหัสสินค้า : </b>' . substr($order["product_mat_no"], 0, 12) . '</td>';
         $html .= '<td>' . $order["product_mat_barcode"] . '</td>';
         $html .= '<td>' . $order["product_size_id"] . '</td>';
         $html .= '<td>' . $order["SUM(b.product_qty)"] . '</td>';
