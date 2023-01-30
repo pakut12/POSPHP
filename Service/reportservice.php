@@ -22,53 +22,45 @@ class reportservice
 
             $sheet = $excel->getActiveSheet();
             $sheet->setTitle("Sheet 1");
-            $sheet->mergeCells('A1:M1');
 
-
-
-            $sheet->setCellValueExplicit("A2", "ลำดับ");
-            $sheet->setCellValueExplicit("B2", "เลขที่เอกสาร");
-            $sheet->setCellValueExplicit("C2", "รหัสพนักงาน");
-            $sheet->setCellValueExplicit("D2", "ชื่อนามสกุล");
-            $sheet->setCellValueExplicit("E2", "บริษัท");
-            $sheet->setCellValueExplicit("F2", "เเผนก");
-            $sheet->setCellValueExplicit("G2", "รหัสสินค้า");
-            $sheet->setCellValueExplicit("H2", "รหัสบาร์โค้ด");
-            $sheet->setCellValueExplicit("I2", "ชื่อสินค้า");
-            $sheet->setCellValueExplicit("J2", "material group");
-            $sheet->setCellValueExplicit("K2", "ชื่อ material group");
-            $sheet->setCellValueExplicit("L2", "จำนวนที่ขาย");
-            $sheet->setCellValueExplicit("M2", "ต้นทุน");
-            $sheet->setCellValueExplicit("N2", "ราคาขาย");
+            $sheet->setCellValueExplicit("A1", "ลำดับ", PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValueExplicit("B1", "เลขที่เอกสาร", PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValueExplicit("C1", "รหัสพนักงาน", PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValueExplicit("D1", "ชื่อนามสกุล", PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValueExplicit("E1", "บริษัท", PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValueExplicit("F1", "เเผนก", PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValueExplicit("G1", "รหัสสินค้า", PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValueExplicit("H1", "รหัสบาร์โค้ด", PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValueExplicit("I1", "ชื่อสินค้า", PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValueExplicit("J1", "material group", PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValueExplicit("K1", "ชื่อ material group", PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValueExplicit("L1", "จำนวนที่ขาย", PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValueExplicit("M1", "ต้นทุน", PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->setCellValueExplicit("N1", "ราคาขาย", PHPExcel_Cell_DataType::TYPE_STRING);
             $sheet->getStyle('A1:N1')->applyFromArray(
                 array(
                     'font' => array('bold' => true),
                     'alignment' => array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
                 )
             );
-            $sheet->getStyle('A2:N2')->applyFromArray(
-                array(
-                    'font' => array('bold' => true),
-                    'alignment' => array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
-                )
-            );
-            $n = 3;
+
+            $n = 2;
             while ($row = mysqli_fetch_assoc($result)) {
-                $sheet->setCellValueExplicit("A1", "List Order " . $row["company_name"] . " Date : " . $date_start . " To " . $date_end);
-                $sheet->setCellValueExplicit("A" . $n, ($n - 2));
-                $sheet->setCellValueExplicit("B" . $n, $row["doc_id"]);
-                $sheet->setCellValueExplicit("C" . $n, $row["customer_code"]);
-                $sheet->setCellValueExplicit("D" . $n, $row["customer_prefix"] . " " . $row["customer_firstname"] . " " . $row["customer_lastname"]);
-                $sheet->setCellValueExplicit("E" . $n, $row["company_name"]);
-                $sheet->setCellValueExplicit("F" . $n, $row["department_name"]);
-                $sheet->setCellValueExplicit("G" . $n, $row["product_mat_no"]);
-                $sheet->setCellValueExplicit("H" . $n, $row["product_mat_barcode"]);
-                $sheet->setCellValueExplicit("I" . $n, $row["product_mat_name_th"]);
-                $sheet->setCellValueExplicit("J" . $n, $row["material_group"]);
-                $sheet->setCellValueExplicit("K" . $n, $row["material_name"]);
-                $sheet->setCellValueExplicit("L" . $n, $row["product_qty"]);
-                $sheet->setCellValueExplicit("M" . $n, $row["product_sale_price"]);
-                $sheet->setCellValueExplicit("N" . $n, $row["product_sale_vat"]);
+
+                $sheet->setCellValueExplicit("A" . $n, ($n - 1),PHPExcel_Cell_DataType::TYPE_STRING);
+                $sheet->setCellValueExplicit("B" . $n, strval($row["doc_id"]),PHPExcel_Cell_DataType::TYPE_STRING);
+                $sheet->setCellValueExplicit("C" . $n, strval($row["customer_code"]),PHPExcel_Cell_DataType::TYPE_STRING);
+                $sheet->setCellValueExplicit("D" . $n, strval($row["customer_prefix"]) . " " . strval($row["customer_firstname"]) . " " . strval($row["customer_lastname"]));
+                $sheet->setCellValueExplicit("E" . $n, strval($row["company_name"]),PHPExcel_Cell_DataType::TYPE_STRING);
+                $sheet->setCellValueExplicit("F" . $n, strval($row["department_name"]),PHPExcel_Cell_DataType::TYPE_STRING);
+                $sheet->setCellValueExplicit("G" . $n, strval($row["product_mat_no"]),PHPExcel_Cell_DataType::TYPE_STRING);
+                $sheet->setCellValueExplicit("H" . $n, strval($row["product_mat_barcode"]),PHPExcel_Cell_DataType::TYPE_STRING);
+                $sheet->setCellValueExplicit("I" . $n, strval($row["product_mat_name_th"]),PHPExcel_Cell_DataType::TYPE_STRING);
+                $sheet->setCellValueExplicit("J" . $n, strval($row["material_group"]),PHPExcel_Cell_DataType::TYPE_STRING);
+                $sheet->setCellValueExplicit("K" . $n, strval($row["material_name"]),PHPExcel_Cell_DataType::TYPE_STRING);
+                $sheet->setCellValueExplicit("L" . $n, strval($row["product_qty"]),PHPExcel_Cell_DataType::TYPE_STRING);
+                $sheet->setCellValueExplicit("M" . $n, strval($row["product_sale_price"]),PHPExcel_Cell_DataType::TYPE_STRING);
+                $sheet->setCellValueExplicit("N" . $n, strval($row["product_sale_vat"]),PHPExcel_Cell_DataType::TYPE_STRING);
                 $n++;
             }
 
