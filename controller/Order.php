@@ -13,7 +13,6 @@ if ($type == "getorder") {
     $listorder = $order->getorder($date_start, $date_end, $company_id);
     $html = "";
     if (count($listorder) > 0) {
-
         $html .= '<table class="table text-nowrap" id="table_order">';
         $html .= '<thead>';
         $html .= '<tr>';
@@ -46,11 +45,29 @@ if ($type == "getorder") {
         }
         $html .= '</tbody>';
         $html .= '</table>';
+    } else {
+        $html .= '<table class="table text-nowrap" id="table_order">';
+        $html .= '<thead>';
+        $html .= '<tr>';
+        $html .= '<th>No</th>';
+        $html .= '<th>DocID</th>';
+        $html .= '<th>CustomerCode</th>';
+        $html .= '<th>Name</th>';
+        $html .= '<th>Company</th>';
+        $html .= '<th>Department</th>';
+        $html .= '<th>Date</th>';
+        $html .= '<th>Detail</th>';
+        $html .= '<th>Print</th>';
+        $html .= '<th>Del</th>';
+        $html .= '</tr>';
+        $html .= '</thead>';
+        $html .= '<tbody id="data_order">';
+
+        $html .= '</tbody>';
+        $html .= '</table>';
     }
 
     echo $html;
-
-    
 } else if ($type == "delorder") {
     $doc_id = $_POST["doc_id"];
     $customer_id = $_POST["customer_id"];

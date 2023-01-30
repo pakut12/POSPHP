@@ -25,6 +25,8 @@
         -o-background-size: cover;
         background-size: cover;
         font-family: Krub;
+        zoom: 90%;
+
     }
 
     .card .card-header {
@@ -40,6 +42,11 @@
     .modal-header {
         background-color: rgb(34, 139, 34, 0.8);
         color: whitesmoke;
+    }
+
+    .modal-backdrop {
+        width: 100%;
+        height: 100%;
     }
 
     .modal-content {

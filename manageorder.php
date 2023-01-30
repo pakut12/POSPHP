@@ -244,8 +244,6 @@
                 </div>
             </div>
         </div>
-
-
     </div>
 
 </body>
@@ -530,7 +528,14 @@
                 success: function(msg) {
                     $("#order_table").empty();
                     $("#order_table").html(msg);
-                    $("#table_order").DataTable();
+                    var table = $("#table_order").DataTable();
+                    if (table.rows().count() == 0) {
+                        Swal.fire({
+                            title: "ผิดพลาด",
+                            icon: "error",
+                            text: "ไม่พบข้อมูล"
+                        })
+                    }
                 }
             });
         } else {
@@ -541,6 +546,7 @@
             })
         }
     }
+
     $(document).ready(function() {
         $("#manageorder").addClass("active");
         getcompany();
