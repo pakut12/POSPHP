@@ -236,9 +236,7 @@
                             <a href="pos.php"><button class="btn btn-lg btn-success" id="add_department"> + Add</button></a>
                         </div>
                         <br>
-                        <div class="table-responsive ">
-                            <div id="order_table">
-                            </div>
+                        <div id="order_table">
                         </div>
                     </div>
                 </div>
@@ -528,7 +526,10 @@
                 success: function(msg) {
                     $("#order_table").empty();
                     $("#order_table").html(msg);
-                    var table = $("#table_order").DataTable();
+                    var table = $("#table_order").DataTable({
+                        scrollX: true,
+                        scrollCollapse: true
+                    });
                     if (table.rows().count() == 0) {
                         Swal.fire({
                             title: "ผิดพลาด",

@@ -73,15 +73,15 @@
                         <div class="tab-content" id="nav-tabContent">
                             <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
 
-                                <div id="order_table" class="mt-4">
+                                <div id="order_table_details" class="mt-4">
                                 </div>
 
                             </div>
                             <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
-                                <div class="table-responsive">
-                                    <div id="order_table_customer" class="mt-4">
-                                    </div>
+
+                                <div id="order_table_customer" class="mt-4">
                                 </div>
+
                             </div>
                             <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">
 
@@ -172,7 +172,7 @@
 
                     var groupColumn = 1;
                     var table = $('#table_size').DataTable({
-                        
+
                         columnDefs: [{
                             visible: false,
                             targets: groupColumn
@@ -242,7 +242,7 @@
                     $("#order_table_customer").html(msg);
 
                     var table = $('#table_customer').DataTable({
-                     
+
                     });
 
                 }
@@ -271,7 +271,7 @@
                 },
                 success: function(msg) {
 
-                    $("#order_table").html(msg);
+                    $("#order_table_details").html(msg);
                     var groupColumn = 2;
                     var table = $('#table_exportexcel').DataTable({
                         scrollY: "50vh",
