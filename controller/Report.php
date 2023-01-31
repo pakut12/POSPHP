@@ -10,7 +10,7 @@ if ($type == "summarizeorder") {
     $list = new reportservice();
     $listorder = $list->getsummarizeorder($date_start, $date_end, $company_id);
     $html = "";
-    $html .= '<table class="table text-nowrap text-center w-100" id="table_exportexcel">';
+    $html .= '<table class="table text-nowrap text-center table-striped table-bordered w-100 table-sm" id="table_exportexcel">';
     $html .= '<thead>';
     $html .= '<tr>';
     $html .= '<th>ลำดับ</th>';
@@ -53,7 +53,7 @@ if ($type == "summarizeorder") {
     $listorder = $list->getsummarizeordercustomer($date_start, $date_end, $company_id);
     $sum = 0;
     $html = "";
-    $html .= '<table class="table text-nowrap text-center w-100" id="table_customer">';
+    $html .= '<table class="table text-nowrap table-bordered table-striped text-center table-sm w-100" id="table_customer">';
     $html .= '<thead>';
     $html .= '<tr>';
     $html .= '<th>ลำดับ</th>';
@@ -79,13 +79,13 @@ if ($type == "summarizeorder") {
         $sum += $order["SUM(b.product_qty)"];
     }
     $html .= '</tbody>';
+    $html .= '<tfoot>';
+    $html .= '<tr>';
+    $html .= '<th colspan="6" class="text-end"></th>';
+    $html .= '<th></th>';
+    $html .= '</tr>';
+    $html .= '</tfoot>';
     $html .= '</table>';
-
-    $html .= '<div class="container mt-3">';
-    $html .= '<div class="d-flex justify-content-end ">';
-    $html .= '<div class="h1 text-primary"> รวมทั้งหมด : ' . $sum . '</div>';
-    $html .= '</div>';
-    $html .= '</div>';
 
     echo $html;
 } else if ($type == "getsummarizeordersize") {
@@ -94,8 +94,12 @@ if ($type == "summarizeorder") {
     $company_id = $_POST["company_id"];
     $list = new reportservice();
     $listorder = $list->getsummarizeordersize($date_start, $date_end, $company_id);
+
+
+
+    
     $html = "";
-    $html .= '<table class="table text-nowrap text-center w-100" id="table_size">';
+    $html .= '<table class="table text-nowrap table-bordered table-striped table-sm text-center w-100" id="table_size">';
     $html .= '<thead>';
     $html .= '<tr>';
     $html .= '<th>ลำดับ</th>';
@@ -110,7 +114,7 @@ if ($type == "summarizeorder") {
     foreach ($listorder as $key => $order) {
         $html .= '<tr>';
         $html .= '<td>' . ($key + 1) . '</td>';
-        $html .= '<td><b>ชื่อสินค้า : </b>' . $order["product_mat_name_th"] . '<br><b>รหัสสินค้า : </b>' . substr($order["product_mat_no"], 0, 12) . '</td>';
+        $html .= '<td><b>ชื่อสินค้า : </b>' . $order["product_mat_name_th"] . '<br><b>รหัสสินค้า : </b>' . substr($order["product_mat_no"], 0, 12) . '<>b</td>';
         $html .= '<td>' . $order["product_mat_barcode"] . '</td>';
         $html .= '<td>' . $order["product_size_id"] . '</td>';
         $html .= '<td>' . $order["SUM(b.product_qty)"] . '</td>';
@@ -120,6 +124,7 @@ if ($type == "summarizeorder") {
     $html .= '</tbody>';
     $html .= '</table>';
     echo $html;
+    
 } else if ($type == "exportorder") {
     $date_start = $_POST["date_start"];
     $date_end = $_POST["date_end"];

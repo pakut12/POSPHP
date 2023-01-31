@@ -13,7 +13,7 @@ if ($type == "getorder") {
     $listorder = $order->getorder($date_start, $date_end, $company_id);
     $html = "";
     if (count($listorder) > 0) {
-        $html .= '<table class="table text-nowrap" id="table_order">';
+        $html .= '<table class="table text-nowrap table-sm" id="table_order">';
         $html .= '<thead>';
         $html .= '<tr>';
         $html .= '<th>No</th>';

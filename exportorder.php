@@ -78,10 +78,10 @@
 
                             </div>
                             <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
-
-                                <div id="order_table_customer" class="mt-4">
+                                <div class="table-responsive">
+                                    <div id="order_table_customer" class="mt-4">
+                                    </div>
                                 </div>
-
                             </div>
                             <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">
 
@@ -241,12 +241,39 @@
                     company_id: company[0]
                 },
                 success: function(msg) {
+                    console.log(msg);
                     $("#order_table_customer").html(msg);
-
                     var table = $('#table_customer').DataTable({
-                        "scrollX": true,
-                        "scrollY": true,
-                        "scrollCollapse": true
+
+                        footerCallback: function(row, data, start, end, display) {
+                            var api = this.api();
+
+                            // Remove the formatting to get integer data for summation
+                            var intVal = function(i) {
+                                return typeof i === 'string' ? i.replace(/[\$,]/g, '') * 1 : typeof i === 'number' ? i : 0;
+                            };
+
+                            // Total over all pages
+                            total = api
+                                .column(5)
+                                .data()
+                                .reduce(function(a, b) {
+                                    return intVal(a) + intVal(b);
+                                }, 0);
+
+                            // Total over this page
+                            pageTotal = api
+                                .column(5, {
+                                    page: 'current'
+                                })
+                                .data()
+                                .reduce(function(a, b) {
+                                    return intVal(a) + intVal(b);
+                                }, 0);
+
+                            // Update footer
+                            $(api.column(5).footer()).html('รวม : ' + pageTotal + ' (รวมทั้งหมด : ' + total + ' total)');
+                        }
                     });
 
                 }
