@@ -102,6 +102,10 @@
                                     <option value="นาย">นาย</option>
                                     <option value="นางสาว">นางสาว</option>
                                     <option value="นาง">นาง</option>
+                                    <option value="Mr.">Mr.</option>
+                                    <option value="Ms.">Ms.</option>
+                                    <option value="ว่าที่ร้อยตรี">ว่าที่ร้อยตรี</option>
+                                    <option value="-">ไม่ระบุ</option>
                                 </select>
                             </div>
                             <div class="mb-3">
@@ -137,7 +141,7 @@
                 </div>
             </div>
         </div>
-
+        
         <div class="row mt-4">
             <div class="col-sm-12 col-md-12 text-end ">
                 <button class="btn btn-primary btn-lg " id="view_customer">ข้อมูลลูกค้า</button>
@@ -155,7 +159,7 @@
                                 <div class="col-sm-12 col-md-12  mt-3">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="basic-addon1">บาร์โค้ด</span>
-                                        <input type="number" class="form-control text-center" id="mat_barcode">
+                                        <input type="text" class="form-control text-center" id="mat_barcode" onclick="this.select();" maxlength="13" minlength="13" pattern=".{13}" required>
                                     </div>
                                 </div>
                             </div>
@@ -265,6 +269,7 @@
 
 
     function getproduct() {
+
         $.ajax({
             type: "post",
             url: "controller/Product.php",
@@ -439,6 +444,7 @@
     }
 
     function cleanorder() {
+        $("#confirm_order").attr("disabled", false);
         cart.length = 0;
         $("#myform").removeClass("was-validated");
         $("#mat_barcode").val("");
@@ -499,6 +505,7 @@
                                 listcart: cart
                             },
                             success: function(msg) {
+                                $("#confirm_order").attr("disabled", true);
                                 var js = JSON.parse(msg);
                                 $("#docid").text(js.doc_id);
                                 $("#print_order").attr("disabled", false);
@@ -546,6 +553,7 @@
             $("#modalcustomer").modal('show');
         });
         $("#confirm_order").click(function() {
+
             confirmorder()
         });
         $("#print_order").click(function() {

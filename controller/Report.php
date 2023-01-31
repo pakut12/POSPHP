@@ -51,6 +51,7 @@ if ($type == "summarizeorder") {
     $company_id = $_POST["company_id"];
     $list = new reportservice();
     $listorder = $list->getsummarizeordercustomer($date_start, $date_end, $company_id);
+    $sum = 0;
     $html = "";
     $html .= '<table class="table text-nowrap text-center w-100" id="table_customer">';
     $html .= '<thead>';
@@ -75,9 +76,17 @@ if ($type == "summarizeorder") {
         $html .= '<td>' . $order["SUM(b.product_qty)"] . '</td>';
         $html .= '<td>' . $order["date_create"] . '</td>';
         $html .= ' </tr>';
+        $sum += $order["SUM(b.product_qty)"];
     }
     $html .= '</tbody>';
     $html .= '</table>';
+
+    $html .= '<div class="container mt-3">';
+    $html .= '<div class="d-flex justify-content-end ">';
+    $html .= '<div class="h1 text-primary"> รวมทั้งหมด : ' . $sum . '</div>';
+    $html .= '</div>';
+    $html .= '</div>';
+
     echo $html;
 } else if ($type == "getsummarizeordersize") {
     $date_start = $_POST["date_start"];

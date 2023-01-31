@@ -172,7 +172,9 @@
 
                     var groupColumn = 1;
                     var table = $('#table_size').DataTable({
-
+                        "scrollX": true,
+                        "scrollY": true,
+                        "scrollCollapse": true,
                         columnDefs: [{
                             visible: false,
                             targets: groupColumn
@@ -242,7 +244,9 @@
                     $("#order_table_customer").html(msg);
 
                     var table = $('#table_customer').DataTable({
-
+                        "scrollX": true,
+                        "scrollY": true,
+                        "scrollCollapse": true
                     });
 
                 }

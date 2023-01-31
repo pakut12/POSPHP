@@ -20,7 +20,7 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between ">
                     <div class="h3 fw-bold ">UploadExcel</div>
-                    <a href="attachfile/downloadmaster/Master.xlsx"><button class="btn btn-success btn-md" id="">โหลดไฟล์ Master</button></a>
+                    <!--<a href="attachfile/downloadmaster/Master.xlsx"><button class="btn btn-success btn-md" id="">โหลดไฟล์ Master</button></a>-->
                 </div>
                 <form id="myForm" class="">
                     <div class="row">
