@@ -120,4 +120,109 @@ class departmentservice
         mysqli_close($conn);
         return $status;
     }
+
+
+    public static function uploadfile($file)
+    {
+        date_default_timezone_set("Asia/Bangkok");
+        $date = date("Y_m_d_h_i_s");
+        $Str_file = explode(".", $file['name']);
+        $filename =  $date . "." . $Str_file['1'];
+        $target_dir = "../attachfile/uploaddepartment/";
+
+        $target_file = $target_dir .  $filename;
+
+        $uploadOk = 1;
+        $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+
+        // Check if file already exists
+        if (file_exists($target_file)) {
+            $uploadOk = 2;
+        }
+
+        // Check file size
+        if ($file["size"] > 500000) {
+            $uploadOk = 3;
+        }
+
+        // Allow certain file formats
+        if ($imageFileType != "xls" && $imageFileType != "xlsx") {
+            $uploadOk = 4;
+        }
+
+        // Check if $uploadOk is set to 0 by an error
+        if ($uploadOk == 0) {
+            $uploadOk = 5;
+        } else {
+            if (move_uploaded_file($file["tmp_name"], $target_file)) {
+                $uploadOk = $target_file;
+            } else {
+                $uploadOk = 6;
+            }
+        }
+        return $uploadOk;
+    }
+
+
+    public static function readexcel($file)
+    {
+        error_reporting(error_reporting() & ~E_NOTICE);
+        require('../PHPExcel/PHPExcel.php');
+
+        $objPHPExcel = PHPExcel_IOFactory::load($file);
+
+
+        // Get the first worksheet from the workbook
+        $worksheet = $objPHPExcel->getActiveSheet();
+        $n = 0;
+
+        // Read data from the worksheet
+        $arr = [];
+        foreach ($worksheet->getRowIterator() as $row) {
+            if ($n != 0) {
+
+                $cellIterator = $row->getCellIterator();
+                $cellIterator->setIterateOnlyExistingCells(false); // Loop all cells, even if it is not set
+                foreach ($cellIterator as $cell) {
+                    array_push($arr, $cell->getValue());
+                }
+            }
+            $n++;
+        }
+        return $arr;
+    }
+
+
+    public static function generateSQLText($listdepartment, $company)
+    {
+        include "../config.php";
+        $primarykey = self::getlastprimarykey() + 1;
+        $date = date("Y-m-d h:i:s");
+
+        $sql = "INSERT INTO `tb_department`(`department_id`, `department_name`, `company_id`, `date_create`) VALUES ";
+        for ($n = 0; $n < count($listdepartment); $n++) {
+            $department = $listdepartment[$n];
+            if ($n + 1 != count($listdepartment)) {
+                $sql .= "('$primarykey','$department','$company','$date'),";
+            } else {
+                $sql .= "('$primarykey','$department','$company','$date')";
+            }
+            $primarykey++;
+        }
+        return $sql;
+    }
+
+    public static function uploaddepartment($sql)
+    {
+        include "../config.php";
+        $status = null;
+        $result = mysqli_query($conn, $sql);
+        if ($result) {
+            $status = true;
+        } else {
+            $status = false;
+        }
+
+        return $status;
+    }
 }

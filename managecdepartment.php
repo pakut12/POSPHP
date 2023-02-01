@@ -7,6 +7,45 @@
 
 <body>
     <?php include("share/navbar.php"); ?>
+    <div class="modal fade" id="modaluploaddepartment" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">อัพโหลดข้อมูลเเผนก</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="text-start text-danger">
+                        <b>คำเเนะนำ</b>
+                        <ol>
+                            <li>กรุณาอัพโหลดไฟล์ที่โหลดจากระบบเท่านั้น</li>
+                            <li>หากมีปัญหากรุณาติดต่อ support</li>
+                        </ol>
+                    </div>
+                    <hr>
+                    <div class="text-end ">
+                        <a href="attachfile/downloadmaster/MasterDepartment.xlsx"><button class="btn btn-sm btn-success ">โหลด MasterDepartment</button></a>
+                    </div>
+                    <div id="formupload">
+                        <div class="mb-3">
+                            <label for="user_id" class="form-label">ชื่อเเผนก</label>
+                            <input class="form-control form-control-sm" id="uploaddepartment_file" type="file" accept=".xlsx" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="customer_id" class="form-label">บริษัท</label>
+                            <input class="form-control form-control-sm text-center" list="uploaddepartment_companylist" autocomplete="off" name="uploaddepartment__companyname" id="uploaddepartment__companyname" required>
+                            <datalist id="uploaddepartment_companylist">
+                            </datalist>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="uploaddepartment_save_add">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- 
       /***************  Modal Add   ****************/  
     -->
@@ -87,6 +126,7 @@
                     <div class="h3 fw-bold">ManageDepartment</div>
                 </div>
                 <div class="text-end">
+                    <button class="btn btn-lg btn-success" id="upload_department"> + อัพโหลดเเผนก</button>&nbsp;
                     <button class="btn btn-lg btn-success" id="add_department"> + เพิ่ม</button>
                 </div>
 
@@ -207,6 +247,10 @@
                 });
                 $("#companylist").empty();
                 $("#companylist").append(html);
+
+                $("#uploaddepartment_companylist").empty();
+                $("#uploaddepartment_companylist").append(html);
+
             }
         });
     }
@@ -305,18 +349,79 @@
 
     $(document).ready(function() {
         $("#managesystem").addClass("active");
-
+        getcompany();
         getdepartment();
         $("#add_department").click(function() {
             $('#modaladd').modal('show');
-            getcompany();
+
             $("#add_department_name").val("");
             $("#companyname").val("");
         });
         $("#department_save_add").click(function() {
             adddepartment();
-
         });
+        $("#upload_department").click(function() {
+            $('#modaluploaddepartment').modal('show');
+        });
+
+
+        $("#uploaddepartment_save_add").click(function() {
+            if ($('#uploaddepartment_file').get(0).files.length === 0 || $("#uploaddepartment__companyname").val() == "") {
+                $("#formupload").addClass("was-validated");
+                Swal.fire({
+                    title: 'ผิดพลาด',
+                    icon: 'error',
+                    text: 'กรุณากรอกข้อมูลให้ถูกต้อง'
+                })
+
+            } else {
+                var formData = new FormData();
+                var file = document.getElementById('uploaddepartment_file').files[0];
+                formData.append('uploaddepartment_file', file);
+                formData.append('type', "uploaddepartment");
+                formData.append('uploaddepartment__companyname', $("#uploaddepartment__companyname").val());
+
+                $.ajax({
+                    url: 'controller/Department.php',
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    xhr: function() {
+                        var xhr = new window.XMLHttpRequest();
+                        xhr.upload.addEventListener("progress", function(evt) {
+                            if (evt.lengthComputable) {
+                                var percentComplete = evt.loaded / evt.total;
+                                percentComplete = parseInt(percentComplete * 100);
+                                //console.log(percentComplete + '% uploaded');
+                            }
+                        }, false);
+                        return xhr;
+                    },
+                    success: function(data) {
+                        var js = JSON.parse(data);
+                        if (js.status) {
+                            Swal.fire({
+                                title: "เรียบร้อย",
+                                icon: "success",
+                                text: "อัพโหลดเรียบร้อย"
+                            })
+                        } else {
+                            Swal.fire({
+                                title: "ผิดพลาด",
+                                icon: "error",
+                                text: "อัพโหลดไม่สำเร็จ"
+                            })
+                        }
+                        getdepartment();
+                    },
+                    error: function(xhr, status, error) {
+                        console.log("Error uploading file");
+                    }
+                });
+            }
+        });
+
     });
 </script>
 

@@ -305,7 +305,7 @@
                                 text: 'ลบไม่สำเร็จ'
                             })
                         }
-                        getorder();
+                        getorder(0);
                     }
                 });
             }
@@ -510,7 +510,8 @@
         window.open('distplayprint.php?docid=' + id, '_blank', 'height=600,width=800,left=200,top=200');
     }
 
-    function getorder() {
+    function getorder(status) {
+        console.log(status);
         $("#myform").addClass("was-validated");
         if ($("#companyname").val() && $("#date_start").val() && $("#date_end").val()) {
             var company = $("#companyname").val().split(":");
@@ -530,7 +531,7 @@
                         scrollX: true,
                         scrollCollapse: true
                     });
-                    if (table.rows().count() == 0) {
+                    if (table.rows().count() == 0 && status == 2) {
                         Swal.fire({
                             title: "ผิดพลาด",
                             icon: "error",
@@ -569,7 +570,7 @@
             printout(id);
         });
         $("#bt_search").click(function() {
-            getorder();
+            getorder(1);
         });
     });
 </script>

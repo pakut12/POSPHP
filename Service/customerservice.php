@@ -18,6 +18,7 @@ class customerservice
     {
         include "../config.php";
         $customercode = $listcustomer["customercode"];
+        $customergender = $listcustomer["customergender"];
         $customerprefix = $listcustomer["customerprefix"];
         $customerfirstname = $listcustomer["customerfirstname"];
         $customerlastname = $listcustomer["customerlastname"];
@@ -27,7 +28,7 @@ class customerservice
         date_default_timezone_set("Asia/Bangkok");
         $date = date("Y-m-d h:i:s");
         $lastkey = self::getlastprimarykey() + 1;
-        $sql = "INSERT INTO `tb_customer` (`customer_id`, `customer_code`, `customer_prefix`, `customer_firstname`, `customer_lastname`,`customer_phone`,`date_create`) VALUES ('$lastkey', '$customercode', '$customerprefix', '$customerfirstname', '$customerlastname', '$customerphone','$date');";
+        $sql = "INSERT INTO `tb_customer` (`customer_id`, `customer_code`, `customer_gender`, `customer_prefix`, `customer_firstname`, `customer_lastname`,`customer_phone`,`date_create`) VALUES ('$lastkey', '$customercode', '$customerprefix', '$customergender', '$customerfirstname', '$customerlastname', '$customerphone','$date');";
         $result = mysqli_query($conn, $sql);
         $status = null;
         if ($result) {

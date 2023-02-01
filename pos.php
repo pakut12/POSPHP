@@ -96,6 +96,15 @@
                                 <input type="text" class="form-control form-control-sm text-center" id="customer_code" required>
                             </div>
                             <div class="mb-3">
+                                <label for="customer_id" class="form-label">เพศ</label>
+                                <select class="form-select form-select-sm text-center" id="customer_gender" required>
+                                    <option value="" selected disabled>โปรดเลือก</option>
+                                    <option value="ชาย">ชาย</option>
+                                    <option value="หญิง">หญิง</option>
+                                    <option value="-">ไม่ระบุ</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
                                 <label for="customer_id" class="form-label">คำนำหน้า</label>
                                 <select class="form-select form-select-sm text-center" id="customer_prefix" required>
                                     <option value="" selected disabled>โปรดเลือก</option>
@@ -120,6 +129,7 @@
                                 <label for="customer_id" class="form-label">เบอร์โทร</label>
                                 <input type="text" class="form-control form-control-sm text-center" id="customer_phone" maxlength="10" size="10" pattern="[0-9]{10}" required>
                             </div>
+
                             <div class="mb-3">
                                 <label for="customer_id" class="form-label">บริษัท</label>
                                 <input class="form-control form-control-sm text-center" list="companylist" autocomplete="off" name="companyname" id="companyname" required>
@@ -141,7 +151,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="row mt-4">
             <div class="col-sm-12 col-md-12 text-end ">
                 <button class="btn btn-primary btn-lg " id="view_customer">ข้อมูลลูกค้า</button>
@@ -489,6 +499,7 @@
                     if (result.isConfirmed) {
                         var listcustomer = {
                             customercode: $("#customer_code").val(),
+                            customergender: $("#customer_gender").val(),
                             customerprefix: $("#customer_prefix").val(),
                             customerfirstname: $("#customer_firstname").val(),
                             customerlastname: $("#customer_lastname").val(),

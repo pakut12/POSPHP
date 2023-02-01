@@ -108,8 +108,6 @@
         $("#edit_material_id").val(material_id);
         $("#edit_material_group").val(material_group);
         $("#edit_material_name").val(material_name);
-
-
     }
 
     function updateMaterial(id) {

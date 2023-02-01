@@ -81,4 +81,16 @@ if ($type == "getdepartment") {
     $html .= '</tbody>';
     $html .= '</table>';
     echo $html;
+} else if ($type == "uploaddepartment") {
+    $file = $_FILES["uploaddepartment_file"];
+    $company = $_POST["uploaddepartment__companyname"];
+
+    $key = new departmentservice();
+    $list = $key->uploadfile($file);
+    $readexcel = $key->readexcel($list, $company);
+    $sql = $key->generateSQLText($readexcel, $company);
+    $uploaddepartmant = $key->uploaddepartment($sql);
+    $status = array("status" => $uploaddepartmant);
+
+    echo json_encode($status);
 }
