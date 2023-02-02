@@ -53,7 +53,7 @@ class reportservice
                 $sheet->setCellValueExplicit("D" . $n, strval($row["customer_prefix"]) . " " . strval($row["customer_firstname"]) . " " . strval($row["customer_lastname"]));
                 $sheet->setCellValueExplicit("E" . $n, strval($row["company_name"]), PHPExcel_Cell_DataType::TYPE_STRING);
                 $sheet->setCellValueExplicit("F" . $n, strval($row["department_name"]), PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValueExplicit("G" . $n, strval($row["product_mat_no"].$row["product_size_other"]), PHPExcel_Cell_DataType::TYPE_STRING);
+                $sheet->setCellValueExplicit("G" . $n, strval($row["product_mat_no"] . $row["product_size_other"]), PHPExcel_Cell_DataType::TYPE_STRING);
                 $sheet->setCellValueExplicit("H" . $n, strval($row["product_mat_barcode"]), PHPExcel_Cell_DataType::TYPE_STRING);
                 $sheet->setCellValueExplicit("I" . $n, strval($row["product_mat_name_th"]), PHPExcel_Cell_DataType::TYPE_STRING);
                 $sheet->setCellValueExplicit("J" . $n, strval($row["material_group"]), PHPExcel_Cell_DataType::TYPE_STRING);
@@ -105,7 +105,7 @@ class reportservice
             );
             array_push($listorder, $order);
         }
-     
+
         mysqli_close($conn);
         return $listorder;
     }
@@ -153,7 +153,7 @@ class reportservice
     {
         include "../config.php";
         require "../modal/orderdetails.php";
-        $sql = "SELECT c.product_mat_no,c.product_mat_name_th,c.product_mat_barcode,h.material_group,h.material_name,c.product_size_id,SUM(b.product_qty),c.product_sale_price,c.product_sale_vat,b.date_create FROM tb_doc a INNER JOIN tb_order b ON a.doc_id = b.doc_id INNER JOIN tb_product c ON c.product_id = b.product_id INNER JOIN tb_customer e on e.customer_id = b.customer_id INNER JOIN tb_department f on f.department_id = b.department_id INNER JOIN tb_company g on g.company_id = b.company_id INNER JOIN tb_material h ON h.material_id = c.material_id WHERE b.date_create BETWEEN '$date_start' AND '$date_end' AND b.company_id = '$company_id' GROUP BY c.product_mat_no,c.product_size_id;";
+        $sql = "SELECT b.product_size_other,c.product_mat_no,c.product_mat_name_th,c.product_mat_barcode,h.material_group,h.material_name,c.product_size_id,SUM(b.product_qty),c.product_sale_price,c.product_sale_vat,b.date_create FROM tb_doc a INNER JOIN tb_order b ON a.doc_id = b.doc_id INNER JOIN tb_product c ON c.product_id = b.product_id INNER JOIN tb_customer e on e.customer_id = b.customer_id INNER JOIN tb_department f on f.department_id = b.department_id INNER JOIN tb_company g on g.company_id = b.company_id INNER JOIN tb_material h ON h.material_id = c.material_id WHERE b.date_create BETWEEN '$date_start' AND '$date_end' AND b.company_id = '$company_id' GROUP BY c.product_mat_no,c.product_size_id;";
 
         $result  = mysqli_query($conn, $sql);
         $listorder = [];
@@ -164,6 +164,7 @@ class reportservice
                 "product_mat_barcode" => $row["product_mat_barcode"],
                 "product_size_id" => $row["product_size_id"],
                 "SUM(b.product_qty)" => $row["SUM(b.product_qty)"],
+                "product_size_other" => $row["product_size_other"],
                 "date_create" => $row["date_create"]
             );
             array_push($listorder, $order);

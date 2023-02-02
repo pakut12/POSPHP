@@ -34,6 +34,7 @@ class productservice
             $product->setproduct_size_id($row["product_size_id"]);
             $product->setproduct_sale_price($row["product_sale_price"]);
             $product->setproduct_sale_vat($row["product_sale_vat"]);
+            $product->setproduct_plant($row["product_plant"]);
             $product->setdate_create($row["date_create"]);
             array_push($arr, $product);
         }
@@ -115,7 +116,8 @@ class productservice
         $price = $mat["price"];
         $productid = $mat["productid"];
         $pricevat = $mat["pricevat"];
-        $sql = "UPDATE tb_product SET product_group = '$productid',material_id = '$materialgroup ',product_mat_barcode = '$barcode',product_mat_name_th = '$name',product_color_id = '$color',product_size_id = '$size',product_sale_price = '$price',product_sale_vat = '$pricevat' WHERE product_id = '$id';";
+        $plant = $mat["plant"];
+        $sql = "UPDATE tb_product SET product_group = '$productid',material_id = '$materialgroup ',product_mat_barcode = '$barcode',product_mat_name_th = '$name',product_color_id = '$color',product_size_id = '$size',product_sale_price = '$price',product_sale_vat = '$pricevat',product_plant = '$plant' WHERE product_id = '$id';";
 
         $result = mysqli_query($conn, $sql);
         if ($result) {
@@ -135,7 +137,7 @@ class productservice
         $lastkeygroup = self::getlastkeyproductgroup() + 1;
         $lastkeyprimary = self::getlastprimarykey() + 1;
 
-        $sql = "INSERT INTO `tb_product` (`product_id`, `material_id`,`product_group`, `product_mat_no`, `product_mat_barcode`, `product_mat_name_th`, `product_color_id`, `product_size_id`, `product_sale_price`, `product_sale_vat`,  `date_create`) VALUES ";
+        $sql = "INSERT INTO `tb_product` (`product_id`, `material_id`,`product_group`, `product_mat_no`, `product_mat_barcode`, `product_mat_name_th`, `product_color_id`, `product_size_id`, `product_sale_price`, `product_sale_vat`, `product_plant`,  `date_create`) VALUES ";
         $row = count($listproduct);
         $update = 0;
         for ($x = 0; $x < $row; $x++) {
@@ -146,7 +148,7 @@ class productservice
             $product_size_id = $listproduct[$x]->getproduct_size_id();
             $product_sale_price = $listproduct[$x]->getproduct_sale_price();
             $product_sale_vat = $listproduct[$x]->getproduct_sale_vat();
-
+            $product_plant = $listproduct[$x]->getproduct_plant();
 
             $color = substr(substr($mat, 10), 0, 2);
             $size = substr($mat, 12, 3);
@@ -154,9 +156,9 @@ class productservice
 
             if ($chack["row"] != 1) {
                 if ($x == $row - 1) {
-                    $sql = $sql . "('" . $lastkeyprimary . "', '" . $materialgroup . "','" . $lastkeygroup . "', '" . $mat . "', '" . $product_mat_barcode . "', '" . $product_mat_name_th . "', '" .    $color . "', '" . $size . "', '" . $product_sale_price . "', '" . $product_sale_vat . "', '" . $date . "')";
+                    $sql = $sql . "('" . $lastkeyprimary . "', '" . $materialgroup . "','" . $lastkeygroup . "', '" . $mat . "', '" . $product_mat_barcode . "', '" . $product_mat_name_th . "', '" .    $color . "', '" . $size . "', '" . $product_sale_price . "', '" . $product_sale_vat . "', '" . $product_plant . "', '" . $date . "')";
                 } else {
-                    $sql = $sql . "('" . $lastkeyprimary . "','" . $materialgroup . "', '" . $lastkeygroup . "', '" . $mat . "', '" . $product_mat_barcode . "', '" . $product_mat_name_th . "', '" .    $color . "', '" . $size . "', '" . $product_sale_price . "', '" . $product_sale_vat . "','" . $date . "'),";
+                    $sql = $sql . "('" . $lastkeyprimary . "','" . $materialgroup . "', '" . $lastkeygroup . "', '" . $mat . "', '" . $product_mat_barcode . "', '" . $product_mat_name_th . "', '" .    $color . "', '" . $size . "', '" . $product_sale_price . "', '" . $product_sale_vat . "','" . $product_plant . "', '" . $date . "'),";
                 }
                 $lastkeyprimary++;
             } else {
@@ -169,7 +171,8 @@ class productservice
                     "color" => $color,
                     "size" =>  $size,
                     "price" => $product_sale_price,
-                    "pricevat" => $product_sale_vat
+                    "pricevat" => $product_sale_vat,
+                    "plant" => $product_plant
                 );
 
                 if (self::updatemat($mat) == 1) {
@@ -221,6 +224,9 @@ class productservice
                         $d++;
                     } else  if ($d == 5) {
                         $product->setproduct_sale_vat($cell->getValue());
+                        $d++;
+                    } else  if ($d == 6) {
+                        $product->setproduct_plant($cell->getValue());
                         $d = 1;
                     }
                     // echo $cell->getValue() . "<br>";

@@ -10,6 +10,7 @@ class productdetails
     private $product_size_id;
     private $product_sale_price;
     private $product_sale_vat;
+    private $product_plant;
     private $date_create;
 
 
@@ -108,5 +109,14 @@ class productdetails
     public function getdate_create()
     {
         return $this->date_create;
+    }
+
+    public function setproduct_plant($product_plant)
+    {
+        $this->product_plant = $product_plant;
+    }
+    public function getproduct_plant()
+    {
+        return $this->product_plant;
     }
 }

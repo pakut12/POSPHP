@@ -128,7 +128,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="customer_id" class="form-label">เบอร์โทร</label>
-                                <input type="text" class="form-control form-control-sm text-center" id="customer_phone" maxlength="10" size="10" pattern="[0-9]{10}" required>
+                                <input type="text" class="form-control form-control-sm text-center" id="customer_phone"  required>
                             </div>
 
                             <div class="mb-3">
@@ -165,20 +165,21 @@
                     </div>
                     <div class="card-body">
                         <div class="container">
-                            <div class="row">
-                                <div class="col-sm-12 col-md-12 ">
-                                    <div class="input-group input-group-sm mt-3">
-                                        <span class="input-group-text" id="basic-addon1">SizeOther</span>
-                                        <input type="text" class="form-control text-center" id="size_other" value="000" maxlength="3" minlength="3" pattern=".{3}" required>
+                            <div id="formbarcode">
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-12 ">
+                                        <div class="input-group input-group-sm mt-3">
+                                            <span class="input-group-text" id="basic-addon1">SizeOther</span>
+                                            <input type="text" class="form-control text-center" id="size_other" onclick="this.select();" value="000" maxlength="3" minlength="3" pattern=".{3}" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-12  mt-3">
+                                        <div class="input-group input-group-sm mb-3">
+                                            <span class="input-group-text" id="basic-addon1">Barcode</span>
+                                            <input type="text" class="form-control text-center" id="mat_barcode" onclick="this.select();" maxlength="13" minlength="13" pattern=".{13}" required>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-12 col-md-12  mt-3">
-                                    <div class="input-group input-group-sm mb-3">
-                                        <span class="input-group-text" id="basic-addon1">Barcode</span>
-                                        <input type="text" class="form-control text-center" id="mat_barcode" onclick="this.select();" maxlength="13" minlength="13" pattern=".{13}" required>
-                                    </div>
-                                </div>
-
                             </div>
                         </div>
                     </div>
@@ -286,30 +287,39 @@
 
 
     function getproduct() {
-
-        $.ajax({
-            type: "post",
-            url: "controller/Product.php",
-            data: {
-                type: "searchproduct",
-                barcode: $("#mat_barcode").val()
-            },
-            success: function(msg) {
-                console.log(msg);
-                if (msg) {
-                    var js = JSON.parse(msg);
-                    var size_other = $("#size_other").val();
-                    addToCart(js.product_id, js.product_mat_no + size_other, js.product_mat_name_th, js.product_sale_price, js.product_size_id, js.product_color_id, 1, js.product_sale_vat);
-                    $("#tb_product").DataTable();
-                } else {
-                    Swal.fire({
-                        title: "ผิดพลาด",
-                        text: "ไม่พบข้อมูล",
-                        icon: "error"
-                    })
+        $("#formbarcode").addClass("was-validated");
+        if ($("#size_other").val().length == 3) {
+            $.ajax({
+                type: "post",
+                url: "controller/Product.php",
+                data: {
+                    type: "searchproduct",
+                    barcode: $("#mat_barcode").val()
+                },
+                success: function(msg) {
+                    console.log(msg);
+                    if (msg) {
+                        var js = JSON.parse(msg);
+                        var size_other = $("#size_other").val();
+                        addToCart(js.product_id, js.product_mat_no + size_other, js.product_mat_name_th, js.product_sale_price, js.product_size_id, js.product_color_id, 1, js.product_sale_vat);
+                        $("#tb_product").DataTable();
+                    } else {
+                        Swal.fire({
+                            title: "ผิดพลาด",
+                            text: "ไม่พบข้อมูล",
+                            icon: "error"
+                        })
+                    }
                 }
-            }
-        })
+            })
+        } else {
+            Swal.fire({
+                title: "ผิดพลาด",
+                icon: "error",
+                text: "กรุณากรอกข้อมูลให้ถูกต้อง"
+            })
+        }
+
     }
 
 
@@ -462,8 +472,11 @@
     }
 
     function cleanorder() {
+
+        $("#size_other").val("000");
         $("#confirm_order").attr("disabled", false);
         cart.length = 0;
+        $("#formbarcode").removeClass("was-validated");
         $("#myform").removeClass("was-validated");
         $("#mat_barcode").val("");
         $("#customer_code").val("");
@@ -485,7 +498,7 @@
 
     function confirmorder() {
         if (cart.length > 0) {
-            if ($("#customer_phone").val().length != 10 || !$("#customer_phone").val() || !$("#customer_code").val() || !$("#customer_prefix").val() || !$("#customer_firstname").val() || !$("#customer_lastname").val() || !$("#departmentname").val() || !$("#companyname").val()) {
+            if (!$("#customer_phone").val() || !$("#customer_code").val() || !$("#customer_prefix").val() || !$("#customer_firstname").val() || !$("#customer_lastname").val() || !$("#departmentname").val() || !$("#companyname").val()) {
                 $("#myform").addClass("was-validated");
                 $("#modalcustomer").modal('show');
                 Swal.fire({
@@ -572,7 +585,6 @@
             $("#modalcustomer").modal('show');
         });
         $("#confirm_order").click(function() {
-
             confirmorder()
         });
         $("#print_order").click(function() {

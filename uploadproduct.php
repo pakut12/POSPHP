@@ -63,6 +63,7 @@
                                 <th>Size</th>
                                 <th>Price</th>
                                 <th>Price Vat</th>
+                                <th>Plant</th>
                                 <th>Date</th>
                             </tr>
                         </thead>
@@ -100,6 +101,7 @@
                     html += "<td>" + v.product_size_id + "</td>";
                     html += "<td>" + v.product_sale_price + "</td>";
                     html += "<td>" + v.product_sale_vat + "</td>";
+                    html += "<td>" + v.product_plant + "</td>";
                     html += "<td>" + v.date_create + "</td>";
                     html += "</tr>";
                 })

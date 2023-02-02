@@ -26,6 +26,7 @@ if ($type == "searchproduct") {
             "product_size_id" => $row->getproduct_size_id(),
             "product_sale_price" => $row->getproduct_sale_price(),
             "product_sale_vat" => $row->getproduct_sale_vat(),
+            "product_plant" => $row->getproduct_plant(),
             "date_create" => $row->getdate_create()
         );
 
@@ -40,8 +41,7 @@ if ($type == "searchproduct") {
     $product = new productservice();
     $uploadstatus = $product->uploadfile($file);
     $listproduct = $product->readexcel($uploadstatus);
-    $process = $product->insertproduct($listproduct,$materialgroup);
+    $process = $product->insertproduct($listproduct, $materialgroup);
 
     echo json_encode($process);
-  
 }
