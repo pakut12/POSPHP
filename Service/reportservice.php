@@ -10,7 +10,7 @@ class reportservice
         require "../modal/orderdetails.php";
         require('../PHPExcel/PHPExcel.php');
 
-        $sql = "SELECT a.doc_id,b.order_id,e.customer_id,e.customer_code,e.customer_prefix,e.customer_firstname,e.customer_lastname,f.department_name,g.company_name,c.product_mat_no,c.product_mat_name_th,c.product_mat_barcode,h.material_group,h.material_name,b.product_qty,c.product_sale_price,c.product_sale_vat,b.date_create FROM tb_doc a INNER JOIN tb_order b ON a.doc_id = b.doc_id INNER JOIN tb_product c ON c.product_id = b.product_id INNER JOIN tb_customer e on e.customer_id = b.customer_id INNER JOIN tb_department f on f.department_id = b.department_id INNER JOIN tb_company g on g.company_id = b.company_id INNER JOIN tb_material h ON h.material_id = c.material_id WHERE b.date_create BETWEEN '$date_start' AND '$date_end'  AND b.company_id = '$company_id'";
+        $sql = "SELECT a.doc_id,b.order_id,b.product_size_other,e.customer_id,e.customer_code,e.customer_prefix,e.customer_firstname,e.customer_lastname,f.department_name,g.company_name,c.product_mat_no,c.product_mat_name_th,c.product_mat_barcode,h.material_group,h.material_name,b.product_qty,c.product_sale_price,c.product_sale_vat,b.date_create FROM tb_doc a INNER JOIN tb_order b ON a.doc_id = b.doc_id INNER JOIN tb_product c ON c.product_id = b.product_id INNER JOIN tb_customer e on e.customer_id = b.customer_id INNER JOIN tb_department f on f.department_id = b.department_id INNER JOIN tb_company g on g.company_id = b.company_id INNER JOIN tb_material h ON h.material_id = c.material_id WHERE b.date_create BETWEEN '$date_start' AND '$date_end'  AND b.company_id = '$company_id'";
         $result  = mysqli_query($conn, $sql);
         date_default_timezone_set("Asia/Bangkok");
         $date = date("Y_m_d_h_i_s");
@@ -53,7 +53,7 @@ class reportservice
                 $sheet->setCellValueExplicit("D" . $n, strval($row["customer_prefix"]) . " " . strval($row["customer_firstname"]) . " " . strval($row["customer_lastname"]));
                 $sheet->setCellValueExplicit("E" . $n, strval($row["company_name"]), PHPExcel_Cell_DataType::TYPE_STRING);
                 $sheet->setCellValueExplicit("F" . $n, strval($row["department_name"]), PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValueExplicit("G" . $n, strval($row["product_mat_no"]), PHPExcel_Cell_DataType::TYPE_STRING);
+                $sheet->setCellValueExplicit("G" . $n, strval($row["product_mat_no"].$row["product_size_other"]), PHPExcel_Cell_DataType::TYPE_STRING);
                 $sheet->setCellValueExplicit("H" . $n, strval($row["product_mat_barcode"]), PHPExcel_Cell_DataType::TYPE_STRING);
                 $sheet->setCellValueExplicit("I" . $n, strval($row["product_mat_name_th"]), PHPExcel_Cell_DataType::TYPE_STRING);
                 $sheet->setCellValueExplicit("J" . $n, strval($row["material_group"]), PHPExcel_Cell_DataType::TYPE_STRING);
@@ -81,7 +81,7 @@ class reportservice
     {
         include "../config.php";
         require "../modal/orderdetails.php";
-        $sql = "SELECT a.doc_id,b.order_id,e.customer_id,e.customer_code,e.customer_prefix,e.customer_firstname,e.customer_lastname,f.department_name,g.company_name,c.product_mat_no,c.product_mat_name_th,c.product_mat_barcode,h.material_group,h.material_name,b.product_qty,c.product_sale_price,c.product_sale_vat,b.date_create FROM tb_doc a INNER JOIN tb_order b ON a.doc_id = b.doc_id INNER JOIN tb_product c ON c.product_id = b.product_id INNER JOIN tb_customer e on e.customer_id = b.customer_id INNER JOIN tb_department f on f.department_id = b.department_id INNER JOIN tb_company g on g.company_id = b.company_id INNER JOIN tb_material h ON h.material_id = c.material_id WHERE b.date_create BETWEEN '$date_start' AND '$date_end'  AND b.company_id = '$company_id'";
+        $sql = "SELECT a.doc_id,b.order_id,b.product_size_other,e.customer_id,e.customer_code,e.customer_prefix,e.customer_firstname,e.customer_lastname,f.department_name,g.company_name,c.product_mat_no,c.product_mat_name_th,c.product_mat_barcode,h.material_group,h.material_name,b.product_qty,c.product_sale_price,c.product_sale_vat,b.date_create FROM tb_doc a INNER JOIN tb_order b ON a.doc_id = b.doc_id INNER JOIN tb_product c ON c.product_id = b.product_id INNER JOIN tb_customer e on e.customer_id = b.customer_id INNER JOIN tb_department f on f.department_id = b.department_id INNER JOIN tb_company g on g.company_id = b.company_id INNER JOIN tb_material h ON h.material_id = c.material_id WHERE b.date_create BETWEEN '$date_start' AND '$date_end'  AND b.company_id = '$company_id'";
 
         $result  = mysqli_query($conn, $sql);
         $listorder = [];
@@ -94,6 +94,7 @@ class reportservice
                 "department_name" => $row["department_name"],
                 "company_name" => $row["company_name"],
                 "product_mat_no" => $row["product_mat_no"],
+                "product_size_other" => $row["product_size_other"],
                 "product_mat_barcode" => $row["product_mat_barcode"],
                 "product_mat_name_th" => $row["product_mat_name_th"],
                 "material_group" => $row["material_group"],
@@ -104,6 +105,7 @@ class reportservice
             );
             array_push($listorder, $order);
         }
+     
         mysqli_close($conn);
         return $listorder;
     }
@@ -115,7 +117,7 @@ class reportservice
 
         $sql = "SELECT SUBSTRING(c.product_mat_no, 1, 12) as matID ,c.product_mat_no,c.product_mat_name_th,c.product_mat_barcode,h.material_group,h.material_name,c.product_size_id,SUM(b.product_qty),c.product_sale_price,c.product_sale_vat,b.date_create FROM tb_doc a INNER JOIN tb_order b ON a.doc_id = b.doc_id INNER JOIN tb_product c ON c.product_id = b.product_id INNER JOIN tb_customer e on e.customer_id = b.customer_id INNER JOIN tb_department f on f.department_id = b.department_id INNER JOIN tb_company g on g.company_id = b.company_id INNER JOIN tb_material h ON h.material_id = c.material_id WHERE b.date_create BETWEEN '$date_start' AND '$date_end' AND b.company_id = '$company_id' AND SUBSTRING(c.product_mat_no, 1, 12) ='$mat' GROUP BY SUBSTRING(c.product_mat_no, 1, 12);";
         $result  = mysqli_query($conn, $sql);
-      
+
         $totel = "";
         while ($row = mysqli_fetch_assoc($result)) {
             $totel = $row["SUM(b.product_qty)"];

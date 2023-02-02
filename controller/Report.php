@@ -32,7 +32,7 @@ if ($type == "summarizeorder") {
         $html .= '<td>' . ($key + 1) . '</td>';
         $html .= '<td>' . $order["order_id"] . '</td>';
         $html .= '<td><b>รหัสพนักงาน : </b>' . $order["customer_code"] . '<br><b>ชื่อพนักงาน : </b>' . $order["customer_name"] . '<br><b>บริษัท : </b>' . $order["company_name"] . '<br><b>เเผนก : </b>' . $order["department_name"] . '<br></td>';
-        $html .= '<td>' . $order["product_mat_no"] . '</td>';
+        $html .= '<td>' . $order["product_mat_no"] . $order["product_size_other"] . '</td>';
         $html .= '<td>' . $order["product_mat_barcode"] . '</td>';
         $html .= '<td>' . $order["product_mat_name_th"] . '</td>';
         $html .= '<td>' . $order["material_group"] . '</td>';

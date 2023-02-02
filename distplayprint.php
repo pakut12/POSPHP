@@ -110,9 +110,10 @@
                 var totalnovat = 0;
                 var vat = 0;
                 var totalvat = 0;
-
+        
                 $.each(jsdecode, function(k, v) {
-                    html += "<tr><td class='p-0'>" + v.product_mat_no + "</td><td class='p-0'>" + v.product_qty + "</td><td class='p-0'>" + (v.product_sale_price * v.product_qty).toFixed(2) + "</td></tr>";
+
+                    html += "<tr><td class='p-0'>" + v.product_mat_no + v.product_size_other + "</td><td class='p-0'>" + v.product_qty + "</td><td class='p-0'>" + (v.product_sale_price * v.product_qty).toFixed(2) + "</td></tr>";
                     totalnovat += parseFloat(v.product_sale_price) * parseInt(v.product_qty);
                     totalvat += parseFloat(v.product_sale_vat) * parseInt(v.product_qty);
                 })

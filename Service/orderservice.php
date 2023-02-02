@@ -45,18 +45,18 @@ class orderservice
         date_default_timezone_set("Asia/Bangkok");
         $date = date("Y-m-d h:i:s");
         $lastkey = self::getlastprimarykey() + 1;
-        $sql = "INSERT INTO `tb_order` (`order_id`, `doc_id`, `customer_id`, `product_id`, `department_id`,`product_qty`, `company_id`, `date_create`, `order_status`) 
+        $sql = "INSERT INTO `tb_order` (`order_id`, `doc_id`, `customer_id`, `product_id`, `department_id`,`product_qty`,`product_size_other`, `company_id`, `date_create`, `order_status`) 
         VALUES ";
-
 
         $numpd = count($listcart) - 1;
         foreach ($listcart as $row => $key) {
             $num = $key["num"];
             $pd = $key["id"];
+            $othersize = substr($key["no"], 15, 18);
             if ($numpd != $row) {
-                $sql = $sql . "('$lastkey', '$keydoc', '$keycustomer', '$pd', '$keydepartment','$num', '$keycompany', '$date', 'new'),";
+                $sql = $sql . "('$lastkey', '$keydoc', '$keycustomer', '$pd', '$keydepartment','$num','$othersize', '$keycompany', '$date', 'new'),";
             } else {
-                $sql = $sql . "('$lastkey', '$keydoc', '$keycustomer', '$pd', '$keydepartment', '$num','$keycompany', '$date', 'new')";
+                $sql = $sql . "('$lastkey', '$keydoc', '$keycustomer', '$pd', '$keydepartment', '$num','$othersize','$keycompany', '$date', 'new')";
             }
             $lastkey++;
         }
@@ -74,7 +74,7 @@ class orderservice
     {
         include "../config.php";
         $sql = "SELECT a.doc_id,e.customer_id,e.customer_code,e.customer_prefix,e.customer_firstname,e.customer_lastname,f.department_name,g.company_name,b.date_create FROM tb_doc a INNER JOIN tb_order b ON a.doc_id = b.doc_id INNER JOIN tb_product c ON c.product_id = b.product_id INNER JOIN tb_customer e on e.customer_id = b.customer_id INNER JOIN tb_department f on f.department_id = b.department_id INNER JOIN tb_company g on g.company_id = b.company_id  WHERE b.date_create BETWEEN '$date_start' AND '$date_end' AND b.company_id = '$company_id' GROUP BY a.doc_id";
-      
+
         $result = mysqli_query($conn, $sql);
         $listorder = [];
 
@@ -140,7 +140,7 @@ class orderservice
     public static function getorderbyid($doc_id)
     {
         include "../config.php";
-        $sql = "SELECT b.order_id,a.doc_id,e.customer_id,e.customer_code,e.customer_prefix,e.customer_firstname,e.customer_lastname,e.customer_phone,f.department_id,f.department_name,g.company_id,g.company_name,b.date_create,c.product_mat_no,c.product_id,c.product_sale_price,c.product_sale_vat,b.product_qty FROM tb_doc a INNER JOIN tb_order b ON a.doc_id = b.doc_id INNER JOIN tb_product c ON c.product_id = b.product_id INNER JOIN tb_customer e on e.customer_id = b.customer_id INNER JOIN tb_department f on f.department_id = b.department_id INNER JOIN tb_company g on g.company_id = b.company_id WHERE a.doc_id ='$doc_id' GROUP BY c.product_mat_no ORDER BY b.order_id";
+        $sql = "SELECT b.product_size_other,b.order_id,a.doc_id,e.customer_id,e.customer_code,e.customer_prefix,e.customer_firstname,e.customer_lastname,e.customer_phone,f.department_id,f.department_name,g.company_id,g.company_name,b.date_create,c.product_mat_no,c.product_id,c.product_sale_price,c.product_sale_vat,b.product_qty FROM tb_doc a INNER JOIN tb_order b ON a.doc_id = b.doc_id INNER JOIN tb_product c ON c.product_id = b.product_id INNER JOIN tb_customer e on e.customer_id = b.customer_id INNER JOIN tb_department f on f.department_id = b.department_id INNER JOIN tb_company g on g.company_id = b.company_id WHERE a.doc_id ='$doc_id' GROUP BY c.product_mat_no ORDER BY b.order_id";
         $result = mysqli_query($conn, $sql);
         $listorder = [];
 
@@ -150,6 +150,7 @@ class orderservice
             $vat =   $totalvat - $totalnovat;
             $order = array(
                 "order_id" => $row["order_id"],
+                "product_size_other" => $row["product_size_other"],
                 "doc_id" => $row["doc_id"],
                 "customer_id" => $row["customer_id"],
                 "customer_code" => $row["customer_code"],
@@ -243,7 +244,7 @@ class orderservice
         date_default_timezone_set("Asia/Bangkok");
         $date = date("Y-m-d h:i:s");
         $lastkey = self::getlastprimarykey() + 1;
-        $sql = "INSERT INTO `tb_order`(`order_id`, `doc_id`, `customer_id`, `product_id`, `product_qty`, `department_id`, `company_id`, `date_create`, `order_status`) 
+        $sql = "INSERT INTO `tb_order`(`order_id`, `doc_id`, `customer_id`, `product_id`, `product_qty`,`product_size_other`, `department_id`, `company_id`, `date_create`, `order_status`) 
         VALUES ";
 
         $numpd = count($listcart) - 1;
@@ -251,11 +252,11 @@ class orderservice
         foreach ($listcart as $row => $key) {
             $product_id = $key["id"];
             $product_qty = $key["qty"];
-
+            $othersize = substr($key["no"], 15, 18);
             if ($numpd != $row) {
-                $sql = $sql . "('$lastkey', '$doc_id', '$customer_id', '$product_id', '$product_qty','$department_id', '$company_id', '$date', 'new'),";
+                $sql = $sql . "('$lastkey', '$doc_id', '$customer_id', '$product_id', '$product_qty','$othersize ','$department_id', '$company_id', '$date', 'new'),";
             } else {
-                $sql = $sql . "('$lastkey', '$doc_id', '$customer_id', '$product_id', '$product_qty', '$department_id','$company_id', '$date', 'new')";
+                $sql = $sql . "('$lastkey', '$doc_id', '$customer_id', '$product_id', '$product_qty','$othersize ', '$department_id','$company_id', '$date', 'new')";
             }
             $lastkey++;
         }

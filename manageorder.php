@@ -96,10 +96,16 @@
                                     <div class="card-body">
                                         <div class="row g-3 align-items-center mb-3">
                                             <div class="col-auto">
-                                                <label for="" class="col-form-label">บาร์โค้ด : </label>
+                                                <label for="" class="col-form-label">Barcode : </label>
                                             </div>
                                             <div class="col-auto">
                                                 <input type="text" id="detail_barcode" class="form-control form-control-sm text-center">
+                                            </div>
+                                            <div class="col-auto">
+                                                <label for="" class="col-form-label">SizeOther : </label>
+                                            </div>
+                                            <div class="col-auto">
+                                                <input type="text" id="size_order" class="form-control form-control-sm text-center" value="000" minlength="3" maxlength="3">
                                             </div>
                                             <div class="col-auto">
                                                 <button class="btn btn-success btn-sm" id="addproduct">เพิ่มข้อมูล</button>
@@ -386,7 +392,7 @@
                     //addToCart(js.product_id, js.product_mat_no, js.product_mat_name_th, js.product_sale_price, js.product_size_id, js.product_color_id, 1, js.product_sale_vat);
                     var x = '"new"';
 
-                    addToCart(x, js.product_id, js.product_mat_no, js.product_sale_price, js.product_sale_vat, 1);
+                    addToCart(x, js.product_id, js.product_mat_no + $("#size_order").val(), js.product_sale_price, js.product_sale_vat, 1);
 
                     displayCart();
                 } else {
@@ -423,8 +429,6 @@
             totalvat += (v.pricevat * v.qty);
             vat = totalvat - totalnovat;
         });
-
-
 
         $("#cart_product").text(numberformat(totalnovat.toFixed(2)));
         $("#cart_totalvat").text(numberformat(vat.toFixed(2)));
@@ -492,10 +496,12 @@
                 $('#detail_department').val(js[0].department_name);
                 $('#detail_company').val(js[0].company_name);
                 $('#detail_date_create').val(js[0].date_create);
-                $.each(js, function(k, v) {
-                    addToCart(v.order_id, v.product_id, v.product_mat_no, v.product_sale_price, v.product_sale_vat, v.product_qty);
-                });
 
+
+                $.each(js, function(k, v) {
+
+                    addToCart(v.order_id, v.product_id, v.product_mat_no + v.product_size_other, v.product_sale_price, v.product_sale_vat, v.product_qty);
+                });
                 displayCart();
             }
         });
@@ -511,7 +517,6 @@
     }
 
     function getorder(status) {
-        console.log(status);
         $("#myform").addClass("was-validated");
         if ($("#companyname").val() && $("#date_start").val() && $("#date_end").val()) {
             var company = $("#companyname").val().split(":");

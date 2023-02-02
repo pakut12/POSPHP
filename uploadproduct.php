@@ -175,7 +175,7 @@
                 success: function(data) {
 
                     var js = JSON.parse(data);
-                    console.log(js);
+                  
                     if (js.status == "true") {
                         Swal.fire({
                             title: "เรียบร้อย",

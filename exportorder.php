@@ -124,7 +124,6 @@
                         text: "ไม่พบข้อมูล"
                     })
                 }
-
             }
         });
     }
@@ -169,7 +168,6 @@
                 },
                 success: function(msg) {
                     $("#order_table_product").html(msg);
-
                     var groupColumn = 1;
                     var table = $('#table_size').DataTable({
                         "scrollX": true,

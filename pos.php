@@ -8,6 +8,7 @@
 <body>
     <?php include("share/navbar.php"); ?>
 
+
     <div class="container">
         <div class="modal fade" id="modalprint" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -140,7 +141,6 @@
                                 <label for="customer_id" class="form-label">เเผนก</label>
                                 <input class="form-control form-control-sm text-center" list="departmentlist" autocomplete="off" name="departmentname" id="departmentname" disabled required>
                                 <datalist id="departmentlist">
-
                                 </datalist>
                             </div>
                         </div>
@@ -166,12 +166,19 @@
                     <div class="card-body">
                         <div class="container">
                             <div class="row">
+                                <div class="col-sm-12 col-md-12 ">
+                                    <div class="input-group input-group-sm mt-3">
+                                        <span class="input-group-text" id="basic-addon1">SizeOther</span>
+                                        <input type="text" class="form-control text-center" id="size_other" value="000" maxlength="3" minlength="3" pattern=".{3}" required>
+                                    </div>
+                                </div>
                                 <div class="col-sm-12 col-md-12  mt-3">
                                     <div class="input-group input-group-sm mb-3">
-                                        <span class="input-group-text" id="basic-addon1">บาร์โค้ด</span>
+                                        <span class="input-group-text" id="basic-addon1">Barcode</span>
                                         <input type="text" class="form-control text-center" id="mat_barcode" onclick="this.select();" maxlength="13" minlength="13" pattern=".{13}" required>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -291,7 +298,8 @@
                 console.log(msg);
                 if (msg) {
                     var js = JSON.parse(msg);
-                    addToCart(js.product_id, js.product_mat_no, js.product_mat_name_th, js.product_sale_price, js.product_size_id, js.product_color_id, 1, js.product_sale_vat);
+                    var size_other = $("#size_other").val();
+                    addToCart(js.product_id, js.product_mat_no + size_other, js.product_mat_name_th, js.product_sale_price, js.product_size_id, js.product_color_id, 1, js.product_sale_vat);
                     $("#tb_product").DataTable();
                 } else {
                     Swal.fire({
