@@ -107,7 +107,7 @@ class departmentservice
         include "../config.php";
         require "../modal/departmentdetails.php";
         date_default_timezone_set("Asia/Bangkok");
-        $date = date("Y-m-d h:i:s");
+        $date = date("Y-m-d H:i:s");
         $primarykey = self::getlastprimarykey() + 1;
         $sql = "INSERT INTO `tb_department` (`department_id`, `department_name`, `company_id`, `date_create`) VALUES ('$primarykey ', '$department','$company', '$date');";
         $result = mysqli_query($conn, $sql);
@@ -197,7 +197,7 @@ class departmentservice
     {
         include "../config.php";
         $primarykey = self::getlastprimarykey() + 1;
-        $date = date("Y-m-d h:i:s");
+        $date = date("Y-m-d H:i:s");
 
         $sql = "INSERT INTO `tb_department`(`department_id`, `department_name`, `company_id`, `date_create`) VALUES ";
         for ($n = 0; $n < count($listdepartment); $n++) {

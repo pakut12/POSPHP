@@ -43,7 +43,7 @@ class orderservice
         $keydepartment = $listcustomer["departmentlist"];
         $keycompany = $listcustomer["companylist"];
         date_default_timezone_set("Asia/Bangkok");
-        $date = date("Y-m-d h:i:s");
+        $date = date("Y-m-d H:i:s");
         $lastkey = self::getlastprimarykey() + 1;
         $sql = "INSERT INTO `tb_order` (`order_id`, `doc_id`, `customer_id`, `product_id`, `department_id`,`product_qty`,`product_size_other`, `company_id`, `date_create`, `order_status`) 
         VALUES ";
@@ -242,7 +242,7 @@ class orderservice
     {
         include "../config.php";
         date_default_timezone_set("Asia/Bangkok");
-        $date = date("Y-m-d h:i:s");
+        $date = date("Y-m-d H:i:s");
         $lastkey = self::getlastprimarykey() + 1;
         $sql = "INSERT INTO `tb_order`(`order_id`, `doc_id`, `customer_id`, `product_id`, `product_qty`,`product_size_other`, `department_id`, `company_id`, `date_create`, `order_status`) 
         VALUES ";

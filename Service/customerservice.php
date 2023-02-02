@@ -26,7 +26,7 @@ class customerservice
         // $departmentlist = $listcustomer["departmentlist"];
         // $companylist = $listcustomer["companylist"];
         date_default_timezone_set("Asia/Bangkok");
-        $date = date("Y-m-d h:i:s");
+        $date = date("Y-m-d H:i:s");
         $lastkey = self::getlastprimarykey() + 1;
         $sql = "INSERT INTO `tb_customer` (`customer_id`, `customer_code`, `customer_gender`, `customer_prefix`, `customer_firstname`, `customer_lastname`,`customer_phone`,`date_create`) VALUES ('$lastkey', '$customercode', '$customergender', '$customerprefix', '$customerfirstname', '$customerlastname', '$customerphone','$date');";
         $result = mysqli_query($conn, $sql);

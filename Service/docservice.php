@@ -20,7 +20,7 @@ class docservice
     {
         include "../config.php";
         date_default_timezone_set("Asia/Bangkok");
-        $date = date("Y-m-d h:i:s");
+        $date = date("Y-m-d H:i:s");
         $lastkey =  self::getlastprimarykey() + 1;
         $sql = "INSERT INTO `tb_doc` (`doc_id`, `date_create`) VALUES ('$lastkey', ' $date')";
         $result = mysqli_query($conn, $sql);
