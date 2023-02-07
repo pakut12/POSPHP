@@ -6,6 +6,8 @@ class productdetails
     private $product_mat_no;
     private $product_mat_barcode;
     private $product_mat_name_th;
+    private $product_mat_group;
+    private $product_mat_group_name;
     private $product_color_id;
     private $product_size_id;
     private $product_sale_price;
@@ -118,5 +120,45 @@ class productdetails
     public function getproduct_plant()
     {
         return $this->product_plant;
+    }
+
+    /**
+     * Get the value of product_mat_group
+     */ 
+    public function getProduct_mat_group()
+    {
+        return $this->product_mat_group;
+    }
+
+    /**
+     * Set the value of product_mat_group
+     *
+     * @return  self
+     */ 
+    public function setProduct_mat_group($product_mat_group)
+    {
+        $this->product_mat_group = $product_mat_group;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of product_mat_group_name
+     */ 
+    public function getProduct_mat_group_name()
+    {
+        return $this->product_mat_group_name;
+    }
+
+    /**
+     * Set the value of product_mat_group_name
+     *
+     * @return  self
+     */ 
+    public function setProduct_mat_group_name($product_mat_group_name)
+    {
+        $this->product_mat_group_name = $product_mat_group_name;
+
+        return $this;
     }
 }

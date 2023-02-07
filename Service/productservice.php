@@ -55,10 +55,10 @@ class productservice
         mysqli_close($conn);
         return $primarykey;
     }
-    public static function insertproduct($listproduct, $materialgroup)
+    public static function insertproduct($listproduct)
     {
         include "../config.php";
-        $sql = self::generatorsqlinsert($listproduct, $materialgroup);
+        $sql = self::generatorsqlinsert($listproduct);
         $result = mysqli_query($conn, $sql["sql"]);
         if ($result) {
             $status = array(
@@ -108,7 +108,8 @@ class productservice
     {
         include "../config.php";
         $id = $mat["id"];
-        $materialgroup = $mat["materialgroup"];
+        $materialgroup = $mat["material_group"];
+        $materialgroupname = $mat["material_group_name"];
         $barcode = $mat["barcode"];
         $name = $mat["name"];
         $color = $mat["color"];
@@ -117,7 +118,8 @@ class productservice
         $productid = $mat["productid"];
         $pricevat = $mat["pricevat"];
         $plant = $mat["plant"];
-        $sql = "UPDATE tb_product SET product_group = '$productid',material_id = '$materialgroup ',product_mat_barcode = '$barcode',product_mat_name_th = '$name',product_color_id = '$color',product_size_id = '$size',product_sale_price = '$price',product_sale_vat = '$pricevat',product_plant = '$plant' WHERE product_id = '$id';";
+
+        $sql = "UPDATE tb_product SET product_group = '$productid',material_group_name = '$materialgroupname',material_group = '$materialgroup',product_mat_barcode = '$barcode',product_mat_name_th = '$name',product_color_id = '$color',product_size_id = '$size',product_sale_price = '$price',product_sale_vat = '$pricevat',product_plant = '$plant' WHERE product_id = '$id';";
 
         $result = mysqli_query($conn, $sql);
         if ($result) {
@@ -129,7 +131,7 @@ class productservice
         return $num;
     }
 
-    public static function generatorsqlinsert($listproduct, $materialgroup)
+    public static function generatorsqlinsert($listproduct)
     {
         include "../config.php";
         date_default_timezone_set("Asia/Bangkok");
@@ -137,7 +139,7 @@ class productservice
         $lastkeygroup = self::getlastkeyproductgroup() + 1;
         $lastkeyprimary = self::getlastprimarykey() + 1;
 
-        $sql = "INSERT INTO `tb_product` (`product_id`, `material_id`,`product_group`, `product_mat_no`, `product_mat_barcode`, `product_mat_name_th`, `product_color_id`, `product_size_id`, `product_sale_price`, `product_sale_vat`, `product_plant`,  `date_create`) VALUES ";
+        $sql = "INSERT INTO `tb_product` (`product_id`, `material_group`,`material_group_name`,`product_group`, `product_mat_no`, `product_mat_barcode`, `product_mat_name_th`, `product_color_id`, `product_size_id`, `product_sale_price`, `product_sale_vat`, `product_plant`,  `date_create`) VALUES ";
         $row = count($listproduct);
         $update = 0;
         for ($x = 0; $x < $row; $x++) {
@@ -154,17 +156,21 @@ class productservice
             $size = substr($mat, 12, 3);
             $chack = self::chackmat($mat);
 
+            $material_group = $listproduct[$x]->getProduct_mat_group();
+            $material_group_name = $listproduct[$x]->getProduct_mat_group_name();
+
             if ($chack["row"] != 1) {
                 if ($x == $row - 1) {
-                    $sql = $sql . "('" . $lastkeyprimary . "', '" . $materialgroup . "','" . $lastkeygroup . "', '" . $mat . "', '" . $product_mat_barcode . "', '" . $product_mat_name_th . "', '" .    $color . "', '" . $size . "', '" . $product_sale_price . "', '" . $product_sale_vat . "', '" . $product_plant . "', '" . $date . "')";
+                    $sql = $sql . "('" . $lastkeyprimary . "', '" . $material_group . "', '" . $material_group_name . "','" . $lastkeygroup . "', '" . $mat . "', '" . $product_mat_barcode . "', '" . $product_mat_name_th . "', '" .    $color . "', '" . $size . "', '" . $product_sale_price . "', '" . $product_sale_vat . "', '" . $product_plant . "', '" . $date . "')";
                 } else {
-                    $sql = $sql . "('" . $lastkeyprimary . "','" . $materialgroup . "', '" . $lastkeygroup . "', '" . $mat . "', '" . $product_mat_barcode . "', '" . $product_mat_name_th . "', '" .    $color . "', '" . $size . "', '" . $product_sale_price . "', '" . $product_sale_vat . "','" . $product_plant . "', '" . $date . "'),";
+                    $sql = $sql . "('" . $lastkeyprimary . "','" . $material_group . "', '" . $material_group_name . "', '" . $lastkeygroup . "', '" . $mat . "', '" . $product_mat_barcode . "', '" . $product_mat_name_th . "', '" .    $color . "', '" . $size . "', '" . $product_sale_price . "', '" . $product_sale_vat . "','" . $product_plant . "', '" . $date . "'),";
                 }
                 $lastkeyprimary++;
             } else {
                 $mat = array(
                     "id" => $chack["id"],
-                    "materialgroup" => $materialgroup,
+                    "material_group" => $material_group,
+                    "material_group_name" => $material_group_name,
                     "productid" => $lastkeygroup,
                     "barcode" => $product_mat_barcode,
                     "name" => $product_mat_name_th,
@@ -220,12 +226,18 @@ class productservice
                         $product->setproduct_mat_name_th($cell->getValue());
                         $d++;
                     } else  if ($d == 4) {
-                        $product->setproduct_sale_price($cell->getValue());
+                        $product->setProduct_mat_group($cell->getValue());
                         $d++;
                     } else  if ($d == 5) {
-                        $product->setproduct_sale_vat($cell->getValue());
+                        $product->setProduct_mat_group_name($cell->getValue());
                         $d++;
                     } else  if ($d == 6) {
+                        $product->setproduct_sale_price($cell->getValue());
+                        $d++;
+                    } else  if ($d == 7) {
+                        $product->setproduct_sale_vat($cell->getValue());
+                        $d++;
+                    } else  if ($d == 8) {
                         $product->setproduct_plant($cell->getValue());
                         $d = 1;
                     }

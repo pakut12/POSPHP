@@ -478,7 +478,6 @@
             data: {
                 type: "getorderbyid",
                 doc_id: doc_id
-
             },
             success: function(msg) {
                 var js = JSON.parse(msg);
@@ -497,9 +496,7 @@
                 $('#detail_company').val(js[0].company_name);
                 $('#detail_date_create').val(js[0].date_create);
 
-
                 $.each(js, function(k, v) {
-
                     addToCart(v.order_id, v.product_id, v.product_mat_no + v.product_size_other, v.product_sale_price, v.product_sale_vat, v.product_qty);
                 });
                 displayCart();

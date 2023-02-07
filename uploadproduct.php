@@ -24,15 +24,7 @@
                 </div>
                 <form id="myForm" class="">
                     <div class="row">
-                        <div class="col-sm-12 col-md-6">
-                            <div class="mt-3">
-                                <label for="asd" class="form-label">MaterialGroup : </label>
-                                <select class="form-select form-select-sm text-center" id="materialgroup" name="materialgroup" required>
-
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-6">
+                        <div class="col-sm-12 col-md-12">
                             <div class="mt-3">
                                 <input type="hidden" id="type" name="type" value="uploadproduct">
                                 <label for="fileexcel" class="form-label">FileExcel : </label>
@@ -142,7 +134,7 @@
 
     function uploadFile() {
 
-        if ($('#fileexcel').get(0).files.length === 0 || $("#materialgroup").val() == "") {
+        if ($('#fileexcel').get(0).files.length === 0) {
             $("#myForm").addClass("was-validated");
             Swal.fire({
                 title: 'ผิดพลาด',
@@ -177,7 +169,7 @@
                 success: function(data) {
 
                     var js = JSON.parse(data);
-                  
+
                     if (js.status == "true") {
                         Swal.fire({
                             title: "เรียบร้อย",

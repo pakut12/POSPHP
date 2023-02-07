@@ -36,7 +36,6 @@ if ($type == "searchproduct") {
     echo json_encode($arr);
 } else if ($type == "uploadproduct") {
     $file = $_FILES["fileexcel"];
-    $materialgroup = $_POST["materialgroup"];
 
     $product = new productservice();
     $uploadstatus = $product->uploadfile($file);
