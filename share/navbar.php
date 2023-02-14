@@ -61,7 +61,8 @@
                                     ManageDepartment
                                 </a>
                             </li>
-                            <li>
+                            <!--
+                                <li>
                                 <a class="dropdown-item" href="managematerial.php">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pass" viewBox="0 0 16 16">
                                         <path d="M5.5 5a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5Zm0 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3Z" />
@@ -70,6 +71,7 @@
                                     ManageMaterial
                                 </a>
                             </li>
+                        -->
                             <li>
                                 <a class="dropdown-item" href="uploadproduct.php">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-upload" viewBox="0 0 16 16">

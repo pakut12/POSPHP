@@ -170,8 +170,8 @@
                     $("#order_table_product").html(msg);
                     var groupColumn = 1;
                     var table = $('#table_size').DataTable({
-                        "scrollX": true,
-                        "scrollY": true,
+                        scrollY: "50vh",
+                        scrollX: true,
                         "scrollCollapse": true,
                         columnDefs: [{
                             visible: false,

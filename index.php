@@ -19,8 +19,8 @@
                 <ol>
                     <li>เพิ่มชื่อบริษัทที่จะไปขาย [<a href="managecompany.php">เพิ่มชื่อบริษัท </a>] <b class="text-danger"># ถ้าหากบริษัทมีอยู่ในรายชื่อเเล้วให้ข้ามขั้นตอนนี้ไปได้เลย</b></li>
                     <li>เพิ่มชื่อเเผนกในบริษัทที่จะไปขาย [<a href="managecdepartment.php">เพิ่มชื่อเเผนก </a>] <b class="text-danger"># ถ้าหากเเผนกมีอยู่ในรายชื่อบริษัทเเล้วให้ข้ามขั้นตอนนี้ไปได้เลย</b></li>
-                    <li>เพิ่มชื่อ Material เเละ MaterialGroup [<a href="managematerial.php">เพิ่มชื่อ Material เเละ MaterialGroup </a>] <b class="text-danger"># ถ้าหากMaterial เเละ MaterialGroupมีอยู่ในรายชื่อเเล้วให้ข้ามขั้นตอนนี้ไปได้เลย</b></li>
-                    <li>โหลดไฟล์ Master เเละกรอกรายละเอียดให้เรียบร้อย [<a href="attachfile/downloadmaster/Master.xlsx">โหลดไฟล์ Master </a>]</li>
+                    <!--<li>เพิ่มชื่อ Material เเละ MaterialGroup [<a href="managematerial.php">เพิ่มชื่อ Material เเละ MaterialGroup </a>] <b class="text-danger"># ถ้าหากMaterial เเละ MaterialGroupมีอยู่ในรายชื่อเเล้วให้ข้ามขั้นตอนนี้ไปได้เลย</b></li>-->
+                    <!--<li>โหลดไฟล์ Master เเละกรอกรายละเอียดให้เรียบร้อย [<a href="attachfile/downloadmaster/Master.xlsx">โหลดไฟล์ Master </a>]</li>-->
                     <li>อับโหลดไฟล์ Master ที่กรอกให้เรียบร้อย [<a href="uploadproduct.php">อับโหลดไฟล์ Master </a>]</li>
                 </ol>
                 </p>
@@ -28,7 +28,7 @@
                 <h5 class="card-title fw-bold">ขั้นตอนการรับออเดอร์ลูกค้า</h5>
                 <p class="card-text">
                 <ol>
-                    <li>เข้าหน้าโปรเเกรม POS [<a href="pos.php">โปรเเกรม POS </a>]</li>
+                    <li>เข้าหน้าโปรเเกรม Order [<a href="pos.php">โปรเเกรม Order </a>]</li>
                     <li>กรอกข้อมูลลูกค้า</li>
                     <li>เพิ่มรายการสินค้าที่ลูกค้าต้องการ</li>
                     <li>ตรวจสอบออเดอร์ของลูกค้าหลังจากนั้นกดปุ่ม <b class="text-primary">ยืนยัน Order</b></li>
